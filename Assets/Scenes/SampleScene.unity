@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 705507994}
-  m_IndirectSpecularColor: {r: 0.18028378, g: 0.22571412, b: 0.30692285, a: 1}
+  m_IndirectSpecularColor: {r: 0.18028331, g: 0.2257133, b: 0.3069217, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -878,7 +878,7 @@ GameObject:
   - component: {fileID: 690830959}
   - component: {fileID: 690830958}
   - component: {fileID: 690830957}
-  - component: {fileID: 690830961}
+  - component: {fileID: 690830963}
   - component: {fileID: 690830962}
   m_Layer: 0
   m_Name: Enemy
@@ -975,21 +975,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &690830961
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 690830956}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d98f562a1b267f24c9496c9a4298b300, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_player: {fileID: 1505879510}
-  m_isShowDetectArea: 1
-  m_isShowAttackArea: 1
 --- !u!195 &690830962
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -1012,6 +997,29 @@ NavMeshAgent:
   m_BaseOffset: 1
   m_WalkableMask: 4294967295
   m_ObstacleAvoidanceType: 4
+--- !u!114 &690830963
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 690830956}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d98f562a1b267f24c9496c9a4298b300, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_player: {fileID: 1505879510}
+  m_path: {fileID: 1160012600}
+  m_patrolType: 0
+  m_state: 0
+  m_detectDist: 7
+  m_isShowDetectArea: 1
+  m_attackDist: 3
+  m_isShowAttackArea: 1
+  m_idleDuration: 5
+  m_idleTime: 0
+  m_maxChaseDistance: 15
 --- !u!1 &705507993
 GameObject:
   m_ObjectHideFlags: 0
@@ -1298,7 +1306,7 @@ Transform:
   m_GameObject: {fileID: 963194225}
   serializedVersion: 2
   m_LocalRotation: {x: 0.2669336, y: -3.4238033e-15, z: 1.836517e-15, w: 0.96371496}
-  m_LocalPosition: {x: 0.28, y: 5, z: 33.43}
+  m_LocalPosition: {x: -20.9, y: 5, z: 36.3}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1935,7 +1943,7 @@ Transform:
   m_GameObject: {fileID: 1505879505}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.28, y: 1, z: 38.43}
+  m_LocalPosition: {x: -20.9, y: 1, z: 41.3}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -2255,7 +2263,7 @@ Transform:
   m_GameObject: {fileID: 2103710229}
   serializedVersion: 2
   m_LocalRotation: {x: 0.2669336, y: -3.4238033e-15, z: 1.836517e-15, w: 0.96371496}
-  m_LocalPosition: {x: 0.28, y: 5, z: 33.43}
+  m_LocalPosition: {x: -20.9, y: 5, z: 36.3}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
