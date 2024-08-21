@@ -26,6 +26,8 @@ public class PathController : MonoBehaviour
 
     void OnDrawGizmos()
     {
+        m_wayPoints = GetComponentsInChildren<Waypoint>();
+
         if (m_drawLine)
         {
             for (int i = 0; i < m_wayPoints.Length - 1; i++)

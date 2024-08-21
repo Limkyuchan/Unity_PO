@@ -1,7 +1,5 @@
 using System.Collections;
 using System.Collections.Generic;
-using System.Net.NetworkInformation;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -46,12 +44,14 @@ public class EnemyController : MonoBehaviour
     [SerializeField]
     bool m_isShowAttackArea;
     [SerializeField]
+    float m_maxChaseDistance = 15f; // Chase 상태에서 플레이어를 추적할 최대 거리
+    [SerializeField]
+    bool m_isShowMaxChaseDistance;
+    [SerializeField]
     float m_idleDuration = 5f;      // Idle 상태 유지시간
     [SerializeField]
     float m_idleTime;               // Idle 상태 진입 후의 시간 
-    [SerializeField]
-    float m_maxChaseDistance = 15f; // Chase 상태에서 플레이어를 추적할 최대 거리
-
+    
     bool m_isPatrol;                // Patrol 중인지 확인
     bool m_isReverse;               // Patrol PingPong 정/역주행 확인
     int m_curWaypoint;              // 현재 지정되어 있는 Waypoint
@@ -109,9 +109,9 @@ public class EnemyController : MonoBehaviour
         return false;
     }
 
-    bool CheckArea(Vector3 targetPos, float distance)
+    bool CheckArea(Transform target, float distance)
     {
-        var dir = targetPos - transform.position;
+        var dir = target.position - transform.position;
         if (dir.sqrMagnitude <= distance * distance)
         {
             return true;
@@ -148,7 +148,7 @@ public class EnemyController : MonoBehaviour
                     if (FindTarget(m_player.transform, m_detectDist))
                     {
                         // 1-1) 공격 범위 안에 들어오면 => Attack
-                        if (CheckArea(m_player.transform.position, m_attackDist))
+                        if (CheckArea(m_player.transform, m_attackDist))
                         {
                             SetState(AiState.Attack);
                             return;
@@ -262,13 +262,20 @@ public class EnemyController : MonoBehaviour
         if (m_isShowAttackArea)
         {
             Gizmos.color = Color.green;
-            Gizmos.DrawWireSphere (transform.position, m_attackDist);
+            Gizmos.DrawWireSphere(transform.position, m_attackDist);
+        }
+
+        if (m_isShowMaxChaseDistance)
+        {
+            Gizmos.color = Color.red;
+            Gizmos.DrawWireSphere(transform.position, m_maxChaseDistance);
         }
     }
 
     void Start()
     {
         m_navAgent = GetComponent<NavMeshAgent>();
+
         m_playerLayer = 1 << LayerMask.NameToLayer("Player");
         m_backgroundLayer = 1 << LayerMask.NameToLayer("Background");
     }
