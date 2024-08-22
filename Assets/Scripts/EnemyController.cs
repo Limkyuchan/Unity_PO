@@ -26,6 +26,7 @@ public class EnemyController : MonoBehaviour
     #region Constants and Fields
     [SerializeField]
     PlayerController m_player;
+    EnemyAnimController m_animCtrl;
     NavMeshAgent m_navAgent;
 
     [Space(10), Header("AI 관련 정보")]
@@ -134,6 +135,7 @@ public class EnemyController : MonoBehaviour
         m_navAgent.ResetPath();
         SetState(AiState.Idle);
         SetIdleDuration(duration);
+        m_animCtrl.Play(EnemyAnimController.Motion.Idle);
     }
 
     void BehaviourProcess()
@@ -155,12 +157,14 @@ public class EnemyController : MonoBehaviour
                         }
                         // 1-2) 공격 범위 안에 들어오지 않으면 => Chase
                         SetState(AiState.Chase);
+                        m_animCtrl.Play(EnemyAnimController.Motion.Run);
                         m_navAgent.stoppingDistance = m_attackDist;
                         m_coChaseTarget = StartCoroutine(CoChaseToTarget(m_player.transform, 30));
                         return;
                     }
                     // 2) 인식 범위 안에 들어오지 않으면 => Patrol 
                     SetState(AiState.Patrol);
+                    m_animCtrl.Play(EnemyAnimController.Motion.Walk);
                     m_navAgent.stoppingDistance = m_navAgent.radius;
                     m_coSearchTarget = StartCoroutine(CoSearchTarget(m_player.transform, 1f));
                     return;
@@ -274,6 +278,7 @@ public class EnemyController : MonoBehaviour
 
     void Start()
     {
+        m_animCtrl = GetComponent<EnemyAnimController>();
         m_navAgent = GetComponent<NavMeshAgent>();
 
         m_playerLayer = 1 << LayerMask.NameToLayer("Player");

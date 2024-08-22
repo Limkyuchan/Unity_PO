@@ -11,24 +11,26 @@ public class PlayerController : MonoBehaviour
     [SerializeField]
     GameObject m_virtualCamBack;
 
+    PlayerAnimController m_animCtrl;
     NavMeshAgent m_navAgent;
 
     [SerializeField]
     float m_speed = 5f;
     float m_scale;
+    int hash_Speed;
     Vector3 m_dir;
     #endregion Constants and Fields
-
-
-
 
     #region Call by Unity
     void Start()
     {
+        m_animCtrl = GetComponent<PlayerAnimController>();
         m_navAgent = GetComponent<NavMeshAgent>();
 
         m_virtualCamEffect.SetActive(false);
         m_virtualCamBack.SetActive(false);
+
+        hash_Speed = Animator.StringToHash("Speed");
     }
 
     void Update()
@@ -46,6 +48,7 @@ public class PlayerController : MonoBehaviour
 
         if (m_dir != Vector3.zero)
         {
+            transform.forward = m_dir;
             if (m_scale < 1f)
             {
                 m_scale += Time.deltaTime / 2f;
@@ -66,6 +69,8 @@ public class PlayerController : MonoBehaviour
                 m_scale = 0f;
             }
         }
+
+        m_animCtrl.SetFloat(hash_Speed, m_scale);
 
         if (m_navAgent.enabled)
         {
