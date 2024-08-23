@@ -10,7 +10,10 @@ public class PlayerController : MonoBehaviour
     GameObject m_virtualCamEffect;
     [SerializeField]
     GameObject m_virtualCamBack;
+    [SerializeField]
+    GameObject m_attackAreaObj;
 
+    AttackAreaUnitFind[] m_attackAreas;
     PlayerAnimController m_animCtrl;
     NavMeshAgent m_navAgent;
 
@@ -21,11 +24,33 @@ public class PlayerController : MonoBehaviour
     Vector3 m_dir;
     #endregion Constants and Fields
 
-    #region Call by Unity
+    #region Public Properties
+    PlayerAnimController.Motion GetMotion { get { return m_animCtrl.GetMotion; } }
+    #endregion Public Properties
+
+    #region Animation Event Methods
+    void AnimEvent_AttackFinished()
+    {
+        m_animCtrl.Play(PlayerAnimController.Motion.Idle);
+    }
+
+    void AnimEvent_Attack()
+    {
+        var unitList = m_attackAreas[0].UnitList;
+        for (int i = 0; i < unitList.Count; i++)
+        {
+            var enemy = unitList[i].GetComponent<EnemyController>();
+            enemy.SetDamage();
+        }
+    }
+    #endregion Animation Event Methods
+
+    #region Unity Methods
     void Start()
     {
         m_animCtrl = GetComponent<PlayerAnimController>();
         m_navAgent = GetComponent<NavMeshAgent>();
+        m_attackAreas = m_attackAreaObj.GetComponentsInChildren<AttackAreaUnitFind>();
 
         m_virtualCamEffect.SetActive(false);
         m_virtualCamBack.SetActive(false);
@@ -35,13 +60,21 @@ public class PlayerController : MonoBehaviour
 
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.X))
+        if (Input.GetKeyDown(KeyCode.E))
         {
             m_virtualCamBack.SetActive(true);
         }
-        if (Input.GetKeyUp(KeyCode.X))
+        if (Input.GetKeyUp(KeyCode.E))
         {
             m_virtualCamBack.SetActive(false);
+        }
+
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            if (GetMotion == PlayerAnimController.Motion.Idle || GetMotion == PlayerAnimController.Motion.Locomotion)
+            {
+                m_animCtrl.Play(PlayerAnimController.Motion.Attack1);
+            }
         }
 
         m_dir = new Vector3(Input.GetAxis("Horizontal"), 0f, Input.GetAxis("Vertical"));
@@ -77,5 +110,5 @@ public class PlayerController : MonoBehaviour
             m_navAgent.Move(m_dir * m_speed * m_scale * Time.deltaTime);
         }
     }
-    #endregion Call by Unity
+    #endregion Unity Methods
 }

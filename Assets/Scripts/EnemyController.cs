@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -12,6 +13,7 @@ public class EnemyController : MonoBehaviour
         Attack,
         Chase,
         Patrol,
+        Damaged,
         Max
     }
 
@@ -28,6 +30,7 @@ public class EnemyController : MonoBehaviour
     PlayerController m_player;
     EnemyAnimController m_animCtrl;
     NavMeshAgent m_navAgent;
+    MoveTween m_moveTween;
 
     [Space(10), Header("AI 관련 정보")]
     [SerializeField]
@@ -63,6 +66,28 @@ public class EnemyController : MonoBehaviour
     Coroutine m_coChaseTarget;
     Coroutine m_coSearchTarget;
     #endregion Constants and Fields
+
+    #region Public Methods
+    public void SetDamage()
+    {
+        SetState(AiState.Damaged);
+        m_animCtrl.Play(EnemyAnimController.Motion.Hit, false);         // Hit 모션 바로 재생(Blend X)
+
+        Vector3 from = transform.position;
+        Vector3 dir = transform.position - m_player.transform.position;
+        dir.y = 0f;
+        Vector3 to = from + dir.normalized * 0.3f;
+        float duration = 0.3f;
+        m_moveTween.Play(from, to, duration);
+    }
+    #endregion Public Methods
+
+    #region Animation Event Methods
+    void AnimEvent_HitFinished()
+    {
+        SetIdle(1.5f);
+    }
+    #endregion Animation Event Methods
 
     #region Coroutine Methods
     IEnumerator CoChaseToTarget(Transform target, int frame)
@@ -142,7 +167,7 @@ public class EnemyController : MonoBehaviour
     {
         switch (m_state)
         {
-            case AiState.Idle:
+            case AiState.Idle: 
                 if (m_idleTime > m_idleDuration)
                 {
                     m_idleTime = 0f;
@@ -254,7 +279,7 @@ public class EnemyController : MonoBehaviour
     }
     #endregion Methods
 
-    #region Call by Unity
+    #region Unity Methods
     void OnDrawGizmos()
     {
         if (m_isShowDetectArea)
@@ -280,6 +305,7 @@ public class EnemyController : MonoBehaviour
     {
         m_animCtrl = GetComponent<EnemyAnimController>();
         m_navAgent = GetComponent<NavMeshAgent>();
+        m_moveTween = GetComponent<MoveTween>();
 
         m_playerLayer = 1 << LayerMask.NameToLayer("Player");
         m_backgroundLayer = 1 << LayerMask.NameToLayer("Background");
@@ -289,5 +315,5 @@ public class EnemyController : MonoBehaviour
     {
         BehaviourProcess();
     }
-    #endregion Call by Unity
+    #endregion Unity Methods
 }
