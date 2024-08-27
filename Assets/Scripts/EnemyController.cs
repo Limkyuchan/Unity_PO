@@ -6,6 +6,12 @@ using UnityEngine.AI;
 public class EnemyController : MonoBehaviour
 {
     #region Enum Methods
+    public enum MovementType
+    { 
+        Walk,
+        Roll,
+    }
+
     public enum AiState
     {
         Idle,
@@ -33,6 +39,9 @@ public class EnemyController : MonoBehaviour
 
     [Space(10), Header("AI 관련 정보")]
     [SerializeField]
+    MovementType m_movementType;
+    IMovementStrategy m_movementStrategy;
+    [SerializeField]
     PathController m_path;
     [SerializeField]
     PatrolType m_patrolType;
@@ -54,7 +63,7 @@ public class EnemyController : MonoBehaviour
     float m_idleDuration = 5f;      // Idle 상태 유지시간
     [SerializeField]
     float m_idleTime;               // Idle 상태 진입 후의 시간 
-    
+
     bool m_isPatrol;                // Patrol 중인지 확인
     bool m_isReverse;               // Patrol PingPong 정/역주행 확인
     int m_curWaypoint;              // 현재 지정되어 있는 Waypoint
@@ -65,6 +74,10 @@ public class EnemyController : MonoBehaviour
     Coroutine m_coChaseTarget;
     Coroutine m_coSearchTarget;
     #endregion Constants and Fields
+
+    #region Public Properties
+    public AiState GetMotion { get { return m_state; } }
+    #endregion Public Properties
 
     #region Public Methods
     public void SetDamage()
@@ -78,6 +91,16 @@ public class EnemyController : MonoBehaviour
         Vector3 to = from + dir.normalized * 0.5f;
         float duration = 0.5f;
         m_moveTween.Play(from, to, duration);
+    }
+
+    public NavMeshAgent GetNavMeshAgent()
+    {
+        return m_navAgent;
+    }
+
+    public EnemyAnimController GetAnimator()
+    {
+        return m_animCtrl;
     }
     #endregion Public Methods
 
@@ -179,7 +202,7 @@ public class EnemyController : MonoBehaviour
     {
         switch (m_state)
         {
-            case AiState.Idle: 
+            case AiState.Idle:
                 if (m_idleTime > m_idleDuration)
                 {
                     m_idleTime = 0f;
@@ -196,14 +219,14 @@ public class EnemyController : MonoBehaviour
                         }
                         // 1-2) 공격 범위 안에 들어오지 않으면 => Chase
                         SetState(AiState.Chase);
-                        m_animCtrl.Play(EnemyAnimController.Motion.Run);
+                        m_movementStrategy.Move(this);
                         m_navAgent.stoppingDistance = m_attackDist;
                         m_coChaseTarget = StartCoroutine(CoChaseToTarget(m_player.transform, 30));
                         return;
                     }
                     // 2) 인식 범위 안에 들어오지 않으면 => Patrol 
                     SetState(AiState.Patrol);
-                    m_animCtrl.Play(EnemyAnimController.Motion.Walk);
+                    m_movementStrategy.Move(this);
                     m_navAgent.stoppingDistance = m_navAgent.radius;
                     m_coSearchTarget = StartCoroutine(CoSearchTarget(m_player.transform, 1f));
                     return;
@@ -312,6 +335,19 @@ public class EnemyController : MonoBehaviour
         {
             Gizmos.color = Color.red;
             Gizmos.DrawWireSphere(transform.position, m_maxChaseDistance);
+        }
+    }
+
+    void Awake()
+    {
+        switch (m_movementType)
+        {
+            case MovementType.Walk:
+                m_movementStrategy = new WalkMovement();
+                break;
+            case MovementType.Roll:
+                m_movementStrategy = new RollMovement();
+                break;
         }
     }
 

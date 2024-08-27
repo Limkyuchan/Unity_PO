@@ -32,7 +32,6 @@ public class PlayerAnimController : AnimationController
         for (int i = 0; i < (int)Motion.Max; i++)
         {
             var motion = (Motion)i;
-            print("ÁÖÀÎ°ø Motion: " + motion);
             m_motionHashTable.Add(motion, Animator.StringToHash(motion.ToString()));
         }
     }

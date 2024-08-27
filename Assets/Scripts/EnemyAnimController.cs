@@ -9,6 +9,7 @@ public class EnemyAnimController : AnimationController
         Idle,
         Walk,
         Run,
+        Roll,
         Hit,
         Attack1,
         Max
@@ -33,7 +34,6 @@ public class EnemyAnimController : AnimationController
         for (int i = 0; i < (int)Motion.Max; i++)
         {
             var motion = (Motion)i;
-            print("Àû Motion: " + motion);
             m_motionHashTable.Add(motion, Animator.StringToHash(motion.ToString()));
         }
     }
