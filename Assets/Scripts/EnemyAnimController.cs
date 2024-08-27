@@ -10,6 +10,7 @@ public class EnemyAnimController : AnimationController
         Walk,
         Run,
         Hit,
+        Attack1,
         Max
     }
 

@@ -8,6 +8,7 @@ public class PlayerAnimController : AnimationController
     {
         Idle,
         Locomotion,
+        Hit,
         Attack1,
         Max
     }

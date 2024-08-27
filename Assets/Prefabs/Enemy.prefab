@@ -1949,7 +1949,7 @@ MonoBehaviour:
     m_RotationOrder: 4
   m_from: {x: 0, y: 0, z: 0}
   m_to: {x: 0, y: 0, z: 0}
-  m_duration: 1
+  m_duration: 0.5
 --- !u!136 &8022482305735998732
 CapsuleCollider:
   m_ObjectHideFlags: 0

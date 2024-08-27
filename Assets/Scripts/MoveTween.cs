@@ -55,15 +55,4 @@ public class MoveTween : MonoBehaviour
     {
         m_navAgent = GetComponent<NavMeshAgent>();    
     }
-
-    void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.P))
-        {
-            m_from = transform.position;
-            m_to = m_from + Vector3.forward * 4f;
-            m_duration = 1f;
-            Play();
-        }
-    }
 }

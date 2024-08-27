@@ -5,15 +5,15 @@ using UnityEngine;
 public class AttackAreaUnitFind : MonoBehaviour
 {
     [SerializeField]
-    List<GameObject> m_unitList = new List<GameObject>();
+    List<GameObject> m_enemyUnitList = new List<GameObject>();
 
-    public List<GameObject> UnitList { get { return m_unitList; } }
+    public List<GameObject> EnemyUnitList { get { return m_enemyUnitList; } }
 
     void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("Enemy"))
         {
-            m_unitList.Add(other.gameObject);
+            m_enemyUnitList.Add(other.gameObject);
         }
     }
 
@@ -21,12 +21,12 @@ public class AttackAreaUnitFind : MonoBehaviour
     {
         if (other.CompareTag("Enemy"))
         {
-            m_unitList.Remove(other.gameObject);
+            m_enemyUnitList.Remove(other.gameObject);
         }
     }
 
     void Start()
     {
-        m_unitList.Clear();
+        m_enemyUnitList.Clear();
     }
 }

@@ -1,6 +1,5 @@
 using System.Collections;
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -71,13 +70,13 @@ public class EnemyController : MonoBehaviour
     public void SetDamage()
     {
         SetState(AiState.Damaged);
-        m_animCtrl.Play(EnemyAnimController.Motion.Hit, false);         // Hit 모션 바로 재생(Blend X)
+        m_animCtrl.Play(EnemyAnimController.Motion.Hit, false);     // Hit 모션 바로 재생(Blend X)
 
         Vector3 from = transform.position;
         Vector3 dir = transform.position - m_player.transform.position;
         dir.y = 0f;
-        Vector3 to = from + dir.normalized * 0.3f;
-        float duration = 0.3f;
+        Vector3 to = from + dir.normalized * 0.5f;
+        float duration = 0.5f;
         m_moveTween.Play(from, to, duration);
     }
     #endregion Public Methods
@@ -86,6 +85,19 @@ public class EnemyController : MonoBehaviour
     void AnimEvent_HitFinished()
     {
         SetIdle(1.5f);
+    }
+
+    void AnimEvent_AttackFinished()
+    {
+        SetIdle(1.5f);
+    }
+
+    void AnimEvent_Attack()
+    {
+        if (CheckArea(m_player.transform, m_attackDist))
+        {
+            m_player.SetDamage(this);
+        }
     }
     #endregion Animation Event Methods
 
@@ -178,6 +190,8 @@ public class EnemyController : MonoBehaviour
                         if (CheckArea(m_player.transform, m_attackDist))
                         {
                             SetState(AiState.Attack);
+                            transform.LookAt(m_player.transform);
+                            m_animCtrl.Play(EnemyAnimController.Motion.Attack1);
                             return;
                         }
                         // 1-2) 공격 범위 안에 들어오지 않으면 => Chase
