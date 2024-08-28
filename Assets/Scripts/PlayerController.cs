@@ -16,7 +16,6 @@ public class PlayerController : MonoBehaviour
     AttackAreaUnitFind[] m_attackAreas;
     PlayerAnimController m_animCtrl;
     NavMeshAgent m_navAgent;
-    MoveTween m_moveTween;
 
     [SerializeField]
     float m_speed = 5f;
@@ -33,13 +32,6 @@ public class PlayerController : MonoBehaviour
     public void SetDamage(EnemyController enemy)
     {
         m_animCtrl.Play(PlayerAnimController.Motion.Hit, false);
-
-        Vector3 from = transform.position;
-        Vector3 dir = transform.position - enemy.transform.position;
-        dir.y = 0f;
-        Vector3 to = from + dir.normalized * 0.3f;
-        float duration = 0.3f;
-        m_moveTween.Play(from, to, duration);
     }
     #endregion Public Methods
 
@@ -71,7 +63,6 @@ public class PlayerController : MonoBehaviour
         m_animCtrl = GetComponent<PlayerAnimController>();
         m_navAgent = GetComponent<NavMeshAgent>();
         m_attackAreas = m_attackAreaObj.GetComponentsInChildren<AttackAreaUnitFind>();
-        m_moveTween = GetComponent<MoveTween>();
 
         m_virtualCamEffect.SetActive(false);
         m_virtualCamBack.SetActive(false);

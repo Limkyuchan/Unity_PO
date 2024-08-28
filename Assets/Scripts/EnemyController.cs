@@ -3,13 +3,19 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
+// Melee : AttackDist = 2.5f;
+// Zombie : AttackDist = 1.5f;
+// Warrior : AttackDist = 2f;
+// Mage : AttackDist = 
+
 public class EnemyController : MonoBehaviour
 {
     #region Enum Methods
     public enum MovementType
-    { 
+    {
         Walk,
         Roll,
+        Jump,
     }
 
     public enum AiState
@@ -18,6 +24,7 @@ public class EnemyController : MonoBehaviour
         Attack,
         Chase,
         Patrol,
+        Jump,
         Damaged,
         Max
     }
@@ -33,7 +40,10 @@ public class EnemyController : MonoBehaviour
     #region Constants and Fields
     [SerializeField]
     PlayerController m_player;
+    [SerializeField]
+    GameObject m_attackAreaObj;
     EnemyAnimController m_animCtrl;
+    AttackAreaUnitFind m_attackArea;
     NavMeshAgent m_navAgent;
     MoveTween m_moveTween;
 
@@ -48,7 +58,7 @@ public class EnemyController : MonoBehaviour
     [SerializeField]
     AiState m_state;
     [SerializeField]
-    float m_detectDist = 7f;
+    float m_detectDist;
     [SerializeField]
     bool m_isShowDetectArea;
     [SerializeField]
@@ -64,6 +74,7 @@ public class EnemyController : MonoBehaviour
     [SerializeField]
     float m_idleTime;               // Idle 상태 진입 후의 시간 
 
+    bool m_isInvokeJumpPatrolMove = false;  // Invoke가 호출된 상태인지 확인
     bool m_isPatrol;                // Patrol 중인지 확인
     bool m_isReverse;               // Patrol PingPong 정/역주행 확인
     int m_curWaypoint;              // 현재 지정되어 있는 Waypoint
@@ -77,6 +88,8 @@ public class EnemyController : MonoBehaviour
 
     #region Public Properties
     public AiState GetMotion { get { return m_state; } }
+
+    public float GetAttackDist { get { return m_attackDist; } }
     #endregion Public Properties
 
     #region Public Methods
@@ -91,6 +104,11 @@ public class EnemyController : MonoBehaviour
         Vector3 to = from + dir.normalized * 0.5f;
         float duration = 0.5f;
         m_moveTween.Play(from, to, duration);
+    }
+
+    public void SetState(AiState state)
+    {
+        m_state = state;
     }
 
     public NavMeshAgent GetNavMeshAgent()
@@ -117,10 +135,20 @@ public class EnemyController : MonoBehaviour
 
     void AnimEvent_Attack()
     {
-        if (CheckArea(m_player.transform, m_attackDist))
+        if (m_attackArea.PlayerUnitList != null)
         {
             m_player.SetDamage(this);
         }
+    }
+
+    void AnimEvent_RollFinished()
+    {
+        SetIdle(2f);
+    }
+
+    void AnimEvent_JumpFinished()
+    {
+        SetState(AiState.Jump);
     }
     #endregion Animation Event Methods
 
@@ -179,10 +207,12 @@ public class EnemyController : MonoBehaviour
         }
         return false;
     }
-
-    void SetState(AiState state)
+    
+    void InvokeJumpPatrolMove()
     {
-        m_state = state;
+        m_movementStrategy.PatrolMove(this);
+        SetState(AiState.Jump);
+        m_isInvokeJumpPatrolMove = false;
     }
 
     void SetIdleDuration(float duration)
@@ -203,33 +233,41 @@ public class EnemyController : MonoBehaviour
         switch (m_state)
         {
             case AiState.Idle:
-                if (m_idleTime > m_idleDuration)
+                if (m_idleTime >= m_idleDuration)
                 {
                     m_idleTime = 0f;
                     // 1) 인식 범위 안에 들어오면 => Attack / Chase
                     if (FindTarget(m_player.transform, m_detectDist))
                     {
                         // 1-1) 공격 범위 안에 들어오면 => Attack
-                        if (CheckArea(m_player.transform, m_attackDist))
+                        if (CheckArea(m_player.transform, m_attackDist))    
                         {
                             SetState(AiState.Attack);
                             transform.LookAt(m_player.transform);
                             m_animCtrl.Play(EnemyAnimController.Motion.Attack1);
-                            return;
                         }
                         // 1-2) 공격 범위 안에 들어오지 않으면 => Chase
-                        SetState(AiState.Chase);
-                        m_movementStrategy.Move(this);
-                        m_navAgent.stoppingDistance = m_attackDist;
-                        m_coChaseTarget = StartCoroutine(CoChaseToTarget(m_player.transform, 30));
+                        else
+                        {
+                            m_movementStrategy.ChaseMove(this);
+                            m_coChaseTarget = StartCoroutine(CoChaseToTarget(m_player.transform, 30));
+                        }
                         return;
                     }
-                    // 2) 인식 범위 안에 들어오지 않으면 => Patrol 
-                    SetState(AiState.Patrol);
-                    m_movementStrategy.Move(this);
-                    m_navAgent.stoppingDistance = m_navAgent.radius;
-                    m_coSearchTarget = StartCoroutine(CoSearchTarget(m_player.transform, 1f));
-                    return;
+                    // 2) 인식 범위 안에 들어오지 않으면 => Patrol
+                    else
+                    {
+                        if (m_movementType == MovementType.Walk || m_movementType == MovementType.Roll)
+                        {
+                            m_movementStrategy.PatrolMove(this);
+                            m_coSearchTarget = StartCoroutine(CoSearchTarget(m_player.transform, 1f));
+                        }
+                        else if (m_movementType == MovementType.Jump)
+                        {
+                            m_movementStrategy.PatrolMove(this);
+                        }
+                        return;
+                    }
                 }
                 m_idleTime += Time.deltaTime;
                 break;
@@ -248,16 +286,19 @@ public class EnemyController : MonoBehaviour
                 if (m_navAgent.remainingDistance <= m_navAgent.stoppingDistance)
                 {
                     SetIdle(0.5f);
-                    StopCoroutine(m_coChaseTarget);
+                    if (m_coChaseTarget != null)
+                    {
+                        StopCoroutine(m_coChaseTarget);
+                    }
                     return;
                 }
                 break;
             case AiState.Patrol:
                 // 1) Patrol 하고 있지 않으면
-                if (!m_isPatrol)
+                if (!m_isPatrol)    
                 {
                     // 1-1) Patrol 타입이 Loop
-                    if (m_patrolType == PatrolType.Loop)
+                    if (m_patrolType == PatrolType.Loop)            
                     {
                         m_curWaypoint++;
                         if (m_curWaypoint >= m_path.Points.Length)
@@ -266,7 +307,7 @@ public class EnemyController : MonoBehaviour
                         }
                     }
                     // 1-2) Patrol 타입이 PingPong
-                    else if (m_patrolType == PatrolType.PingPong)
+                    else if (m_patrolType == PatrolType.PingPong)   
                     {
                         if (!m_isReverse)
                         {
@@ -287,8 +328,8 @@ public class EnemyController : MonoBehaviour
                             }
                         }
                     }
-                    // 1-3) Patrol 타입이 Random
-                    else if (m_patrolType == PatrolType.Random)
+                    // 1-3) Patrol 타입이 Random       
+                    else if (m_patrolType == PatrolType.Random)           
                     {
                         int point = 0;
                         do
@@ -301,15 +342,28 @@ public class EnemyController : MonoBehaviour
                     m_isPatrol = true;
                     m_prevWaypoint = m_curWaypoint;
                 }
-                // 2) Patrol 하고 있다면
+                // 2) Patrol 하고 있다면        
                 else
                 {
                     if (m_navAgent.remainingDistance <= m_navAgent.stoppingDistance)
                     {
-                        SetIdle(3f);
                         m_isPatrol = false;
                         StopCoroutine(m_coSearchTarget);
                     }
+                }
+                break;
+            case AiState.Jump:
+                if (FindTarget(m_player.transform, m_detectDist))
+                {
+                    CancelInvoke("InvokeJumpPatrolMove");
+                    m_isInvokeJumpPatrolMove = false;
+                    m_navAgent.enabled = true;
+                    SetState(AiState.Chase);
+                }
+                else if (!m_isInvokeJumpPatrolMove)
+                {
+                    Invoke("InvokeJumpPatrolMove", 3f);
+                    m_isInvokeJumpPatrolMove = true;
                 }
                 break;
         }
@@ -338,27 +392,31 @@ public class EnemyController : MonoBehaviour
         }
     }
 
-    void Awake()
-    {
-        switch (m_movementType)
-        {
-            case MovementType.Walk:
-                m_movementStrategy = new WalkMovement();
-                break;
-            case MovementType.Roll:
-                m_movementStrategy = new RollMovement();
-                break;
-        }
-    }
-
     void Start()
     {
         m_animCtrl = GetComponent<EnemyAnimController>();
+        m_attackArea = m_attackAreaObj.GetComponentInChildren<AttackAreaUnitFind>();
         m_navAgent = GetComponent<NavMeshAgent>();
         m_moveTween = GetComponent<MoveTween>();
 
         m_playerLayer = 1 << LayerMask.NameToLayer("Player");
         m_backgroundLayer = 1 << LayerMask.NameToLayer("Background");
+
+        switch (m_movementType)
+        {
+            case MovementType.Walk:
+                m_movementStrategy = new WalkMovement();
+                m_detectDist = 7f;
+                break;
+            case MovementType.Roll:
+                m_movementStrategy = new RollMovement();
+                m_detectDist = 8f;
+                break;
+            case MovementType.Jump:
+                m_movementStrategy = new JumpMovement();
+                m_detectDist = 9f;
+                break;
+        }
     }
 
     void Update()
