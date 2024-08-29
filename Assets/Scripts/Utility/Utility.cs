@@ -15,5 +15,17 @@ public class Utility
         m_waitForSecList.Add(sec, new WaitForSeconds(sec));
         return m_waitForSecList[sec];
     }
-   
+
+    public static GameObject FindChildObject(GameObject obj, string childName)
+    {
+        var childs = obj.GetComponentsInChildren<Transform>();
+        foreach (var child in childs)
+        {
+            if (child.name.Equals(childName))
+            {
+                return child.gameObject;
+            }
+        }
+        return null;
+    }
 }

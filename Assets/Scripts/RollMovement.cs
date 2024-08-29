@@ -1,23 +1,27 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using static EnemyController;
 
 public class RollMovement : IMovementStrategy
 {
-    public void ChaseMove(EnemyController enemyController)
+    public void Move(EnemyController enemy)
     {
-        enemyController.SetState(AiState.Chase);
-        enemyController.GetNavMeshAgent().speed = 0.01f;
-        enemyController.GetNavMeshAgent().stoppingDistance = enemyController.GetAttackDist;
-        enemyController.GetAnimator().Play(EnemyAnimController.Motion.Roll);
-    }
+        if (enemy.IsChase)
+        {
+            enemy.SetState(EnemyController.AiState.Chase);
+            enemy.GetNavMeshAgent().speed = 3f;
+            enemy.GetNavMeshAgent().stoppingDistance = enemy.GetAttackDist;
+            enemy.GetAnimator().Play(EnemyAnimController.Motion.Run);
+            enemy.IsChase = false;
+        }
 
-    public void PatrolMove(EnemyController enemyController)
-    {
-        enemyController.SetState(AiState.Patrol);
-        enemyController.GetNavMeshAgent().speed = 0.01f;
-        enemyController.GetNavMeshAgent().stoppingDistance = enemyController.GetNavMeshAgent().radius;
-        enemyController.GetAnimator().Play(EnemyAnimController.Motion.Roll);
+        if (enemy.IsPatrol)
+        {
+            enemy.SetState(EnemyController.AiState.Patrol);
+            enemy.GetNavMeshAgent().speed = 0.01f;
+            enemy.GetNavMeshAgent().stoppingDistance = enemy.GetNavMeshAgent().radius;
+            enemy.GetAnimator().Play(EnemyAnimController.Motion.Roll);
+            enemy.IsPatrol = false;
+        }
     }
 }

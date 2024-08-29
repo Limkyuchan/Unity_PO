@@ -1,22 +1,26 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using static EnemyController;
 
 public class JumpMovement : IMovementStrategy
 {
-    public void ChaseMove(EnemyController enemyController)
+    public void Move(EnemyController enemy)
     {
-        enemyController.SetState(AiState.Chase);
-        enemyController.GetNavMeshAgent().speed = 3.5f;
-        enemyController.GetNavMeshAgent().stoppingDistance = enemyController.GetAttackDist;
-        enemyController.GetAnimator().Play(EnemyAnimController.Motion.Run);
-    }
+        if (enemy.IsChase)
+        {
+            enemy.IsPatrol = false;
+            enemy.SetState(EnemyController.AiState.Chase);
+            enemy.GetNavMeshAgent().speed = 3.5f;
+            enemy.GetNavMeshAgent().stoppingDistance = enemy.GetAttackDist;
+            enemy.GetAnimator().Play(EnemyAnimController.Motion.Run);
+            enemy.IsChase = false;
+        }
 
-    public void PatrolMove(EnemyController enemyController)
-    {
-        enemyController.SetState(AiState.Jump);
-        enemyController.GetNavMeshAgent().enabled = false;
-        enemyController.GetAnimator().Play(EnemyAnimController.Motion.Jump);
+        if (enemy.IsPatrol)
+        {
+            enemy.SetState(EnemyController.AiState.Jump);
+            enemy.GetNavMeshAgent().enabled = false;
+            enemy.GetAnimator().Play(EnemyAnimController.Motion.Jump);
+        }
     }
 }

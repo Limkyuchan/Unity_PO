@@ -1,12 +1,14 @@
+using Cinemachine.Utility;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.AI;
 
 // Melee : AttackDist = 2.5f;
 // Zombie : AttackDist = 1.5f;
 // Warrior : AttackDist = 2f;
-// Mage : AttackDist = 
+// Mage : AttackDist = 5f;
 
 public class EnemyController : MonoBehaviour
 {
@@ -16,6 +18,12 @@ public class EnemyController : MonoBehaviour
         Walk,
         Roll,
         Jump,
+    }
+
+    public enum AttackType
+    {
+        Melee,
+        Range,
     }
 
     public enum AiState
@@ -46,11 +54,15 @@ public class EnemyController : MonoBehaviour
     AttackAreaUnitFind m_attackArea;
     NavMeshAgent m_navAgent;
     MoveTween m_moveTween;
+    Transform m_dummyFire;
 
     [Space(10), Header("AI 관련 정보")]
     [SerializeField]
     MovementType m_movementType;
     IMovementStrategy m_movementStrategy;
+    [SerializeField]
+    AttackType m_attackType;
+    IAttackStrategy m_attackStrategy;
     [SerializeField]
     PathController m_path;
     [SerializeField]
@@ -62,7 +74,7 @@ public class EnemyController : MonoBehaviour
     [SerializeField]
     bool m_isShowDetectArea;
     [SerializeField]
-    float m_attackDist = 3f;
+    float m_attackDist;
     [SerializeField]
     bool m_isShowAttackArea;
     [SerializeField]
@@ -74,8 +86,11 @@ public class EnemyController : MonoBehaviour
     [SerializeField]
     float m_idleTime;               // Idle 상태 진입 후의 시간 
 
-    bool m_isInvokeJumpPatrolMove = false;  // Invoke가 호출된 상태인지 확인
-    bool m_isPatrol;                // Patrol 중인지 확인
+    bool m_isChase;                 // AiState 현재 상태 확인
+    bool m_isPatrol;                // AiState 현재 상태 확인
+    bool m_isEnemyAttack;
+    bool m_isInvokeJumpPatrolMove;  // Invoke가 호출된 상태인지 확인
+    bool m_isEnemyPatrol;           // Patrol 중인지 확인
     bool m_isReverse;               // Patrol PingPong 정/역주행 확인
     int m_curWaypoint;              // 현재 지정되어 있는 Waypoint
     int m_prevWaypoint;             // 이전 지정되어 있는 Waypoint
@@ -89,7 +104,17 @@ public class EnemyController : MonoBehaviour
     #region Public Properties
     public AiState GetMotion { get { return m_state; } }
 
+    public PlayerController GetPlayer { get { return m_player; } }
+
+    public AttackAreaUnitFind GetUnitFind { get { return m_attackArea; } }
+
     public float GetAttackDist { get { return m_attackDist; } }
+
+    public bool IsChase { get { return m_isChase; } set { m_isChase = value; } }
+
+    public bool IsPatrol { get { return m_isPatrol; } set { m_isPatrol = value; } }
+
+    public bool IsEnemyAttack { get { return m_isEnemyAttack; } set { m_isEnemyAttack = value; } }
     #endregion Public Properties
 
     #region Public Methods
@@ -130,14 +155,16 @@ public class EnemyController : MonoBehaviour
 
     void AnimEvent_AttackFinished()
     {
+        m_isEnemyAttack = false;
         SetIdle(1.5f);
     }
 
     void AnimEvent_Attack()
     {
-        if (m_attackArea.PlayerUnitList != null)
+        if (!m_isEnemyAttack)
         {
-            m_player.SetDamage(this);
+            m_isEnemyAttack = true;
+            m_attackStrategy.Attack(this);
         }
     }
 
@@ -172,7 +199,7 @@ public class EnemyController : MonoBehaviour
             if (FindTarget(target, m_detectDist))
             {
                 SetIdle(0.5f);
-                m_isPatrol = false;
+                m_isEnemyPatrol = false;
                 yield break;
             }
             yield return Utility.GetWaitForSeconds(sec);
@@ -210,7 +237,7 @@ public class EnemyController : MonoBehaviour
     
     void InvokeJumpPatrolMove()
     {
-        m_movementStrategy.PatrolMove(this);
+        m_movementStrategy.Move(this);
         SetState(AiState.Jump);
         m_isInvokeJumpPatrolMove = false;
     }
@@ -242,14 +269,14 @@ public class EnemyController : MonoBehaviour
                         // 1-1) 공격 범위 안에 들어오면 => Attack
                         if (CheckArea(m_player.transform, m_attackDist))    
                         {
-                            SetState(AiState.Attack);
-                            transform.LookAt(m_player.transform);
-                            m_animCtrl.Play(EnemyAnimController.Motion.Attack1);
+                            m_isEnemyAttack = false;
+                            m_attackStrategy.Attack(this);
                         }
                         // 1-2) 공격 범위 안에 들어오지 않으면 => Chase
                         else
                         {
-                            m_movementStrategy.ChaseMove(this);
+                            m_isChase = true;
+                            m_movementStrategy.Move(this);
                             m_coChaseTarget = StartCoroutine(CoChaseToTarget(m_player.transform, 30));
                         }
                         return;
@@ -257,14 +284,11 @@ public class EnemyController : MonoBehaviour
                     // 2) 인식 범위 안에 들어오지 않으면 => Patrol
                     else
                     {
+                        m_isPatrol = true;
+                        m_movementStrategy.Move(this);
                         if (m_movementType == MovementType.Walk || m_movementType == MovementType.Roll)
                         {
-                            m_movementStrategy.PatrolMove(this);
                             m_coSearchTarget = StartCoroutine(CoSearchTarget(m_player.transform, 1f));
-                        }
-                        else if (m_movementType == MovementType.Jump)
-                        {
-                            m_movementStrategy.PatrolMove(this);
                         }
                         return;
                     }
@@ -295,7 +319,7 @@ public class EnemyController : MonoBehaviour
                 break;
             case AiState.Patrol:
                 // 1) Patrol 하고 있지 않으면
-                if (!m_isPatrol)    
+                if (!m_isEnemyPatrol)    
                 {
                     // 1-1) Patrol 타입이 Loop
                     if (m_patrolType == PatrolType.Loop)            
@@ -339,7 +363,7 @@ public class EnemyController : MonoBehaviour
                         m_curWaypoint = point;
                     }
                     m_navAgent.SetDestination(m_path.Points[m_curWaypoint]);
-                    m_isPatrol = true;
+                    m_isEnemyPatrol = true;
                     m_prevWaypoint = m_curWaypoint;
                 }
                 // 2) Patrol 하고 있다면        
@@ -347,7 +371,7 @@ public class EnemyController : MonoBehaviour
                 {
                     if (m_navAgent.remainingDistance <= m_navAgent.stoppingDistance)
                     {
-                        m_isPatrol = false;
+                        m_isEnemyPatrol = false;
                         StopCoroutine(m_coSearchTarget);
                     }
                 }
@@ -402,6 +426,9 @@ public class EnemyController : MonoBehaviour
         m_playerLayer = 1 << LayerMask.NameToLayer("Player");
         m_backgroundLayer = 1 << LayerMask.NameToLayer("Background");
 
+        m_isInvokeJumpPatrolMove = false;
+        m_isEnemyAttack = false;
+
         switch (m_movementType)
         {
             case MovementType.Walk:
@@ -414,9 +441,24 @@ public class EnemyController : MonoBehaviour
                 break;
             case MovementType.Jump:
                 m_movementStrategy = new JumpMovement();
-                m_detectDist = 9f;
+                m_detectDist = 10f;
                 break;
         }
+
+        switch (m_attackType)
+        {
+            case AttackType.Melee:
+                m_attackStrategy = new MeleeAttack();
+                m_attackDist = 2f;
+                break;
+            case AttackType.Range:
+                m_attackStrategy = new RangeAttack();
+                m_attackDist = 5f;
+                break;
+        }
+
+        // 원거리 공격
+        //m_dummyFire = Utility.FindChildObject(gameObject, "Dummy_Fire").transform;
     }
 
     void Update()
