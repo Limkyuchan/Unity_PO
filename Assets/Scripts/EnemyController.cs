@@ -1,14 +1,8 @@
 using Cinemachine.Utility;
 using System.Collections;
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.AI;
-
-// Melee : AttackDist = 2.5f;
-// Zombie : AttackDist = 1.5f;
-// Warrior : AttackDist = 2f;
-// Mage : AttackDist = 5f;
 
 public class EnemyController : MonoBehaviour
 {
@@ -50,6 +44,7 @@ public class EnemyController : MonoBehaviour
     PlayerController m_player;
     [SerializeField]
     GameObject m_attackAreaObj;
+    GameObject m_rangeAttackEffect;
     EnemyAnimController m_animCtrl;
     AttackAreaUnitFind m_attackArea;
     NavMeshAgent m_navAgent;
@@ -67,7 +62,7 @@ public class EnemyController : MonoBehaviour
     PathController m_path;
     [SerializeField]
     PatrolType m_patrolType;
-    [SerializeField]
+    [SerializeField] 
     AiState m_state;
     [SerializeField]
     float m_detectDist;
@@ -108,6 +103,10 @@ public class EnemyController : MonoBehaviour
 
     public AttackAreaUnitFind GetUnitFind { get { return m_attackArea; } }
 
+    public GameObject GetRangeAttackEffect { get { return m_rangeAttackEffect; } }
+
+    public Transform GetDummyFire { get { return m_dummyFire; } }
+
     public float GetAttackDist { get { return m_attackDist; } }
 
     public bool IsChase { get { return m_isChase; } set { m_isChase = value; } }
@@ -134,6 +133,16 @@ public class EnemyController : MonoBehaviour
     public void SetState(AiState state)
     {
         m_state = state;
+    }
+
+    public bool CheckArea(Transform target, float distance)
+    {
+        var dir = target.position - transform.position;
+        if (dir.sqrMagnitude <= distance * distance)
+        {
+            return true;
+        }
+        return false;
     }
 
     public NavMeshAgent GetNavMeshAgent()
@@ -221,16 +230,6 @@ public class EnemyController : MonoBehaviour
             {
                 return true;
             }
-        }
-        return false;
-    }
-
-    bool CheckArea(Transform target, float distance)
-    {
-        var dir = target.position - transform.position;
-        if (dir.sqrMagnitude <= distance * distance)
-        {
-            return true;
         }
         return false;
     }
@@ -453,12 +452,11 @@ public class EnemyController : MonoBehaviour
                 break;
             case AttackType.Range:
                 m_attackStrategy = new RangeAttack();
-                m_attackDist = 5f;
+                m_attackDist = 6f;
+                m_dummyFire = Utility.FindChildObject(gameObject, "Dummy_Fire").transform;
+                m_rangeAttackEffect = Resources.Load<GameObject>("FX/FX_Fireball_Shooting_Straight");
                 break;
         }
-
-        // 원거리 공격
-        //m_dummyFire = Utility.FindChildObject(gameObject, "Dummy_Fire").transform;
     }
 
     void Update()

@@ -22,21 +22,3 @@ public class MeleeAttack : IAttackStrategy
         }
     }
 }
-
-// 근거리 공격 애들
-//if (m_attackArea.PlayerUnitList != null)
-//{
-//    m_player.SetDamage(this);
-//}
-
-//if (CheckArea(m_player.transform, m_attackDist))
-//{
-//    var dir = m_player.transform.position - transform.position;
-
-//    var dot = Vector3.Dot(transform.forward, dir.normalized);
-//    if (dot > 0.866f)       // 30도
-//    {
-//        // 이팩트
-//    }
-//}
-
