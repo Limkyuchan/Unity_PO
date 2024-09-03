@@ -17,6 +17,7 @@ public class EnemyController : MonoBehaviour
     public enum AttackType
     {
         Melee,
+        Warrior,
         Range,
     }
 
@@ -302,7 +303,10 @@ public class EnemyController : MonoBehaviour
                 if (dir.sqrMagnitude >= m_maxChaseDistance * m_maxChaseDistance)
                 {
                     SetIdle(0.5f);
-                    StopCoroutine(m_coChaseTarget);
+                    if (m_coChaseTarget != null)
+                    {
+                        StopCoroutine(m_coChaseTarget);
+                    }
                     return;
                 }
                 // 2) 추적 중 플레이어와의 거리가 가까워지면 => Idle
@@ -432,7 +436,7 @@ public class EnemyController : MonoBehaviour
         {
             case MovementType.Walk:
                 m_movementStrategy = new WalkMovement();
-                m_detectDist = 7f;
+                m_detectDist = 8f;
                 break;
             case MovementType.Roll:
                 m_movementStrategy = new RollMovement();
@@ -448,11 +452,15 @@ public class EnemyController : MonoBehaviour
         {
             case AttackType.Melee:
                 m_attackStrategy = new MeleeAttack();
+                m_attackDist = 3f;
+                break;
+            case AttackType.Warrior:
+                m_attackStrategy = new WarriorAttack();
                 m_attackDist = 2f;
                 break;
             case AttackType.Range:
                 m_attackStrategy = new RangeAttack();
-                m_attackDist = 6f;
+                m_attackDist = 7f;
                 m_dummyFire = Utility.FindChildObject(gameObject, "Dummy_Fire").transform;
                 m_rangeAttackEffect = Resources.Load<GameObject>("FX/FX_Fireball_Shooting_Straight");
                 break;

@@ -18,7 +18,7 @@ public class PlayerController : MonoBehaviour
     NavMeshAgent m_navAgent;
 
     [SerializeField]
-    float m_speed = 5f;
+    float m_speed = 3f;
     float m_scale;
     int hash_Speed;
     Vector3 m_dir;
@@ -29,7 +29,7 @@ public class PlayerController : MonoBehaviour
     #endregion Public Properties
 
     #region Public Methods
-    public void SetDamage(EnemyController enemy)
+    public void SetDamage()
     {
         m_animCtrl.Play(PlayerAnimController.Motion.Hit, false);
     }

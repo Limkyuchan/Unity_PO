@@ -13,11 +13,9 @@ public class ParticleCollisionHandler : MonoBehaviour
 
     void OnParticleCollision(GameObject other)
     {
-        Debug.Log("진입!!");
         if (other.CompareTag("Player"))
         {
-            Debug.Log("player 맞았음!");
-            m_enemy.GetPlayer.SetDamage(m_enemy);
+            m_enemy.GetPlayer.SetDamage();
         }
     }
 }

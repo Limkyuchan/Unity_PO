@@ -10,9 +10,9 @@ public class WalkMovement : IMovementStrategy
         if (enemy.IsChase)
         {
             enemy.SetState(EnemyController.AiState.Chase);
-            enemy.GetNavMeshAgent().speed = 3f;
+            enemy.GetNavMeshAgent().speed = 1.5f;
             enemy.GetNavMeshAgent().stoppingDistance = enemy.GetAttackDist;
-            enemy.GetAnimator().Play(EnemyAnimController.Motion.Run);
+            enemy.GetAnimator().Play(EnemyAnimController.Motion.Walk);
             enemy.IsChase = false;
         }
 

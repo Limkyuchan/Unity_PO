@@ -1,6 +1,5 @@
 using System.Collections;
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class RangeAttack : IAttackStrategy
@@ -25,7 +24,7 @@ public class RangeAttack : IAttackStrategy
                 effect.gameObject.transform.position = enemy.GetDummyFire.position;
                 effect.transform.forward = dir.normalized;
 
-                var collisionHandler = enemy.AddComponent<ParticleCollisionHandler>();
+                var collisionHandler = effect.GetComponent<ParticleCollisionHandler>();
                 collisionHandler.Initialize(enemy);
             }
         }  

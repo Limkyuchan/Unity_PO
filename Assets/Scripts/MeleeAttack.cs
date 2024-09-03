@@ -1,6 +1,5 @@
 using System.Collections;
 using System.Collections.Generic;
-using Unity.VisualScripting.FullSerializer;
 using UnityEngine;
 
 public class MeleeAttack : IAttackStrategy
@@ -17,7 +16,7 @@ public class MeleeAttack : IAttackStrategy
         {
             if (enemy.GetUnitFind.PlayerUnitList != null)
             {
-                enemy.GetPlayer.SetDamage(enemy);
+                enemy.GetPlayer.SetDamage();
             }
         }
     }
