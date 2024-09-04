@@ -12,7 +12,7 @@ public class WalkMovement : IMovementStrategy
             enemy.SetState(EnemyController.AiState.Chase);
             enemy.GetNavMeshAgent().speed = 1.5f;
             enemy.GetNavMeshAgent().stoppingDistance = enemy.GetAttackDist;
-            enemy.GetAnimator().Play(EnemyAnimController.Motion.Walk);
+            enemy.GetAnimator().Play(EnemyAnimController.Motion.Run);
             enemy.IsChase = false;
         }
 

@@ -10,6 +10,9 @@ public class PlayerAnimController : AnimationController
         Locomotion,
         Hit,
         Attack1,
+        Attack2,
+        Attack3,
+        Attack4,
         Max
     }
 

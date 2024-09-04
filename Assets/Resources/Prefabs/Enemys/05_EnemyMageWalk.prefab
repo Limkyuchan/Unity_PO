@@ -837,7 +837,7 @@ GameObject:
   - component: {fileID: 4486667131735058174}
   - component: {fileID: 297578251091113295}
   m_Layer: 0
-  m_Name: Enemy_Mage
+  m_Name: 05_EnemyMageWalk
   m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -929,13 +929,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d98f562a1b267f24c9496c9a4298b300, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_player: {fileID: 0}
-  m_attackAreaObj: {fileID: 6490805907310955425}
-  m_movementType: 0
-  m_attackType: 2
-  m_path: {fileID: 0}
+  m_enemyType: 0
   m_patrolType: 0
   m_state: 0
+  m_attackAreaObj: {fileID: 6490805907310955425}
   m_detectDist: 8
   m_isShowDetectArea: 1
   m_attackDist: 7
@@ -1715,8 +1712,8 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 1.2, y: 2, z: 6.5}
-  m_Center: {x: 0, y: 1, z: 3}
+  m_Size: {x: 1.2, y: 2, z: 7}
+  m_Center: {x: 0, y: 1, z: 3.5}
 --- !u!54 &8194027559011588054
 Rigidbody:
   m_ObjectHideFlags: 0

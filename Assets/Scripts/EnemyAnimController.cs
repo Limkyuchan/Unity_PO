@@ -9,7 +9,6 @@ public class EnemyAnimController : AnimationController
         Idle,
         Walk,
         Run,
-        Roll,
         Jump,
         Hit,
         Attack1,

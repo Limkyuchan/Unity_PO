@@ -95815,7 +95815,14 @@ AnimationClip:
   m_HasMotionFloatCurves: 1
   m_Events:
   - time: 0.6666667
-    functionName: Hit
+    functionName: AnimEvent_Attack
+    data: 
+    objectReferenceParameter: {fileID: 0}
+    floatParameter: 0
+    intParameter: 0
+    messageOptions: 0
+  - time: 1.2
+    functionName: AnimEvent_AttackFinished
     data: 
     objectReferenceParameter: {fileID: 0}
     floatParameter: 0

@@ -372,7 +372,7 @@ GameObject:
   - component: {fileID: 2529236776091407365}
   - component: {fileID: 6754556727812505276}
   m_Layer: 0
-  m_Name: Enemy_Warrior2
+  m_Name: 04_EnemyWarriorWalk
   m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

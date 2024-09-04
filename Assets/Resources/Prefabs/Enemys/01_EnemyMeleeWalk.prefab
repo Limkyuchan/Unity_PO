@@ -370,12 +370,12 @@ GameObject:
   - component: {fileID: 2016988399960803636}
   - component: {fileID: 5779140520885102736}
   m_Layer: 0
-  m_Name: Enemy_Melee
+  m_Name: 01_EnemyMeleeWalk
   m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &1327269146660467841
 Transform:
   m_ObjectHideFlags: 0
@@ -462,11 +462,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d98f562a1b267f24c9496c9a4298b300, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_player: {fileID: 0}
   m_attackAreaObj: {fileID: 7868468016953488989}
-  m_movementType: 0
-  m_attackType: 0
-  m_path: {fileID: 0}
+  m_enemyType: 0
   m_patrolType: 0
   m_state: 0
   m_detectDist: 7

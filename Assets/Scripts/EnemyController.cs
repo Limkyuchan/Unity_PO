@@ -7,20 +7,6 @@ using UnityEngine.AI;
 public class EnemyController : MonoBehaviour
 {
     #region Enum Methods
-    public enum MovementType
-    {
-        Walk,
-        Roll,
-        Jump,
-    }
-
-    public enum AttackType
-    {
-        Melee,
-        Warrior,
-        Range,
-    }
-
     public enum AiState
     {
         Idle,
@@ -41,30 +27,26 @@ public class EnemyController : MonoBehaviour
     #endregion
 
     #region Constants and Fields
-    [SerializeField]
     PlayerController m_player;
-    [SerializeField]
-    GameObject m_attackAreaObj;
-    GameObject m_rangeAttackEffect;
     EnemyAnimController m_animCtrl;
+    PathController m_path;
     AttackAreaUnitFind m_attackArea;
     NavMeshAgent m_navAgent;
     MoveTween m_moveTween;
     Transform m_dummyFire;
+    GameObject m_rangeAttackEffect;
 
     [Space(10), Header("AI 관련 정보")]
     [SerializeField]
-    MovementType m_movementType;
+    EnemyManager.EnemyType m_enemyType;
     IMovementStrategy m_movementStrategy;
-    [SerializeField]
-    AttackType m_attackType;
     IAttackStrategy m_attackStrategy;
-    [SerializeField]
-    PathController m_path;
     [SerializeField]
     PatrolType m_patrolType;
     [SerializeField] 
     AiState m_state;
+    [SerializeField]
+    GameObject m_attackAreaObj;
     [SerializeField]
     float m_detectDist;
     [SerializeField]
@@ -100,6 +82,8 @@ public class EnemyController : MonoBehaviour
     #region Public Properties
     public AiState GetMotion { get { return m_state; } }
 
+    public EnemyManager.EnemyType Type { get { return m_enemyType; } set { m_enemyType = value; } }
+
     public PlayerController GetPlayer { get { return m_player; } }
 
     public AttackAreaUnitFind GetUnitFind { get { return m_attackArea; } }
@@ -118,10 +102,16 @@ public class EnemyController : MonoBehaviour
     #endregion Public Properties
 
     #region Public Methods
+    public void SetEnemy(PathController path)
+    {
+        m_path = path;
+        transform.position = m_path.Points[0];
+    }
+
     public void SetDamage()
     {
         SetState(AiState.Damaged);
-        m_animCtrl.Play(EnemyAnimController.Motion.Hit, false);     // Hit 모션 바로 재생(Blend X)
+        m_animCtrl.Play(EnemyAnimController.Motion.Hit, false);
 
         Vector3 from = transform.position;
         Vector3 dir = transform.position - m_player.transform.position;
@@ -134,6 +124,11 @@ public class EnemyController : MonoBehaviour
     public void SetState(AiState state)
     {
         m_state = state;
+    }
+
+    public void InitPlayer(PlayerController player)
+    {
+        m_player = player;
     }
 
     public bool CheckArea(Transform target, float distance)
@@ -158,17 +153,6 @@ public class EnemyController : MonoBehaviour
     #endregion Public Methods
 
     #region Animation Event Methods
-    void AnimEvent_HitFinished()
-    {
-        SetIdle(1.5f);
-    }
-
-    void AnimEvent_AttackFinished()
-    {
-        m_isEnemyAttack = false;
-        SetIdle(1.5f);
-    }
-
     void AnimEvent_Attack()
     {
         if (!m_isEnemyAttack)
@@ -178,9 +162,15 @@ public class EnemyController : MonoBehaviour
         }
     }
 
-    void AnimEvent_RollFinished()
+    void AnimEvent_AttackFinished()
     {
-        SetIdle(2f);
+        m_isEnemyAttack = false;
+        SetIdle(1.5f);
+    }
+
+    void AnimEvent_HitFinished()
+    {
+        SetIdle(1.5f);
     }
 
     void AnimEvent_JumpFinished()
@@ -286,7 +276,7 @@ public class EnemyController : MonoBehaviour
                     {
                         m_isPatrol = true;
                         m_movementStrategy.Move(this);
-                        if (m_movementType == MovementType.Walk || m_movementType == MovementType.Roll)
+                        if (Type != EnemyManager.EnemyType.WarriorJump)
                         {
                             m_coSearchTarget = StartCoroutine(CoSearchTarget(m_player.transform, 1f));
                         }
@@ -432,35 +422,32 @@ public class EnemyController : MonoBehaviour
         m_isInvokeJumpPatrolMove = false;
         m_isEnemyAttack = false;
 
-        switch (m_movementType)
+        switch (Type)
         {
-            case MovementType.Walk:
+            case EnemyManager.EnemyType.MeleeWalk:
+            case EnemyManager.EnemyType.MeleeWalk2:
+                m_attackStrategy = new MeleeAttack();
                 m_movementStrategy = new WalkMovement();
+                m_attackDist = 3f;
                 m_detectDist = 8f;
                 break;
-            case MovementType.Roll:
-                m_movementStrategy = new RollMovement();
+            case EnemyManager.EnemyType.WarriorWalk:
+                m_attackStrategy = new WarriorAttack();
+                m_movementStrategy = new WalkMovement();
+                m_attackDist = 2f;
                 m_detectDist = 8f;
                 break;
-            case MovementType.Jump:
+            case EnemyManager.EnemyType.WarriorJump:
+                m_attackStrategy = new WarriorAttack();
                 m_movementStrategy = new JumpMovement();
+                m_attackDist = 2f;
                 m_detectDist = 10f;
                 break;
-        }
-
-        switch (m_attackType)
-        {
-            case AttackType.Melee:
-                m_attackStrategy = new MeleeAttack();
-                m_attackDist = 3f;
-                break;
-            case AttackType.Warrior:
-                m_attackStrategy = new WarriorAttack();
-                m_attackDist = 2f;
-                break;
-            case AttackType.Range:
+            case EnemyManager.EnemyType.MageWalk:
                 m_attackStrategy = new RangeAttack();
+                m_movementStrategy = new WalkMovement();
                 m_attackDist = 7f;
+                m_detectDist = 10f;
                 m_dummyFire = Utility.FindChildObject(gameObject, "Dummy_Fire").transform;
                 m_rangeAttackEffect = Resources.Load<GameObject>("FX/FX_Fireball_Shooting_Straight");
                 break;
