@@ -1,12 +1,15 @@
-using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class WalkMovement : IMovementStrategy
+public class EnemyWalkMovement : MonoBehaviour, IMovementStrategy
 {
+    [SerializeField]
+    EnemyManager.EnemyType m_enemyType;
+
     public void Move(EnemyController enemy)
     {
+        m_enemyType = enemy.Type;
         if (enemy.IsChase)
         {
             enemy.SetState(EnemyController.AiState.Chase);

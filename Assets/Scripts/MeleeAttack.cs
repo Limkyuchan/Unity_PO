@@ -10,7 +10,7 @@ public class MeleeAttack : IAttackStrategy
         {
             enemy.SetState(EnemyController.AiState.Attack);
             enemy.transform.LookAt(enemy.GetPlayer.transform);
-            enemy.GetAnimator().Play(EnemyAnimController.Motion.Attack1);
+            enemy.GetAnimator.Play(EnemyAnimController.Motion.Attack1);
         }
         else if (enemy.IsEnemyAttack)
         {

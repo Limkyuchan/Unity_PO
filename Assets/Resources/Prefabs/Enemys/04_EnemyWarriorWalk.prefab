@@ -368,8 +368,10 @@ GameObject:
   - component: {fileID: 44353200711753885}
   - component: {fileID: 5313369098275600029}
   - component: {fileID: 8298062524585161366}
+  - component: {fileID: 6312699383939970033}
+  - component: {fileID: 9002981373567057486}
+  - component: {fileID: 8167919427703314750}
   - component: {fileID: 286869833945448868}
-  - component: {fileID: 2529236776091407365}
   - component: {fileID: 6754556727812505276}
   m_Layer: 0
   m_Name: 04_EnemyWarriorWalk
@@ -377,7 +379,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &1329646139401950676
 Transform:
   m_ObjectHideFlags: 0
@@ -452,7 +454,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_curMotion: 0
---- !u!114 &286869833945448868
+--- !u!114 &6312699383939970033
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -461,25 +463,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 463802581455116326}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d98f562a1b267f24c9496c9a4298b300, type: 3}
+  m_Script: {fileID: 11500000, guid: 357041150a4a6bb40ab33cbfbb8b6ad9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_player: {fileID: 0}
-  m_attackAreaObj: {fileID: 2391010141154941652}
-  m_movementType: 0
-  m_attackType: 1
-  m_path: {fileID: 0}
-  m_patrolType: 0
-  m_state: 0
-  m_detectDist: 7
-  m_isShowDetectArea: 1
-  m_attackDist: 2
-  m_isShowAttackArea: 1
-  m_maxChaseDistance: 15
-  m_isShowMaxChaseDistance: 1
-  m_idleDuration: 5
-  m_idleTime: 0
---- !u!114 &2529236776091407365
+  m_enemyType: 3
+--- !u!114 &9002981373567057486
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -488,7 +476,20 @@ MonoBehaviour:
   m_GameObject: {fileID: 463802581455116326}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1e72793eb01638e4ea5a01b389c26de4, type: 3}
+  m_Script: {fileID: 11500000, guid: 7595f880b7211f24ab0ba3880b96e253, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_enemyType: 3
+--- !u!114 &8167919427703314750
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 463802581455116326}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c669b0e644c1c3c4b8a7985662b0d3b0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   m_curve:
@@ -504,40 +505,31 @@ MonoBehaviour:
       inWeight: 0
       outWeight: 0
     - serializedVersion: 3
-      time: 0.14539471
-      value: 0.44169527
-      inSlope: 3.6056073
-      outSlope: 3.6056073
+      time: 0.1666862
+      value: 0.626698
+      inSlope: 2.732487
+      outSlope: 2.732487
       tangentMode: 0
       weightedMode: 0
       inWeight: 0.33333334
-      outWeight: 0.1671805
+      outWeight: 0.120383956
     - serializedVersion: 3
-      time: 0.2878633
-      value: 0.8161603
-      inSlope: 2.0321808
-      outSlope: 2.0321808
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.196931
-    - serializedVersion: 3
-      time: 0.46704227
-      value: 0.9694196
-      inSlope: 0.1773024
-      outSlope: 0.1773024
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.12908694
-    - serializedVersion: 3
-      time: 0.99884033
+      time: 0.5
       value: 1
-      inSlope: 0.06255711
-      outSlope: 0.06255711
+      inSlope: 0.030476628
+      outSlope: 0.030476628
       tangentMode: 0
       weightedMode: 0
-      inWeight: 0.11051165
+      inWeight: 0.33333334
+      outWeight: 0.08415198
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
       outWeight: 0
     m_PreInfinity: 2
     m_PostInfinity: 2
@@ -545,6 +537,29 @@ MonoBehaviour:
   m_from: {x: 0, y: 0, z: 0}
   m_to: {x: 0, y: 0, z: 0}
   m_duration: 0.5
+--- !u!114 &286869833945448868
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 463802581455116326}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d98f562a1b267f24c9496c9a4298b300, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_state: 0
+  m_patrolType: 0
+  m_attackAreaObj: {fileID: 2391010141154941652}
+  m_detectDist: 8
+  m_isShowDetectArea: 1
+  m_attackDist: 2
+  m_isShowAttackArea: 1
+  m_maxChaseDistance: 15
+  m_isShowMaxChaseDistance: 1
+  m_idleDuration: 5
+  m_idleTime: 0
 --- !u!136 &6754556727812505276
 CapsuleCollider:
   m_ObjectHideFlags: 0

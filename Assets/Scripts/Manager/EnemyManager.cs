@@ -27,7 +27,7 @@ public class EnemyManager : SingletonMonoBehaviour<EnemyManager>
 
     public void Create(PathController path)
     {
-        EnemyType type = EnemyType.MageWalk;
+        EnemyType type = EnemyType.MeleeWalk;
         var enemy = m_enemyPool[type].Get();
         enemy.SetEnemy(path);
         enemy.gameObject.SetActive(true);

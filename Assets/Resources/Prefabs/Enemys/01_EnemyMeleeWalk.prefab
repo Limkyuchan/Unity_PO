@@ -366,8 +366,10 @@ GameObject:
   - component: {fileID: 8203855269759884998}
   - component: {fileID: 3396078331533631014}
   - component: {fileID: 7639803215350795300}
+  - component: {fileID: 11418221274037049}
+  - component: {fileID: 4235988658104058681}
+  - component: {fileID: -7858401471121646262}
   - component: {fileID: 2414711373178464907}
-  - component: {fileID: 2016988399960803636}
   - component: {fileID: 5779140520885102736}
   m_Layer: 0
   m_Name: 01_EnemyMeleeWalk
@@ -407,7 +409,7 @@ Animator:
   m_Controller: {fileID: 9100000, guid: 90a26c28a10ab1440a1583aa5bca4f0b, type: 2}
   m_CullingMode: 1
   m_UpdateMode: 0
-  m_ApplyRootMotion: 0
+  m_ApplyRootMotion: 1
   m_LinearVelocityBlending: 0
   m_StabilizeFeet: 0
   m_WarningMessage: 
@@ -450,7 +452,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_curMotion: 0
---- !u!114 &2414711373178464907
+--- !u!114 &11418221274037049
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -459,22 +461,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 5914195457514458598}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d98f562a1b267f24c9496c9a4298b300, type: 3}
+  m_Script: {fileID: 11500000, guid: 8ae6f8a01859efc4e806772c705674a6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_attackAreaObj: {fileID: 7868468016953488989}
   m_enemyType: 0
-  m_patrolType: 0
-  m_state: 0
-  m_detectDist: 7
-  m_isShowDetectArea: 1
-  m_attackDist: 3
-  m_isShowAttackArea: 1
-  m_maxChaseDistance: 15
-  m_isShowMaxChaseDistance: 1
-  m_idleDuration: 5
-  m_idleTime: 0
---- !u!114 &2016988399960803636
+--- !u!114 &4235988658104058681
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -483,7 +474,20 @@ MonoBehaviour:
   m_GameObject: {fileID: 5914195457514458598}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1e72793eb01638e4ea5a01b389c26de4, type: 3}
+  m_Script: {fileID: 11500000, guid: 7595f880b7211f24ab0ba3880b96e253, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_enemyType: 0
+--- !u!114 &-7858401471121646262
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5914195457514458598}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c669b0e644c1c3c4b8a7985662b0d3b0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   m_curve:
@@ -499,40 +503,31 @@ MonoBehaviour:
       inWeight: 0
       outWeight: 0
     - serializedVersion: 3
-      time: 0.14539471
-      value: 0.44169527
-      inSlope: 3.6056073
-      outSlope: 3.6056073
+      time: 0.1666862
+      value: 0.626698
+      inSlope: 2.732487
+      outSlope: 2.732487
       tangentMode: 0
       weightedMode: 0
       inWeight: 0.33333334
-      outWeight: 0.1671805
+      outWeight: 0.120383956
     - serializedVersion: 3
-      time: 0.2878633
-      value: 0.8161603
-      inSlope: 2.0321808
-      outSlope: 2.0321808
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.196931
-    - serializedVersion: 3
-      time: 0.46704227
-      value: 0.9694196
-      inSlope: 0.1773024
-      outSlope: 0.1773024
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.12908694
-    - serializedVersion: 3
-      time: 0.99884033
+      time: 0.5
       value: 1
-      inSlope: 0.06255711
-      outSlope: 0.06255711
+      inSlope: 0.030476628
+      outSlope: 0.030476628
       tangentMode: 0
       weightedMode: 0
-      inWeight: 0.11051165
+      inWeight: 0.33333334
+      outWeight: 0.08415198
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
       outWeight: 0
     m_PreInfinity: 2
     m_PostInfinity: 2
@@ -540,6 +535,29 @@ MonoBehaviour:
   m_from: {x: 0, y: 0, z: 0}
   m_to: {x: 0, y: 0, z: 0}
   m_duration: 0.5
+--- !u!114 &2414711373178464907
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5914195457514458598}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d98f562a1b267f24c9496c9a4298b300, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_state: 0
+  m_patrolType: 0
+  m_attackAreaObj: {fileID: 7868468016953488989}
+  m_detectDist: 8
+  m_isShowDetectArea: 1
+  m_attackDist: 3
+  m_isShowAttackArea: 1
+  m_maxChaseDistance: 15
+  m_isShowMaxChaseDistance: 1
+  m_idleDuration: 5
+  m_idleTime: 0
 --- !u!136 &5779140520885102736
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -559,7 +577,7 @@ CapsuleCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 2
+  m_Radius: 1.5
   m_Height: 4
   m_Direction: 1
   m_Center: {x: 0, y: 2, z: 0}

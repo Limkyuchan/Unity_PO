@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class RangeAttack : IAttackStrategy
+public class EnemyRangeAttack : MonoBehaviour, IAttackStrategy
 {
     public void Attack(EnemyController enemy)
     {
@@ -27,6 +27,6 @@ public class RangeAttack : IAttackStrategy
                 var collisionHandler = effect.GetComponent<ParticleCollisionHandler>();
                 collisionHandler.Initialize(enemy);
             }
-        }  
+        }
     }
 }

@@ -15,6 +15,7 @@ public class PlayerController : MonoBehaviour
 
     AttackAreaUnitFind[] m_attackAreas;
     PlayerAnimController m_animCtrl;
+    SkillController m_skillCtrl;
     NavMeshAgent m_navAgent;
 
     [SerializeField]
@@ -38,7 +39,31 @@ public class PlayerController : MonoBehaviour
     #region Animation Event Methods
     void AnimEvent_AttackFinished()
     {
-        m_animCtrl.Play(PlayerAnimController.Motion.Idle);
+        bool isCombo = false;
+        if (m_skillCtrl.CommandCount > 0)
+        {
+            var command = m_skillCtrl.GetCommand();
+            if (command == KeyCode.Space)
+            {
+                isCombo = true;
+            }
+
+            if (m_skillCtrl.CommandCount > 0)
+            {
+                m_skillCtrl.ReleaseKeyBuffer();
+                isCombo = false;
+            }
+        }
+
+        if (isCombo)
+        {
+            m_animCtrl.Play(m_skillCtrl.GetCombo());
+        }
+        else
+        {
+            m_skillCtrl.ResetCombo();
+            m_animCtrl.Play(PlayerAnimController.Motion.Idle);
+        }
     }
 
     void AnimEvent_Attack()
@@ -61,6 +86,7 @@ public class PlayerController : MonoBehaviour
     void Start()
     {
         m_animCtrl = GetComponent<PlayerAnimController>();
+        m_skillCtrl = GetComponent<SkillController>();
         m_navAgent = GetComponent<NavMeshAgent>();
         m_attackAreas = m_attackAreaObj.GetComponentsInChildren<AttackAreaUnitFind>();
 
@@ -86,6 +112,10 @@ public class PlayerController : MonoBehaviour
             if (GetMotion == PlayerAnimController.Motion.Idle || GetMotion == PlayerAnimController.Motion.Locomotion)
             {
                 m_animCtrl.Play(PlayerAnimController.Motion.Attack1);
+            }
+            else
+            {
+                m_skillCtrl.AddCommand(KeyCode.Space);
             }
         }
 

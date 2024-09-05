@@ -909,8 +909,10 @@ GameObject:
   - component: {fileID: 5275837093371658217}
   - component: {fileID: 3719603103361575536}
   - component: {fileID: 4954906419921543716}
+  - component: {fileID: 6074834832251182873}
+  - component: {fileID: -4546943602945785130}
+  - component: {fileID: 1259672112855471767}
   - component: {fileID: 4042885067511568085}
-  - component: {fileID: 2501325327866728594}
   - component: {fileID: 8278156169109384986}
   m_Layer: 0
   m_Name: 02_EnemyMeleeWalk2
@@ -993,7 +995,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_curMotion: 0
---- !u!114 &4042885067511568085
+--- !u!114 &6074834832251182873
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1002,22 +1004,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 2459948830170168720}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d98f562a1b267f24c9496c9a4298b300, type: 3}
+  m_Script: {fileID: 11500000, guid: 8ae6f8a01859efc4e806772c705674a6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_attackAreaObj: {fileID: 6242856424970059258}
   m_enemyType: 0
-  m_patrolType: 0
-  m_state: 0
-  m_detectDist: 7
-  m_isShowDetectArea: 1
-  m_attackDist: 2.5
-  m_isShowAttackArea: 1
-  m_maxChaseDistance: 15
-  m_isShowMaxChaseDistance: 1
-  m_idleDuration: 5
-  m_idleTime: 0
---- !u!114 &2501325327866728594
+--- !u!114 &-4546943602945785130
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1026,7 +1017,20 @@ MonoBehaviour:
   m_GameObject: {fileID: 2459948830170168720}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1e72793eb01638e4ea5a01b389c26de4, type: 3}
+  m_Script: {fileID: 11500000, guid: 7595f880b7211f24ab0ba3880b96e253, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_enemyType: 0
+--- !u!114 &1259672112855471767
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2459948830170168720}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c669b0e644c1c3c4b8a7985662b0d3b0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   m_curve:
@@ -1042,40 +1046,31 @@ MonoBehaviour:
       inWeight: 0
       outWeight: 0
     - serializedVersion: 3
-      time: 0.14539471
-      value: 0.44169527
-      inSlope: 3.6056073
-      outSlope: 3.6056073
+      time: 0.1666862
+      value: 0.626698
+      inSlope: 2.732487
+      outSlope: 2.732487
       tangentMode: 0
       weightedMode: 0
       inWeight: 0.33333334
-      outWeight: 0.1671805
+      outWeight: 0.120383956
     - serializedVersion: 3
-      time: 0.2878633
-      value: 0.8161603
-      inSlope: 2.0321808
-      outSlope: 2.0321808
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.196931
-    - serializedVersion: 3
-      time: 0.46704227
-      value: 0.9694196
-      inSlope: 0.1773024
-      outSlope: 0.1773024
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.12908694
-    - serializedVersion: 3
-      time: 0.99884033
+      time: 0.5
       value: 1
-      inSlope: 0.06255711
-      outSlope: 0.06255711
+      inSlope: 0.030476628
+      outSlope: 0.030476628
       tangentMode: 0
       weightedMode: 0
-      inWeight: 0.11051165
+      inWeight: 0.33333334
+      outWeight: 0.08415198
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
       outWeight: 0
     m_PreInfinity: 2
     m_PostInfinity: 2
@@ -1083,6 +1078,29 @@ MonoBehaviour:
   m_from: {x: 0, y: 0, z: 0}
   m_to: {x: 0, y: 0, z: 0}
   m_duration: 0.5
+--- !u!114 &4042885067511568085
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2459948830170168720}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d98f562a1b267f24c9496c9a4298b300, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_state: 0
+  m_patrolType: 0
+  m_attackAreaObj: {fileID: 6242856424970059258}
+  m_detectDist: 8
+  m_isShowDetectArea: 1
+  m_attackDist: 3
+  m_isShowAttackArea: 1
+  m_maxChaseDistance: 15
+  m_isShowMaxChaseDistance: 1
+  m_idleDuration: 5
+  m_idleTime: 0
 --- !u!136 &8278156169109384986
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -2150,7 +2168,7 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 2.2, y: 2.6, z: 2}
+  m_Size: {x: 2.2, y: 2.6, z: 2.9}
   m_Center: {x: 0, y: 1.3, z: 1.5}
 --- !u!54 &6007508678985238007
 Rigidbody:

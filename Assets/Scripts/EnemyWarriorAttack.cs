@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class WarriorAttack : IAttackStrategy
+public class EnemyWarriorAttack : MonoBehaviour, IAttackStrategy
 {
     public void Attack(EnemyController enemy)
     {

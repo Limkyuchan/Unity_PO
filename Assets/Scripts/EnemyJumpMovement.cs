@@ -2,10 +2,14 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class JumpMovement : IMovementStrategy
+public class EnemyJumpMovement : MonoBehaviour, IMovementStrategy
 {
+    [SerializeField]
+    EnemyManager.EnemyType m_enemyType;
+
     public void Move(EnemyController enemy)
     {
+        m_enemyType = enemy.Type;
         if (enemy.IsChase)
         {
             enemy.IsPatrol = false;
