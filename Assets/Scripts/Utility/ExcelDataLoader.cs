@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
 
-public class TableLoader : Singleton<TableLoader>
+public class ExcelDataLoader : Singleton<ExcelDataLoader>
 {
     List<Dictionary<string, string>> m_table = new List<Dictionary<string, string>>();
 

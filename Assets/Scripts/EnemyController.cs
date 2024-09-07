@@ -33,7 +33,6 @@ public class EnemyController : MonoBehaviour
     AttackAreaUnitFind m_attackArea;
     NavMeshAgent m_navAgent;
     PathController m_path;
-    //MoveTween m_moveTween;
     GameObject m_rangeAttackEffect;
     Transform m_dummyFire;
     EnemyManager.EnemyType m_enemyType;
@@ -41,10 +40,6 @@ public class EnemyController : MonoBehaviour
     IAttackStrategy m_attackStrategy;
 
     [Header("AI 관련 정보")]
-    //[SerializeField]
-    //EnemyManager.EnemyType m_enemyType;
-    //IMovementStrategy m_movementStrategy;
-    //IAttackStrategy m_attackStrategy;
     [SerializeField] 
     AiState m_state;
     [SerializeField]
@@ -116,7 +111,7 @@ public class EnemyController : MonoBehaviour
         transform.position = m_path.Points[0];
     }
 
-    public void SetDamage()
+    public void SetDamage(SkillData skill)
     {
         SetState(AiState.Damaged);
         m_animCtrl.Play(EnemyAnimController.Motion.Hit, false);
@@ -124,8 +119,10 @@ public class EnemyController : MonoBehaviour
         Vector3 from = transform.position;
         Vector3 dir = transform.position - m_player.transform.position;
         dir.y = 0f;
-        Vector3 to = from + dir.normalized * 0.5f;
-        float duration = 0.5f;
+        Vector3 to = from + dir.normalized * skill.knockback;
+        float duration = skill.knockbackDuration;
+        Debug.Log("knockback:" + skill.knockback);
+        Debug.Log("knockbackDuration:" + skill.knockbackDuration);
         m_hittedFeedback.Play(from, to, duration);
     }
 
@@ -413,7 +410,6 @@ public class EnemyController : MonoBehaviour
         m_attackArea = m_attackAreaObj.GetComponentInChildren<AttackAreaUnitFind>();
         m_navAgent = GetComponent<NavMeshAgent>();
         m_hittedFeedback = GetComponent<EnemyHittedFeedback>();
-        //m_moveTween = GetComponent<MoveTween>();
 
         m_playerLayer = 1 << LayerMask.NameToLayer("Player");
         m_backgroundLayer = 1 << LayerMask.NameToLayer("Background");
@@ -445,10 +441,10 @@ public class EnemyController : MonoBehaviour
             case EnemyManager.EnemyType.MageWalk:
                 m_attackStrategy = GetComponent<EnemyRangeAttack>();
                 m_movementStrategy = GetComponent<EnemyWalkMovement>();
-                m_attackDist = 7f;
-                m_detectDist = 10f;
                 m_dummyFire = Utility.FindChildObject(gameObject, "Dummy_Fire").transform;
                 m_rangeAttackEffect = Resources.Load<GameObject>("FX/FX_Fireball_Shooting_Straight");
+                m_attackDist = 7f;
+                m_detectDist = 10f;
                 break;
         }
     }

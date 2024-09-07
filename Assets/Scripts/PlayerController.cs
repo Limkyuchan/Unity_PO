@@ -68,11 +68,12 @@ public class PlayerController : MonoBehaviour
 
     void AnimEvent_Attack()
     {
-        var unitList = m_attackAreas[0].EnemyUnitList;
+        var skill = SkillTable.Instance.GetSkillData(GetMotion);
+        var unitList = m_attackAreas[skill.attackArea].EnemyUnitList;
         for (int i = 0; i < unitList.Count; i++)
         {
             var enemy = unitList[i].GetComponent<EnemyController>();
-            enemy.SetDamage();
+            enemy.SetDamage(skill);
         }
     }
 
