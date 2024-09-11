@@ -13,7 +13,7 @@ public class EnemyWalkMovement : MonoBehaviour, IMovementStrategy
         if (enemy.IsChase)
         {
             enemy.SetState(EnemyController.AiState.Chase);
-            enemy.GetNavMeshAgent.speed = 1.5f;
+            enemy.GetNavMeshAgent.speed = 1.7f;
             enemy.GetNavMeshAgent.stoppingDistance = enemy.GetAttackDist;
             enemy.GetAnimator.Play(EnemyAnimController.Motion.Run);
             enemy.IsChase = false;

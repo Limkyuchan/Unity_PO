@@ -7287,7 +7287,8 @@ MonoBehaviour:
   m_virtualCamEffect: {fileID: 0}
   m_virtualCamBack: {fileID: 0}
   m_attackAreaObj: {fileID: 8005133041294534658}
-  m_speed: 3
+  m_speed: 2
+  m_scale: 0
 --- !u!136 &8491258339732836978
 CapsuleCollider:
   m_ObjectHideFlags: 0

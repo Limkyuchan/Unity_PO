@@ -10,17 +10,20 @@ public class PlayerController : MonoBehaviour
     GameObject m_virtualCamEffect;
     [SerializeField]
     GameObject m_virtualCamBack;
-    [SerializeField]
-    GameObject m_attackAreaObj;
 
     AttackAreaUnitFind[] m_attackAreas;
     PlayerAnimController m_animCtrl;
     SkillController m_skillCtrl;
     NavMeshAgent m_navAgent;
 
+    [Header("Player 관련 정보")]
     [SerializeField]
-    float m_speed = 3f;
+    GameObject m_attackAreaObj;
+    [SerializeField]
+    float m_speed = 2f;
+    [SerializeField]
     float m_scale;
+
     int hash_Speed;
     Vector3 m_dir;
     #endregion Constants and Fields
@@ -33,6 +36,20 @@ public class PlayerController : MonoBehaviour
     public void SetDamage()
     {
         m_animCtrl.Play(PlayerAnimController.Motion.Hit, false);
+    }
+
+    public bool IsAttack
+    {
+        get
+        {
+            if (GetMotion == PlayerAnimController.Motion.Attack1 ||
+                GetMotion == PlayerAnimController.Motion.Attack2 ||
+                GetMotion == PlayerAnimController.Motion.Attack3 ||
+                GetMotion == PlayerAnimController.Motion.Attack4)
+                return true;
+            return false;
+        }
+
     }
     #endregion Public Methods
 
@@ -79,9 +96,19 @@ public class PlayerController : MonoBehaviour
 
     void AnimEvent_HitFinished()
     {
+        ResetMove();
         m_animCtrl.Play(PlayerAnimController.Motion.Idle);
     }
     #endregion Animation Event Methods
+
+    #region Methods
+    void ResetMove()
+    {
+        m_navAgent.ResetPath();
+        m_scale = 0f;
+        m_animCtrl.SetFloat(hash_Speed, m_scale);
+    }
+    #endregion Methods
 
     #region Unity Methods
     void Start()
@@ -110,6 +137,7 @@ public class PlayerController : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.Space))
         {
+            ResetMove();
             if (GetMotion == PlayerAnimController.Motion.Idle || GetMotion == PlayerAnimController.Motion.Locomotion)
             {
                 m_animCtrl.Play(PlayerAnimController.Motion.Attack1);
@@ -122,7 +150,7 @@ public class PlayerController : MonoBehaviour
 
         m_dir = new Vector3(Input.GetAxis("Horizontal"), 0f, Input.GetAxis("Vertical"));
 
-        if (m_dir != Vector3.zero)
+        if (m_dir != Vector3.zero && !IsAttack)
         {
             transform.forward = m_dir;
             if (m_scale < 1f)
@@ -134,7 +162,7 @@ public class PlayerController : MonoBehaviour
                 m_scale = 1f;
             }
         }
-        else
+        else if (!IsAttack)
         {
             if (m_scale > 0f)
             {
@@ -147,8 +175,7 @@ public class PlayerController : MonoBehaviour
         }
 
         m_animCtrl.SetFloat(hash_Speed, m_scale);
-
-        if (m_navAgent.enabled)
+        if (m_navAgent.enabled && !IsAttack)
         {
             m_navAgent.Move(m_dir * m_speed * m_scale * Time.deltaTime);
         }

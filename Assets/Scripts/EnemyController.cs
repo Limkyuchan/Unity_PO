@@ -39,7 +39,7 @@ public class EnemyController : MonoBehaviour
     IMovementStrategy m_movementStrategy;
     IAttackStrategy m_attackStrategy;
 
-    [Header("AI 관련 정보")]
+    [Header("Enemy 관련 정보")]
     [SerializeField] 
     AiState m_state;
     [SerializeField]
@@ -49,15 +49,9 @@ public class EnemyController : MonoBehaviour
     [SerializeField]
     float m_detectDist;
     [SerializeField]
-    bool m_isShowDetectArea;
-    [SerializeField]
     float m_attackDist;
     [SerializeField]
-    bool m_isShowAttackArea;
-    [SerializeField]
     float m_maxChaseDistance = 15f; // Chase 상태에서 플레이어를 추적할 최대 거리
-    [SerializeField]
-    bool m_isShowMaxChaseDistance;
     [SerializeField]
     float m_idleDuration = 5f;      // Idle 상태 유지시간
     [SerializeField]
@@ -73,7 +67,6 @@ public class EnemyController : MonoBehaviour
     int m_prevWaypoint;             // 이전 지정되어 있는 Waypoint
     int m_playerLayer;
     int m_backgroundLayer;
-
     Coroutine m_coChaseTarget;
     Coroutine m_coSearchTarget;
     #endregion Constants and Fields
@@ -121,8 +114,6 @@ public class EnemyController : MonoBehaviour
         dir.y = 0f;
         Vector3 to = from + dir.normalized * skill.knockback;
         float duration = skill.knockbackDuration;
-        Debug.Log("knockback:" + skill.knockback);
-        Debug.Log("knockbackDuration:" + skill.knockbackDuration);
         m_hittedFeedback.Play(from, to, duration);
     }
 
@@ -267,7 +258,7 @@ public class EnemyController : MonoBehaviour
                         return;
                     }
                     // 2) 인식 범위 안에 들어오지 않으면 => Patrol
-                    else
+                    else 
                     {
                         m_isPatrol = true;
                         m_movementStrategy.Move(this);
@@ -385,31 +376,22 @@ public class EnemyController : MonoBehaviour
     #region Unity Methods
     void OnDrawGizmos()
     {
-        if (m_isShowDetectArea)
-        {
-            Gizmos.color = Color.yellow;
-            Gizmos.DrawWireSphere(transform.position, m_detectDist);
-        }
+        Gizmos.color = Color.yellow;
+        Gizmos.DrawWireSphere(transform.position, m_detectDist);
+        
+        Gizmos.color = Color.green;
+        Gizmos.DrawWireSphere(transform.position, m_attackDist);
 
-        if (m_isShowAttackArea)
-        {
-            Gizmos.color = Color.green;
-            Gizmos.DrawWireSphere(transform.position, m_attackDist);
-        }
-
-        if (m_isShowMaxChaseDistance)
-        {
-            Gizmos.color = Color.red;
-            Gizmos.DrawWireSphere(transform.position, m_maxChaseDistance);
-        }
+        Gizmos.color = Color.red;
+        Gizmos.DrawWireSphere(transform.position, m_maxChaseDistance);
     }
 
     void Start()
     {
         m_animCtrl = GetComponent<EnemyAnimController>();
-        m_attackArea = m_attackAreaObj.GetComponentInChildren<AttackAreaUnitFind>();
         m_navAgent = GetComponent<NavMeshAgent>();
         m_hittedFeedback = GetComponent<EnemyHittedFeedback>();
+        m_attackArea = m_attackAreaObj.GetComponentInChildren<AttackAreaUnitFind>();
 
         m_playerLayer = 1 << LayerMask.NameToLayer("Player");
         m_backgroundLayer = 1 << LayerMask.NameToLayer("Background");

@@ -42,7 +42,7 @@ public class EnemyManager : SingletonMonoBehaviour<EnemyManager>
             var enemyPrefab = m_enemyPrefabs[i];
             EnemyType type = (EnemyType)(int.Parse(enemyPrefab.name.Split("_")[0]) - 1);
 
-            var pool = new GameObjectPool<EnemyController> (5, () =>
+            var pool = new GameObjectPool<EnemyController> (3, () =>
             {
                 var obj = Instantiate(enemyPrefab);
                 obj.transform.SetParent(transform, false);
