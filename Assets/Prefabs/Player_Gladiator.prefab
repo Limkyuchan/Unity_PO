@@ -7148,6 +7148,7 @@ GameObject:
   - component: {fileID: 8985052154601430849}
   - component: {fileID: 9114845800687266966}
   - component: {fileID: 7107019677805770236}
+  - component: {fileID: 524558692194863015}
   - component: {fileID: 494880010849840814}
   - component: {fileID: 268522191752103511}
   - component: {fileID: 2182733374495083344}
@@ -7231,7 +7232,7 @@ NavMeshAgent:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8645889757175262427}
-  m_Enabled: 1
+  m_Enabled: 0
   m_AgentTypeID: 0
   m_Radius: 0.5
   m_Speed: 3
@@ -7246,6 +7247,32 @@ NavMeshAgent:
   m_BaseOffset: 0
   m_WalkableMask: 4294967295
   m_ObstacleAvoidanceType: 4
+--- !u!143 &524558692194863015
+CharacterController:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8645889757175262427}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Height: 1.7
+  m_Radius: 0.3
+  m_SlopeLimit: 45
+  m_StepOffset: 0.4
+  m_SkinWidth: 0.08
+  m_MinMoveDistance: 0.001
+  m_Center: {x: 0, y: 0.85, z: 0}
 --- !u!114 &494880010849840814
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7287,7 +7314,7 @@ MonoBehaviour:
   m_virtualCamEffect: {fileID: 0}
   m_virtualCamBack: {fileID: 0}
   m_attackAreaObj: {fileID: 8005133041294534658}
-  m_speed: 2
+  m_speed: 0
   m_scale: 0
 --- !u!136 &8491258339732836978
 CapsuleCollider:
@@ -7308,7 +7335,7 @@ CapsuleCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 0.5
+  m_Radius: 0.3
   m_Height: 1.7
   m_Direction: 1
   m_Center: {x: 0, y: 1, z: 0}

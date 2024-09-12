@@ -27,7 +27,7 @@ public class EnemyManager : SingletonMonoBehaviour<EnemyManager>
 
     public void Create(PathController path)
     {
-        EnemyType type = EnemyType.MeleeWalk;
+        EnemyType type = EnemyType.MageWalk;
         var enemy = m_enemyPool[type].Get();
         enemy.SetEnemy(path);
         enemy.gameObject.SetActive(true);
@@ -37,7 +37,7 @@ public class EnemyManager : SingletonMonoBehaviour<EnemyManager>
     {
         m_enemyPrefabs = Resources.LoadAll<GameObject>("Prefabs/Enemys");
 
-        for (int i = 0; i< m_enemyPrefabs.Length; i++)
+        for (int i = 0; i < m_enemyPrefabs.Length; i++)
         {
             var enemyPrefab = m_enemyPrefabs[i];
             EnemyType type = (EnemyType)(int.Parse(enemyPrefab.name.Split("_")[0]) - 1);

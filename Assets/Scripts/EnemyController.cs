@@ -202,10 +202,14 @@ public class EnemyController : MonoBehaviour
         RaycastHit hit;
         if (Physics.Raycast(start, (end - start).normalized, out hit, distance, m_playerLayer | m_backgroundLayer))
         {
-            Debug.DrawRay(start, (end - start).normalized * hit.distance, Color.magenta, 0.5f);
             if (hit.transform.CompareTag("Player"))
             {
+                Debug.DrawRay(start, (end - start).normalized * hit.distance, Color.magenta, 0.5f);
                 return true;
+            }
+            else
+            {
+                Debug.DrawRay(start, (end - start).normalized * hit.distance, Color.cyan, 0.5f);
             }
         }
         return false;
