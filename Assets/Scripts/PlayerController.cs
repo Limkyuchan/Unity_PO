@@ -1,21 +1,22 @@
 using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
-using UnityEngine.AI;
 
 public class PlayerController : MonoBehaviour
 {
     #region Constants and Fields
-    [SerializeField]
-    GameObject m_virtualCamEffect;
-    [SerializeField]
-    GameObject m_virtualCamBack;
-
     AttackAreaUnitFind[] m_attackAreas;
     PlayerAnimController m_animCtrl;
     SkillController m_skillCtrl;
     CharacterController m_charCtrl;
-    //NavMeshAgent m_navAgent;
+
+    [Header("카메라 관련 정보")]
+    [SerializeField]
+    GameObject m_virtualCamEffect;
+    [SerializeField]
+    GameObject m_virtualCamBack;
+    [SerializeField]
+    float mouseSensitivity = 100f;
 
     [Header("Player 관련 정보")]
     [SerializeField]
@@ -105,9 +106,14 @@ public class PlayerController : MonoBehaviour
     #region Methods
     void ResetMove()
     {
-        //m_navAgent.ResetPath();
         m_scale = 0f;
         m_animCtrl.SetFloat(hash_Speed, m_scale);
+    }
+
+    void RotateCamera()
+    {
+        float mouseX = Input.GetAxis("Mouse X") * mouseSensitivity * Time.deltaTime;
+        transform.Rotate(Vector3.up * mouseX);
     }
     #endregion Methods
 
@@ -117,17 +123,19 @@ public class PlayerController : MonoBehaviour
         m_animCtrl = GetComponent<PlayerAnimController>();
         m_skillCtrl = GetComponent<SkillController>();
         m_charCtrl = GetComponent<CharacterController>();
-        //m_navAgent = GetComponent<NavMeshAgent>();
         m_attackAreas = m_attackAreaObj.GetComponentsInChildren<AttackAreaUnitFind>();
 
         m_virtualCamEffect.SetActive(false);
         m_virtualCamBack.SetActive(false);
-
         hash_Speed = Animator.StringToHash("Speed");
+
+        Cursor.lockState = CursorLockMode.Locked;       // 마우스 커서 고정
     }
 
     void Update()
     {
+        RotateCamera();
+
         if (Input.GetKeyDown(KeyCode.E))
         {
             m_virtualCamBack.SetActive(true);
@@ -181,10 +189,6 @@ public class PlayerController : MonoBehaviour
         {
             m_charCtrl.Move(m_dir * m_speed * m_scale * Time.deltaTime);
         }
-        //if (m_navAgent.enabled && !IsAttack)
-        //{
-        //    m_navAgent.Move(m_dir * m_speed * m_scale * Time.deltaTime);
-        //}
     }
     #endregion Unity Methods
 }
