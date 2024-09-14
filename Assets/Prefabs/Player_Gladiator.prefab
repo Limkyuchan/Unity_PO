@@ -7157,7 +7157,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &8985052154601430849
 Transform:
   m_ObjectHideFlags: 0
@@ -7289,12 +7289,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_virtualCamEffect: {fileID: 0}
   m_virtualCamBack: {fileID: 0}
+  mouseSensitivity: 100
   m_attackAreaObj: {fileID: 8005133041294534658}
   m_speed: 0
   m_scale: 0
-  m_cameraTransform: {fileID: 0}
-  mouseSensitivity: 100
-  verticalRotationLimit: 90
 --- !u!1 &8682839164737941797
 GameObject:
   m_ObjectHideFlags: 0

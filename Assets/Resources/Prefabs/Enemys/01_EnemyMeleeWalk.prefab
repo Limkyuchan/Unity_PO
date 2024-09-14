@@ -366,9 +366,9 @@ GameObject:
   - component: {fileID: 8203855269759884998}
   - component: {fileID: 3396078331533631014}
   - component: {fileID: 7639803215350795300}
-  - component: {fileID: 11418221274037049}
-  - component: {fileID: 4235988658104058681}
-  - component: {fileID: -7858401471121646262}
+  - component: {fileID: -5687350059622209127}
+  - component: {fileID: 8446821116294022636}
+  - component: {fileID: -2777145285058063884}
   - component: {fileID: 2414711373178464907}
   - component: {fileID: 5779140520885102736}
   m_Layer: 0
@@ -452,7 +452,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_curMotion: 0
---- !u!114 &11418221274037049
+--- !u!114 &-5687350059622209127
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -461,10 +461,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 5914195457514458598}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8ae6f8a01859efc4e806772c705674a6, type: 3}
+  m_Script: {fileID: 11500000, guid: adfa1f62ec65d854586ca5dabdbc936a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &4235988658104058681
+--- !u!114 &8446821116294022636
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -473,11 +473,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 5914195457514458598}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7595f880b7211f24ab0ba3880b96e253, type: 3}
+  m_Script: {fileID: 11500000, guid: e7894ad0b2af6ae48b6b4e87cb5aef83, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   m_enemyType: 0
---- !u!114 &-7858401471121646262
+--- !u!114 &-2777145285058063884
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -486,7 +486,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 5914195457514458598}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c669b0e644c1c3c4b8a7985662b0d3b0, type: 3}
+  m_Script: {fileID: 11500000, guid: 70dc8251fb9539c48b04a9f78fb4e817, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   m_curve:

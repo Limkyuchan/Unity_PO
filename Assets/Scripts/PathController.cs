@@ -36,6 +36,7 @@ public class PathController : MonoBehaviour
                 Gizmos.color = Color.blue;
                 Gizmos.DrawLine(m_wayPoints[i].transform.position, m_wayPoints[i + 1].transform.position);
             }
+            m_wayPoints[0].color = Color.white;
             m_wayPoints[m_wayPoints.Length - 1].color = Color.black;
         }
     }

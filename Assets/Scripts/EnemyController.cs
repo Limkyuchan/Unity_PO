@@ -29,7 +29,7 @@ public class EnemyController : MonoBehaviour
     #region Constants and Fields
     PlayerController m_player;
     EnemyAnimController m_animCtrl;
-    EnemyHittedFeedback m_hittedFeedback;
+    HittedFeedback m_hittedFeedback;
     AttackAreaUnitFind m_attackArea;
     NavMeshAgent m_navAgent;
     PathController m_path;
@@ -394,7 +394,7 @@ public class EnemyController : MonoBehaviour
     {
         m_animCtrl = GetComponent<EnemyAnimController>();
         m_navAgent = GetComponent<NavMeshAgent>();
-        m_hittedFeedback = GetComponent<EnemyHittedFeedback>();
+        m_hittedFeedback = GetComponent<HittedFeedback>();
         m_attackArea = m_attackAreaObj.GetComponentInChildren<AttackAreaUnitFind>();
 
         m_playerLayer = 1 << LayerMask.NameToLayer("Player");
@@ -407,26 +407,26 @@ public class EnemyController : MonoBehaviour
         {
             case EnemyManager.EnemyType.MeleeWalk:
             case EnemyManager.EnemyType.MeleeWalk2:
-                m_attackStrategy = GetComponent<EnemyMeleeAttack>();
-                m_movementStrategy = GetComponent<EnemyWalkMovement>();
+                m_attackStrategy = GetComponent<MeleeAttack>();
+                m_movementStrategy = GetComponent<WalkMovement>();
                 m_attackDist = 3f;
                 m_detectDist = 8f;
                 break;
             case EnemyManager.EnemyType.WarriorJump:
-                m_attackStrategy = GetComponent<EnemyWarriorAttack>();
-                m_movementStrategy = GetComponent<EnemyJumpMovement>();
+                m_attackStrategy = GetComponent<WarriorAttack>();
+                m_movementStrategy = GetComponent<JumpMovement>();
                 m_attackDist = 2f;
                 m_detectDist = 10f;
                 break;
             case EnemyManager.EnemyType.WarriorWalk:
-                m_attackStrategy = GetComponent<EnemyWarriorAttack>();
-                m_movementStrategy = GetComponent<EnemyWalkMovement>();
+                m_attackStrategy = GetComponent<WarriorAttack>();
+                m_movementStrategy = GetComponent<WalkMovement>();
                 m_attackDist = 2f;
                 m_detectDist = 8f;
                 break;
             case EnemyManager.EnemyType.MageWalk:
-                m_attackStrategy = GetComponent<EnemyRangeAttack>();
-                m_movementStrategy = GetComponent<EnemyWalkMovement>();
+                m_attackStrategy = GetComponent<RangeAttack>();
+                m_movementStrategy = GetComponent<WalkMovement>();
                 m_dummyFire = Utility.FindChildObject(gameObject, "Dummy_Fire").transform;
                 m_rangeAttackEffect = Resources.Load<GameObject>("FX/FX_Fireball_Shooting_Straight");
                 m_attackDist = 7f;

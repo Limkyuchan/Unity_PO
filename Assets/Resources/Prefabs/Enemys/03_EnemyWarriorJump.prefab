@@ -617,9 +617,9 @@ GameObject:
   - component: {fileID: 1136690320228929868}
   - component: {fileID: 8356943206124077003}
   - component: {fileID: 1474374691995054219}
-  - component: {fileID: -3968084425324769618}
-  - component: {fileID: 7043363212941679889}
-  - component: {fileID: 8192380233686551047}
+  - component: {fileID: 2143441749329509511}
+  - component: {fileID: -2964640486600773828}
+  - component: {fileID: 1629865420429633682}
   - component: {fileID: 4280916117469393862}
   - component: {fileID: 6320831136077929631}
   m_Layer: 0
@@ -704,7 +704,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_curMotion: 0
---- !u!114 &-3968084425324769618
+--- !u!114 &2143441749329509511
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -713,11 +713,23 @@ MonoBehaviour:
   m_GameObject: {fileID: 2510939220798076432}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 357041150a4a6bb40ab33cbfbb8b6ad9, type: 3}
+  m_Script: {fileID: 11500000, guid: c0a8f5a5ed1e77d4ba33cc7de8d607fc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &-2964640486600773828
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2510939220798076432}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6af4f2bd1ff2db0448dbb30232701abe, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   m_enemyType: 2
---- !u!114 &7043363212941679889
+--- !u!114 &1629865420429633682
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -726,20 +738,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 2510939220798076432}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4db80cea964f416438936eb4b1b8934d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_enemyType: 2
---- !u!114 &8192380233686551047
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2510939220798076432}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c669b0e644c1c3c4b8a7985662b0d3b0, type: 3}
+  m_Script: {fileID: 11500000, guid: 70dc8251fb9539c48b04a9f78fb4e817, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   m_curve:
@@ -803,11 +802,8 @@ MonoBehaviour:
   m_patrolType: 0
   m_attackAreaObj: {fileID: 8524293378263255382}
   m_detectDist: 10
-  m_isShowDetectArea: 1
   m_attackDist: 2
-  m_isShowAttackArea: 1
   m_maxChaseDistance: 15
-  m_isShowMaxChaseDistance: 1
   m_idleDuration: 5
   m_idleTime: 0
 --- !u!136 &6320831136077929631

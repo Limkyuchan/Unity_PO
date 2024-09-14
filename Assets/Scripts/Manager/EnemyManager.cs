@@ -18,7 +18,11 @@ public class EnemyManager : SingletonMonoBehaviour<EnemyManager>
     [SerializeField]
     PlayerController m_player;
     [SerializeField]
-    PathController m_path;
+    PathController m_pathA;
+    [SerializeField]
+    PathController m_pathB;
+    [SerializeField]
+    PathController m_pathC;
     [SerializeField]
     GameObject[] m_enemyPrefabs;
 
@@ -26,9 +30,10 @@ public class EnemyManager : SingletonMonoBehaviour<EnemyManager>
     Dictionary<GameObject, EnemyController> m_enemyComponentList = new Dictionary<GameObject, EnemyController>();
     Dictionary<EnemyType, GameObjectPool<EnemyController>> m_enemyPool = new Dictionary<EnemyType, GameObjectPool<EnemyController>>();
 
-    public void Create(PathController path)
+    public void CreateMeleeWalk(PathController path)
     {
-        EnemyType type = EnemyType.MageWalk;
+        var randomType = Random.Range(0, (int)EnemyType.Max);
+        EnemyType type = (EnemyType)randomType;
         var enemy = m_enemyPool[type].Get();
         enemy.SetEnemy(path);
         enemy.gameObject.SetActive(true);
@@ -58,11 +63,19 @@ public class EnemyManager : SingletonMonoBehaviour<EnemyManager>
         }
     }
 
+    void OnTriggerEnter(Collider other)
+    {
+        if (other.CompareTag("Player"))
+        {
+            CreateMeleeWalk(m_pathA);
+        }
+    }
+
     void Update()
     {
         if (Input.GetKeyDown(KeyCode.C))
         {
-            Create(m_path);
+            CreateMeleeWalk(m_pathA);
         }
     }
 }
