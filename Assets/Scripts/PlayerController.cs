@@ -6,15 +6,13 @@ public class PlayerController : MonoBehaviour
 {
     #region Constants and Fields
     AttackAreaUnitFind[] m_attackAreas;
+    CharacterController m_charCtrl;
     PlayerAnimController m_animCtrl;
     SkillController m_skillCtrl;
-    CharacterController m_charCtrl;
 
     [Header("카메라 관련 정보")]
     [SerializeField]
     GameObject m_virtualCamEffect;
-    [SerializeField]
-    GameObject m_virtualCamBack;
     [SerializeField]
     float mouseSensitivity = 100f;
 
@@ -22,7 +20,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField]
     GameObject m_attackAreaObj;
     [SerializeField]
-    float m_speed = 0f;
+    float m_speed = 1.5f;
     [SerializeField]
     float m_scale;
 
@@ -38,6 +36,7 @@ public class PlayerController : MonoBehaviour
     public void SetDamage()
     {
         m_animCtrl.Play(PlayerAnimController.Motion.Hit, false);
+        m_virtualCamEffect.SetActive(true);
     }
 
     public bool IsAttack
@@ -56,6 +55,17 @@ public class PlayerController : MonoBehaviour
     #endregion Public Methods
 
     #region Animation Event Methods
+    void AnimEvent_Attack()
+    {
+        var skill = SkillTable.Instance.GetSkillData(GetMotion);
+        var unitList = m_attackAreas[skill.attackArea].EnemyUnitList;
+        for (int i = 0; i < unitList.Count; i++)
+        {
+            var enemy = unitList[i].GetComponent<EnemyController>();
+            enemy.SetDamage(skill);
+        }
+    }
+
     void AnimEvent_AttackFinished()
     {
         bool isCombo = false;
@@ -85,20 +95,10 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    void AnimEvent_Attack()
-    {
-        var skill = SkillTable.Instance.GetSkillData(GetMotion);
-        var unitList = m_attackAreas[skill.attackArea].EnemyUnitList;
-        for (int i = 0; i < unitList.Count; i++)
-        {
-            var enemy = unitList[i].GetComponent<EnemyController>();
-            enemy.SetDamage(skill);
-        }
-    }
-
     void AnimEvent_HitFinished()
     {
         ResetMove();
+        m_virtualCamEffect.SetActive(false);
         m_animCtrl.Play(PlayerAnimController.Motion.Idle);
     }
     #endregion Animation Event Methods
@@ -126,7 +126,6 @@ public class PlayerController : MonoBehaviour
         m_attackAreas = m_attackAreaObj.GetComponentsInChildren<AttackAreaUnitFind>();
 
         m_virtualCamEffect.SetActive(false);
-        m_virtualCamBack.SetActive(false);
         hash_Speed = Animator.StringToHash("Speed");
 
         Cursor.lockState = CursorLockMode.Locked;       // 마우스 커서 고정
@@ -135,15 +134,6 @@ public class PlayerController : MonoBehaviour
     void Update()
     {
         RotateCamera();
-
-        if (Input.GetKeyDown(KeyCode.E))
-        {
-            m_virtualCamBack.SetActive(true);
-        }
-        if (Input.GetKeyUp(KeyCode.E))
-        {
-            m_virtualCamBack.SetActive(false);
-        }
 
         if (Input.GetKeyDown(KeyCode.Space))
         {
@@ -158,11 +148,17 @@ public class PlayerController : MonoBehaviour
             }
         }
 
-        m_dir = new Vector3(Input.GetAxis("Horizontal"), 0f, Input.GetAxis("Vertical"));
+        // 주인공 방향전환 
+        Vector3 forward = transform.forward;
+        Vector3 right = transform.right;
+        m_dir = (forward * Input.GetAxis("Vertical")) + (right * Input.GetAxis("Horizontal"));
 
         if (m_dir != Vector3.zero && !IsAttack)
         {
-            transform.forward = m_dir;
+            // 주인공 회전속도 조절
+            Quaternion targetRotation = Quaternion.LookRotation(m_dir);
+            transform.rotation = Quaternion.Lerp(transform.rotation, targetRotation, Time.deltaTime);
+
             if (m_scale < 1f)
             {
                 m_scale += Time.deltaTime / 2f;
@@ -182,6 +178,16 @@ public class PlayerController : MonoBehaviour
             {
                 m_scale = 0f;
             }
+        }
+
+        // 주인공 이동속도 조절
+        if (Input.GetKeyDown(KeyCode.LeftShift))
+        {
+            m_speed = 3f;
+        }
+        if (Input.GetKeyUp(KeyCode.LeftShift))
+        {
+            m_speed = 1.5f;
         }
 
         m_animCtrl.SetFloat(hash_Speed, m_scale);

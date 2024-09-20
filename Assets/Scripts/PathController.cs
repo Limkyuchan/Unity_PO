@@ -11,6 +11,9 @@ public class PathController : MonoBehaviour
 
     Waypoint[] m_wayPoints;
 
+
+    public Waypoint[] Waypoints { get { return m_wayPoints; } }
+
     public Vector3[] Points
     {
         get

@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -18,25 +19,23 @@ public class EnemyManager : SingletonMonoBehaviour<EnemyManager>
     [SerializeField]
     PlayerController m_player;
     [SerializeField]
-    PathController m_pathA;
-    [SerializeField]
-    PathController m_pathB;
-    [SerializeField]
-    PathController m_pathC;
-    [SerializeField]
     GameObject[] m_enemyPrefabs;
 
     List<EnemyController> m_enemyList = new List<EnemyController>();
     Dictionary<GameObject, EnemyController> m_enemyComponentList = new Dictionary<GameObject, EnemyController>();
     Dictionary<EnemyType, GameObjectPool<EnemyController>> m_enemyPool = new Dictionary<EnemyType, GameObjectPool<EnemyController>>();
 
-    public void CreateMeleeWalk(PathController path)
+    public void CreateEnemy(EnemyType type, PathController path, int count)
     {
-        var randomType = Random.Range(0, (int)EnemyType.Max);
-        EnemyType type = (EnemyType)randomType;
-        var enemy = m_enemyPool[type].Get();
-        enemy.SetEnemy(path);
-        enemy.gameObject.SetActive(true);
+        var waypoints = path.Waypoints;
+        int spawnCount = Mathf.Min(count, waypoints.Length);
+
+        for (int i = 0; i < spawnCount; i++)
+        {
+            var enemy = m_enemyPool[type].Get();
+            enemy.SetEnemy(path, i);
+            enemy.gameObject.SetActive(true);
+        }
     }
 
     protected override void OnStart()
@@ -60,22 +59,6 @@ public class EnemyManager : SingletonMonoBehaviour<EnemyManager>
                 return enemy;
             });
             m_enemyPool.Add(type, pool);
-        }
-    }
-
-    void OnTriggerEnter(Collider other)
-    {
-        if (other.CompareTag("Player"))
-        {
-            CreateMeleeWalk(m_pathA);
-        }
-    }
-
-    void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.C))
-        {
-            CreateMeleeWalk(m_pathA);
         }
     }
 }

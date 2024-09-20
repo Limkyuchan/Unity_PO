@@ -86,8 +86,8 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 2, y: 1.6, z: 1.5}
-  m_Center: {x: 0, y: 0.8, z: 0.7}
+  m_Size: {x: 2, y: 1.6, z: 1.8}
+  m_Center: {x: 0, y: 0.8, z: 0.9}
 --- !u!54 &7912843895992266846
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -727,8 +727,8 @@ CapsuleCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 3
-  m_Height: 1.5
+  m_Radius: 3.6
+  m_Height: 1.8
   m_Direction: 1
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!54 &5020718817456475328
@@ -2365,7 +2365,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &598184866499546387
 Transform:
   m_ObjectHideFlags: 0
@@ -2471,10 +2471,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_virtualCamEffect: {fileID: 0}
-  m_virtualCamBack: {fileID: 0}
   mouseSensitivity: 100
   m_attackAreaObj: {fileID: 7273580274512823346}
-  m_speed: 3
+  m_speed: 1.5
   m_scale: 0
 --- !u!1 &8058328170330240124
 GameObject:

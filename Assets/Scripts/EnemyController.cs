@@ -17,13 +17,6 @@ public class EnemyController : MonoBehaviour
         Damaged,
         Max
     }
-
-    public enum PatrolType
-    {
-        Loop,
-        PingPong,
-        Random
-    }
     #endregion
 
     #region Constants and Fields
@@ -43,8 +36,6 @@ public class EnemyController : MonoBehaviour
     [SerializeField] 
     AiState m_state;
     [SerializeField]
-    PatrolType m_patrolType;
-    [SerializeField]
     GameObject m_attackAreaObj;
     [SerializeField]
     float m_detectDist;
@@ -62,9 +53,8 @@ public class EnemyController : MonoBehaviour
     bool m_isEnemyAttack;
     bool m_isInvokeJumpPatrolMove;  // Invoke가 호출된 상태인지 확인
     bool m_isEnemyPatrol;           // Patrol 중인지 확인
-    bool m_isReverse;               // Patrol PingPong 정/역주행 확인
     int m_curWaypoint;              // 현재 지정되어 있는 Waypoint
-    int m_prevWaypoint;             // 이전 지정되어 있는 Waypoint
+    int m_curWaypointIndex;
     int m_playerLayer;
     int m_backgroundLayer;
     Coroutine m_coChaseTarget;
@@ -98,10 +88,11 @@ public class EnemyController : MonoBehaviour
     #endregion Public Properties
 
     #region Public Methods
-    public void SetEnemy(PathController path)
+    public void SetEnemy(PathController path, int waypointIndex)
     {
         m_path = path;
-        transform.position = m_path.Points[0];
+        m_curWaypointIndex = waypointIndex;
+        transform.position = m_path.Points[m_curWaypointIndex];
     }
 
     public void SetDamage(SkillData skill)
@@ -196,8 +187,8 @@ public class EnemyController : MonoBehaviour
     #region Methods
     bool FindTarget(Transform target, float distance)
     {
-        var start = transform.position + Vector3.up * 0.7f;
-        var end = target.position + Vector3.up * 0.7f;
+        var start = transform.position + Vector3.up * 0.3f;
+        var end = target.position + Vector3.up * 0.3f;
 
         RaycastHit hit;
         if (Physics.Raycast(start, (end - start).normalized, out hit, distance, m_playerLayer | m_backgroundLayer))
@@ -304,50 +295,14 @@ public class EnemyController : MonoBehaviour
                 // 1) Patrol 하고 있지 않으면
                 if (!m_isEnemyPatrol)    
                 {
-                    // 1-1) Patrol 타입이 Loop
-                    if (m_patrolType == PatrolType.Loop)            
+                    m_coSearchTarget = StartCoroutine(CoSearchTarget(m_player.transform, 1f));
+                    m_curWaypoint++;
+                    if (m_curWaypoint >= m_path.Points.Length)
                     {
-                        m_curWaypoint++;
-                        if (m_curWaypoint >= m_path.Points.Length)
-                        {
-                            m_curWaypoint = 0;
-                        }
-                    }
-                    // 1-2) Patrol 타입이 PingPong
-                    else if (m_patrolType == PatrolType.PingPong)   
-                    {
-                        if (!m_isReverse)
-                        {
-                            m_curWaypoint++;
-                            if (m_curWaypoint >= m_path.Points.Length)
-                            {
-                                m_isReverse = true;
-                                m_curWaypoint = m_path.Points.Length - 2;
-                            }
-                        }
-                        else
-                        {
-                            m_curWaypoint--;
-                            if (m_curWaypoint < 0)
-                            {
-                                m_isReverse = false;
-                                m_curWaypoint = 1;
-                            }
-                        }
-                    }
-                    // 1-3) Patrol 타입이 Random       
-                    else if (m_patrolType == PatrolType.Random)           
-                    {
-                        int point = 0;
-                        do
-                        {
-                            point = Random.Range(0, m_path.Points.Length);
-                        } while (point == m_curWaypoint || point == m_prevWaypoint);
-                        m_curWaypoint = point;
+                        m_curWaypoint = 0;
                     }
                     m_navAgent.SetDestination(m_path.Points[m_curWaypoint]);
                     m_isEnemyPatrol = true;
-                    m_prevWaypoint = m_curWaypoint;
                 }
                 // 2) Patrol 하고 있다면        
                 else
