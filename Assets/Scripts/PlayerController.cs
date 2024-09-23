@@ -18,6 +18,8 @@ public class PlayerController : MonoBehaviour
 
     [Header("Player 관련 정보")]
     [SerializeField]
+    Status m_status;
+    [SerializeField]
     GameObject m_attackAreaObj;
     [SerializeField]
     float m_speed = 1.5f;
@@ -30,6 +32,8 @@ public class PlayerController : MonoBehaviour
 
     #region Public Properties
     PlayerAnimController.Motion GetMotion { get { return m_animCtrl.GetMotion; } }
+
+    public Status GetStatus { get { return m_status; } }
     #endregion Public Properties
 
     #region Public Methods
@@ -59,10 +63,14 @@ public class PlayerController : MonoBehaviour
     {
         var skill = SkillTable.Instance.GetSkillData(GetMotion);
         var unitList = m_attackAreas[skill.attackArea].EnemyUnitList;
+        DamageType type = DamageType.Miss;
+        float damage = 0f;
+
         for (int i = 0; i < unitList.Count; i++)
         {
             var enemy = unitList[i].GetComponent<EnemyController>();
-            enemy.SetDamage(skill);
+            type = AttackDecision(enemy, skill, out damage);
+            enemy.SetDamage(skill, type, damage);
         }
     }
 
@@ -104,6 +112,25 @@ public class PlayerController : MonoBehaviour
     #endregion Animation Event Methods
 
     #region Methods
+    DamageType AttackDecision(EnemyController enemy, SkillData skill, out float damage)
+    {
+        DamageType type = DamageType.Miss;
+        damage = 0f;
+
+        if (CalculateDamage.AttackDecision(m_status.hitRate + skill.hitRate, enemy.GetStatus.dodgeRate))
+        {
+            type = DamageType.Normal;
+            damage = CalculateDamage.NormalDamage(m_status.attack, skill.attack, enemy.GetStatus.defense);
+
+            if (CalculateDamage.CriticalDecision(m_status.criRate))
+            {
+                type = DamageType.Critical;
+                damage = CalculateDamage.CriticalDamage(damage, m_status.criAttack);
+            }
+        }
+        return type;
+    }
+
     void ResetMove()
     {
         m_scale = 0f;

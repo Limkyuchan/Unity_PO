@@ -36,6 +36,8 @@ public class EnemyController : MonoBehaviour
     [SerializeField] 
     AiState m_state;
     [SerializeField]
+    Status m_status;
+    [SerializeField]
     GameObject m_attackAreaObj;
     [SerializeField]
     float m_detectDist;
@@ -63,6 +65,8 @@ public class EnemyController : MonoBehaviour
 
     #region Public Properties
     public AiState GetMotion { get { return m_state; } }
+
+    public Status GetStatus { get { return m_status; } }
 
     public EnemyManager.EnemyType Type { get { return m_enemyType; } set { m_enemyType = value; } }
 
@@ -95,8 +99,13 @@ public class EnemyController : MonoBehaviour
         transform.position = m_path.Points[m_curWaypointIndex];
     }
 
-    public void SetDamage(SkillData skill)
+    public void SetDamage(SkillData skill, DamageType type, float damage)
     {
+        if (type == DamageType.Miss) return;
+
+        m_status.hp -= Mathf.RoundToInt(damage);
+        Debug.Log("Àû Ã¼·Â: " + m_status.hp);
+
         SetState(AiState.Damaged);
         m_animCtrl.Play(EnemyAnimController.Motion.Hit, false);
 
@@ -106,6 +115,12 @@ public class EnemyController : MonoBehaviour
         Vector3 to = from + dir.normalized * skill.knockback;
         float duration = skill.knockbackDuration;
         m_hittedFeedback.Play(from, to, duration);
+
+        if (m_status.hp <= 0)
+        {
+            EnemyManager.Instance.RemoveEnemy(this);
+            StartCoroutine(CoDestroyGameObject(3f));
+        }
     }
 
     public void SetState(AiState state)
@@ -181,6 +196,12 @@ public class EnemyController : MonoBehaviour
             }
             yield return Utility.GetWaitForSeconds(sec);
         }
+    }
+
+    IEnumerator CoDestroyGameObject(float sec)
+    {
+        yield return Utility.GetWaitForSeconds(sec);
+        Destroy(gameObject);
     }
     #endregion Coroutine Methods
 

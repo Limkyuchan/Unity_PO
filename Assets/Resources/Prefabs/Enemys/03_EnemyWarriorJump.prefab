@@ -799,6 +799,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_state: 0
+  m_status:
+    hp: 300
+    hpMax: 300
+    attack: 20
+    defense: 5
+    hitRate: 80
+    dodgeRate: 5
+    criRate: 5
+    criAttack: 100
   m_attackAreaObj: {fileID: 8524293378263255382}
   m_detectDist: 10
   m_attackDist: 2

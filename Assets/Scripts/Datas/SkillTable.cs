@@ -26,6 +26,7 @@ public class SkillTable : SingletonMonoBehaviour<SkillTable>
             data.skillMotion = ExcelDataLoader.Instance.GetEnum<PlayerAnimController.Motion>("skillMotion", i);
             data.attackArea = ExcelDataLoader.Instance.GetInteger("attackArea", i);
             data.attack = ExcelDataLoader.Instance.GetFloat("attack", i);
+            data.hitRate = ExcelDataLoader.Instance.GetFloat("hitRate", i);
             data.knockback = ExcelDataLoader.Instance.GetFloat("knockback", i);
             data.knockbackDuration = ExcelDataLoader.Instance.GetFloat("knockbackDuration", i);
             m_table.Add(data.skillMotion, data);

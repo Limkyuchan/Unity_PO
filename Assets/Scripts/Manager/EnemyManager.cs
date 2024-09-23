@@ -2,7 +2,6 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.AI;
 
 public class EnemyManager : SingletonMonoBehaviour<EnemyManager>
 {
@@ -19,6 +18,8 @@ public class EnemyManager : SingletonMonoBehaviour<EnemyManager>
     [SerializeField]
     PlayerController m_player;
     [SerializeField]
+    SceneTransitionTriggerZone m_triggerZone;
+    [SerializeField]
     GameObject[] m_enemyPrefabs;
 
     List<EnemyController> m_enemyList = new List<EnemyController>();
@@ -33,8 +34,23 @@ public class EnemyManager : SingletonMonoBehaviour<EnemyManager>
         for (int i = 0; i < spawnCount; i++)
         {
             var enemy = m_enemyPool[type].Get();
+            m_enemyList.Add(enemy);
             enemy.SetEnemy(path, i);
             enemy.gameObject.SetActive(true);
+        }
+    }
+
+    public void RemoveEnemy(EnemyController enemy)
+    {
+        if (m_enemyList.Contains(enemy))
+        {
+            m_enemyList.Remove(enemy);
+        }
+
+        if (m_enemyList.Count == 0)
+        {
+            // 적이 다 죽은 상황.
+            m_triggerZone.AllEnemiesDie();
         }
     }
 

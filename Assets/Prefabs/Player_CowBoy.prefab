@@ -2358,14 +2358,14 @@ GameObject:
   - component: {fileID: 6370932140723146699}
   - component: {fileID: 3369969799746259379}
   - component: {fileID: 6161403918617831757}
-  - component: {fileID: 2613098826995299057}
+  - component: {fileID: 7810983442175094774}
   m_Layer: 6
   m_Name: Player_CowBoy
   m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &598184866499546387
 Transform:
   m_ObjectHideFlags: 0
@@ -2458,7 +2458,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_comboList: 03000000040000000500000006000000
---- !u!114 &2613098826995299057
+--- !u!114 &7810983442175094774
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -2472,6 +2472,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_virtualCamEffect: {fileID: 0}
   mouseSensitivity: 100
+  m_status:
+    hp: 200
+    hpMax: 200
+    attack: 30
+    defense: 10
+    hitRate: 80
+    dodgeRate: 5
+    criRate: 10
+    criAttack: 100
   m_attackAreaObj: {fileID: 7273580274512823346}
   m_speed: 1.5
   m_scale: 0
