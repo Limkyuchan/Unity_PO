@@ -18,7 +18,7 @@ public class PlayerController : MonoBehaviour
 
     [Header("Player 관련 정보")]
     [SerializeField]
-    Status m_status;
+    StatusData m_statusData;
     [SerializeField]
     GameObject m_attackAreaObj;
     [SerializeField]
@@ -33,7 +33,7 @@ public class PlayerController : MonoBehaviour
     #region Public Properties
     PlayerAnimController.Motion GetMotion { get { return m_animCtrl.GetMotion; } }
 
-    public Status GetStatus { get { return m_status; } }
+    public StatusData GetStatus { get { return m_statusData; } }
     #endregion Public Properties
 
     #region Public Methods
@@ -69,8 +69,9 @@ public class PlayerController : MonoBehaviour
         for (int i = 0; i < unitList.Count; i++)
         {
             var enemy = unitList[i].GetComponent<EnemyController>();
-            type = AttackDecision(enemy, skill, out damage);
-            enemy.SetDamage(skill, type, damage);
+            var status = StatusTable.Instance.GetStatusData(enemy.Type);                        //
+            type = AttackDecision(enemy, skill, status, out damage);
+            enemy.SetDamage(status, skill, type, damage);
         }
     }
 
@@ -112,20 +113,20 @@ public class PlayerController : MonoBehaviour
     #endregion Animation Event Methods
 
     #region Methods
-    DamageType AttackDecision(EnemyController enemy, SkillData skill, out float damage)
+    DamageType AttackDecision(EnemyController enemy, SkillData skill, StatusData status, out float damage)
     {
         DamageType type = DamageType.Miss;
         damage = 0f;
 
-        if (CalculateDamage.AttackDecision(m_status.hitRate + skill.hitRate, enemy.GetStatus.dodgeRate))
+        if (CalculateDamage.AttackDecision(m_statusData.hitRate + skill.hitRate, status.dodgeRate))             //
         {
             type = DamageType.Normal;
-            damage = CalculateDamage.NormalDamage(m_status.attack, skill.attack, enemy.GetStatus.defense);
+            damage = CalculateDamage.NormalDamage(m_statusData.attack, skill.attack, status.defense);           //
 
-            if (CalculateDamage.CriticalDecision(m_status.criRate))
+            if (CalculateDamage.CriticalDecision(m_statusData.criRate))
             {
                 type = DamageType.Critical;
-                damage = CalculateDamage.CriticalDamage(damage, m_status.criAttack);
+                damage = CalculateDamage.CriticalDamage(damage, m_statusData.criAttack);
             }
         }
         return type;

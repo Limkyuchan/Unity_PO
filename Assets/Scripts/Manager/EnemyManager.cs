@@ -7,6 +7,7 @@ public class EnemyManager : SingletonMonoBehaviour<EnemyManager>
 {
     public enum EnemyType
     {
+        None = -1,
         MeleeWalk,
         MeleeWalk2,
         WarriorJump,
@@ -49,7 +50,6 @@ public class EnemyManager : SingletonMonoBehaviour<EnemyManager>
 
         if (m_enemyList.Count == 0)
         {
-            // 적이 다 죽은 상황.
             m_triggerZone.AllEnemiesDie();
         }
     }

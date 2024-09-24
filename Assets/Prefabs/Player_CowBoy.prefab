@@ -2472,15 +2472,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_virtualCamEffect: {fileID: 0}
   mouseSensitivity: 100
-  m_status:
+  m_statusData:
+    type: -1
     hp: 200
     hpMax: 200
     attack: 30
     defense: 10
     hitRate: 80
-    dodgeRate: 5
-    criRate: 10
-    criAttack: 100
+    dodgeRate: 10
+    criRate: 15
+    criAttack: 200
+    attackDist: 0
+    detectDist: 0
   m_attackAreaObj: {fileID: 7273580274512823346}
   m_speed: 1.5
   m_scale: 0

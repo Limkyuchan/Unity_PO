@@ -15,6 +15,7 @@ public class EnemyController : MonoBehaviour
         Patrol,
         Jump,
         Damaged,
+        Die,
         Max
     }
     #endregion
@@ -35,14 +36,15 @@ public class EnemyController : MonoBehaviour
     [Header("Enemy 관련 정보")]
     [SerializeField] 
     AiState m_state;
-    [SerializeField]
-    Status m_status;
+    //[SerializeField]
+    //Status m_status;
+    //StatusData m_statusData;
     [SerializeField]
     GameObject m_attackAreaObj;
-    [SerializeField]
-    float m_detectDist;
-    [SerializeField]
-    float m_attackDist;
+    //[SerializeField]
+    //float m_detectDist;
+    //[SerializeField]
+    //float m_attackDist;
     [SerializeField]
     float m_maxChaseDistance = 15f; // Chase 상태에서 플레이어를 추적할 최대 거리
     [SerializeField]
@@ -66,9 +68,17 @@ public class EnemyController : MonoBehaviour
     #region Public Properties
     public AiState GetMotion { get { return m_state; } }
 
-    public Status GetStatus { get { return m_status; } }
-
     public EnemyManager.EnemyType Type { get { return m_enemyType; } set { m_enemyType = value; } }
+
+    public StatusData GetStatus
+    {
+        get
+        {
+            var status = StatusTable.Instance.GetStatusData(this.Type);
+            return status;
+        }
+    }
+    //public StatusData GetStatus { get { return m_statusData; } }
 
     public PlayerController GetPlayer { get { return m_player; } }
 
@@ -82,7 +92,8 @@ public class EnemyController : MonoBehaviour
 
     public Transform GetDummyFire { get { return m_dummyFire; } }
 
-    public float GetAttackDist { get { return m_attackDist; } }
+    public float GetAttackDist { get { return GetStatus.attackDist; } }
+    //public float GetAttackDist { get { return m_attackDist; } }
 
     public bool IsChase { get { return m_isChase; } set { m_isChase = value; } }
 
@@ -99,12 +110,12 @@ public class EnemyController : MonoBehaviour
         transform.position = m_path.Points[m_curWaypointIndex];
     }
 
-    public void SetDamage(SkillData skill, DamageType type, float damage)
+    public void SetDamage(StatusData status, SkillData skill, DamageType type, float damage)
     {
         if (type == DamageType.Miss) return;
 
-        m_status.hp -= Mathf.RoundToInt(damage);
-        Debug.Log("적 체력: " + m_status.hp);
+        status.hp -= Mathf.RoundToInt(damage);
+        Debug.Log("적 체력: " + status.hp);
 
         SetState(AiState.Damaged);
         m_animCtrl.Play(EnemyAnimController.Motion.Hit, false);
@@ -116,8 +127,9 @@ public class EnemyController : MonoBehaviour
         float duration = skill.knockbackDuration;
         m_hittedFeedback.Play(from, to, duration);
 
-        if (m_status.hp <= 0)
+        if (status.hp <= 0)
         {
+            m_animCtrl.Play(EnemyAnimController.Motion.Die);
             EnemyManager.Instance.RemoveEnemy(this);
             StartCoroutine(CoDestroyGameObject(3f));
         }
@@ -188,7 +200,7 @@ public class EnemyController : MonoBehaviour
     {
         while (m_state == AiState.Patrol)
         {
-            if (FindTarget(target, m_detectDist))
+            if (FindTarget(target, GetStatus.detectDist))
             {
                 SetIdle(0.5f);
                 m_isEnemyPatrol = false;
@@ -256,10 +268,10 @@ public class EnemyController : MonoBehaviour
                 {
                     m_idleTime = 0f;
                     // 1) 인식 범위 안에 들어오면 => Attack / Chase
-                    if (FindTarget(m_player.transform, m_detectDist))
+                    if (FindTarget(m_player.transform, GetStatus.detectDist))
                     {
                         // 1-1) 공격 범위 안에 들어오면 => Attack
-                        if (CheckArea(m_player.transform, m_attackDist))    
+                        if (CheckArea(m_player.transform, GetStatus.attackDist))    
                         {
                             m_isEnemyAttack = false;
                             m_attackStrategy.Attack(this);
@@ -336,7 +348,7 @@ public class EnemyController : MonoBehaviour
                 }
                 break;
             case AiState.Jump:
-                if (FindTarget(m_player.transform, m_detectDist))
+                if (FindTarget(m_player.transform, GetStatus.detectDist))
                 {
                     CancelInvoke("InvokeJumpPatrolMove");
                     m_isInvokeJumpPatrolMove = false;
@@ -357,10 +369,10 @@ public class EnemyController : MonoBehaviour
     void OnDrawGizmos()
     {
         Gizmos.color = Color.yellow;
-        Gizmos.DrawWireSphere(transform.position, m_detectDist);
+        Gizmos.DrawWireSphere(transform.position, GetStatus.detectDist);
         
         Gizmos.color = Color.green;
-        Gizmos.DrawWireSphere(transform.position, m_attackDist);
+        Gizmos.DrawWireSphere(transform.position, GetStatus.attackDist);
 
         Gizmos.color = Color.red;
         Gizmos.DrawWireSphere(transform.position, m_maxChaseDistance);
@@ -385,28 +397,28 @@ public class EnemyController : MonoBehaviour
             case EnemyManager.EnemyType.MeleeWalk2:
                 m_attackStrategy = GetComponent<MeleeAttack>();
                 m_movementStrategy = GetComponent<WalkMovement>();
-                m_attackDist = 3f;
-                m_detectDist = 8f;
+                //m_attackDist = 3f;
+                //m_detectDist = 8f;
                 break;
             case EnemyManager.EnemyType.WarriorJump:
                 m_attackStrategy = GetComponent<WarriorAttack>();
                 m_movementStrategy = GetComponent<JumpMovement>();
-                m_attackDist = 2f;
-                m_detectDist = 10f;
+                //m_attackDist = 2f;
+                //m_detectDist = 10f;
                 break;
             case EnemyManager.EnemyType.WarriorWalk:
                 m_attackStrategy = GetComponent<WarriorAttack>();
                 m_movementStrategy = GetComponent<WalkMovement>();
-                m_attackDist = 2f;
-                m_detectDist = 8f;
+                //m_attackDist = 2f;
+                //m_detectDist = 8f;
                 break;
             case EnemyManager.EnemyType.MageWalk:
                 m_attackStrategy = GetComponent<RangeAttack>();
                 m_movementStrategy = GetComponent<WalkMovement>();
                 m_dummyFire = Utility.FindChildObject(gameObject, "Dummy_Fire").transform;
                 m_rangeAttackEffect = Resources.Load<GameObject>("FX/FX_Fireball_Shooting_Straight");
-                m_attackDist = 7f;
-                m_detectDist = 10f;
+                //m_attackDist = 7f;
+                //m_detectDist = 10f;
                 break;
         }
     }

@@ -6,8 +6,7 @@ public class SceneTransitionTriggerZone : MonoBehaviour
 {
     [SerializeField]
     GameObject m_nextSceneTriggerZone;
-
-    bool enemiesAllDie = false;
+    bool enemiesAllDie;
 
     public void AllEnemiesDie()
     {
@@ -19,13 +18,13 @@ public class SceneTransitionTriggerZone : MonoBehaviour
     {
         if (other.CompareTag("Player") && enemiesAllDie)
         {
-            // ¾À º¯°æ.
-            Debug.Log("¾À º¯°æ!");
+            LoadScene.Instance.LoadSceneAsync("GameScene02");
         }
     }
 
     void Start()
     {
+        enemiesAllDie = false;
         m_nextSceneTriggerZone.SetActive(false);
     }
 }

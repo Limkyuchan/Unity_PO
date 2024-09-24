@@ -11,6 +11,7 @@ public class EnemyAnimController : AnimationController
         Run,
         Jump,
         Hit,
+        Die,
         Attack1,
         Max
     }
