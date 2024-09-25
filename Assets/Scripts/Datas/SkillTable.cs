@@ -14,7 +14,23 @@ public class SkillTable : SingletonMonoBehaviour<SkillTable>
 
     public SkillData GetSkillData(PlayerAnimController.Motion motion)
     {
-        return m_table[motion];
+        if (m_table.ContainsKey(motion))
+        {
+            return m_table[motion];
+        }
+        else
+        {
+            var defaultSkillData = new SkillData
+            {
+                skillMotion = PlayerAnimController.Motion.None,
+                attackArea = 0,
+                attack = 0,
+                hitRate = 0,
+                knockback = 0,
+                knockbackDuration = 0
+            };
+            return defaultSkillData;
+        }
     }
 
     void LoadData()

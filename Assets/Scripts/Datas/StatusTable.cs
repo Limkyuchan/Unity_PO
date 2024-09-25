@@ -13,7 +13,28 @@ public class StatusTable : SingletonMonoBehaviour<StatusTable>
 
     public StatusData GetStatusData(EnemyManager.EnemyType type)
     {
-        return m_table[type];
+        if (m_table.ContainsKey(type))
+        {
+            return m_table[type];
+        }
+        else
+        {
+            var defaultStatusData = new StatusData
+            {
+                type = EnemyManager.EnemyType.None,
+                hp = 0,
+                hpMax = 0,
+                attack = 0,
+                defense = 0,
+                hitRate = 0,
+                dodgeRate = 0,
+                criRate = 0,
+                criAttack = 0,
+                attackDist = 0,
+                detectDist = 0
+            };
+            return defaultStatusData;
+        }
     }
 
     void LoadData()

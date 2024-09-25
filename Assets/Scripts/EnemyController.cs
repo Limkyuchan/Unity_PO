@@ -15,7 +15,7 @@ public class EnemyController : MonoBehaviour
         Patrol,
         Jump,
         Damaged,
-        Die,
+        Death,
         Max
     }
     #endregion
@@ -36,15 +36,12 @@ public class EnemyController : MonoBehaviour
     [Header("Enemy 관련 정보")]
     [SerializeField] 
     AiState m_state;
-    //[SerializeField]
-    //Status m_status;
-    //StatusData m_statusData;
     [SerializeField]
     GameObject m_attackAreaObj;
-    //[SerializeField]
-    //float m_detectDist;
-    //[SerializeField]
-    //float m_attackDist;
+    [SerializeField]
+    int m_maxHp;                    // 생성된 적 최대 Hp
+    [SerializeField]
+    int m_currentHp;                // 생성된 적 현재 Hp
     [SerializeField]
     float m_maxChaseDistance = 15f; // Chase 상태에서 플레이어를 추적할 최대 거리
     [SerializeField]
@@ -63,6 +60,7 @@ public class EnemyController : MonoBehaviour
     int m_backgroundLayer;
     Coroutine m_coChaseTarget;
     Coroutine m_coSearchTarget;
+    Coroutine m_coDestroy;
     #endregion Constants and Fields
 
     #region Public Properties
@@ -78,7 +76,6 @@ public class EnemyController : MonoBehaviour
             return status;
         }
     }
-    //public StatusData GetStatus { get { return m_statusData; } }
 
     public PlayerController GetPlayer { get { return m_player; } }
 
@@ -93,7 +90,6 @@ public class EnemyController : MonoBehaviour
     public Transform GetDummyFire { get { return m_dummyFire; } }
 
     public float GetAttackDist { get { return GetStatus.attackDist; } }
-    //public float GetAttackDist { get { return m_attackDist; } }
 
     public bool IsChase { get { return m_isChase; } set { m_isChase = value; } }
 
@@ -112,11 +108,10 @@ public class EnemyController : MonoBehaviour
 
     public void SetDamage(StatusData status, SkillData skill, DamageType type, float damage)
     {
+        m_currentHp -= Mathf.RoundToInt(damage);
+        Debug.Log("적 체력: " + m_currentHp);
+
         if (type == DamageType.Miss) return;
-
-        status.hp -= Mathf.RoundToInt(damage);
-        Debug.Log("적 체력: " + status.hp);
-
         SetState(AiState.Damaged);
         m_animCtrl.Play(EnemyAnimController.Motion.Hit, false);
 
@@ -127,11 +122,17 @@ public class EnemyController : MonoBehaviour
         float duration = skill.knockbackDuration;
         m_hittedFeedback.Play(from, to, duration);
 
-        if (status.hp <= 0)
+        if (m_currentHp <= 0)
         {
-            m_animCtrl.Play(EnemyAnimController.Motion.Die);
+            SetState(AiState.Death);
+            m_animCtrl.Play(EnemyAnimController.Motion.Death);
             EnemyManager.Instance.RemoveEnemy(this);
-            StartCoroutine(CoDestroyGameObject(3f));
+
+            if (m_coDestroy != null)
+            {
+                StopCoroutine(m_coDestroy);
+            }
+            m_coDestroy = StartCoroutine(CoDestroyGameObject(3f));
         }
     }
 
@@ -384,10 +385,11 @@ public class EnemyController : MonoBehaviour
         m_navAgent = GetComponent<NavMeshAgent>();
         m_hittedFeedback = GetComponent<HittedFeedback>();
         m_attackArea = m_attackAreaObj.GetComponentInChildren<AttackAreaUnitFind>();
+        m_maxHp = StatusTable.Instance.GetStatusData(this.Type).hpMax;
+        m_currentHp = StatusTable.Instance.GetStatusData(this.Type).hp;
 
         m_playerLayer = 1 << LayerMask.NameToLayer("Player");
         m_backgroundLayer = 1 << LayerMask.NameToLayer("Background");
-
         m_isInvokeJumpPatrolMove = false;
         m_isEnemyAttack = false;
 
@@ -397,28 +399,20 @@ public class EnemyController : MonoBehaviour
             case EnemyManager.EnemyType.MeleeWalk2:
                 m_attackStrategy = GetComponent<MeleeAttack>();
                 m_movementStrategy = GetComponent<WalkMovement>();
-                //m_attackDist = 3f;
-                //m_detectDist = 8f;
                 break;
             case EnemyManager.EnemyType.WarriorJump:
                 m_attackStrategy = GetComponent<WarriorAttack>();
                 m_movementStrategy = GetComponent<JumpMovement>();
-                //m_attackDist = 2f;
-                //m_detectDist = 10f;
                 break;
             case EnemyManager.EnemyType.WarriorWalk:
                 m_attackStrategy = GetComponent<WarriorAttack>();
                 m_movementStrategy = GetComponent<WalkMovement>();
-                //m_attackDist = 2f;
-                //m_detectDist = 8f;
                 break;
             case EnemyManager.EnemyType.MageWalk:
                 m_attackStrategy = GetComponent<RangeAttack>();
                 m_movementStrategy = GetComponent<WalkMovement>();
                 m_dummyFire = Utility.FindChildObject(gameObject, "Dummy_Fire").transform;
                 m_rangeAttackEffect = Resources.Load<GameObject>("FX/FX_Fireball_Shooting_Straight");
-                //m_attackDist = 7f;
-                //m_detectDist = 10f;
                 break;
         }
     }

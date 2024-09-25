@@ -29,7 +29,7 @@ public struct StatusData
     {
         this.type = type;
         this.hp = hp;
-        this.hpMax = hp;
+        this.hpMax = hpMax;
         this.attack = attack;
         this.defense = defense;
         this.hitRate = hitRate;

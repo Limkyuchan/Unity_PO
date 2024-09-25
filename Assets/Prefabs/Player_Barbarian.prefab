@@ -826,10 +826,9 @@ MonoBehaviour:
   m_statusData:
     type: -1
     hp: 200
-    hpMax: 200
     attack: 30
     defense: 10
-    hitRate: 80
+    hitRate: 90
     dodgeRate: 10
     criRate: 15
     criAttack: 200

@@ -18,7 +18,7 @@ public class SceneTransitionTriggerZone : MonoBehaviour
     {
         if (other.CompareTag("Player") && enemiesAllDie)
         {
-            LoadScene.Instance.LoadSceneAsync("GameScene02");
+            LoadingSceneManager.LoadScene("GameScene02");
         }
     }
 

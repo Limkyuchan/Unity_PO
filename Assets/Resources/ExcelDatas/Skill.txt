@@ -1,7 +1,7 @@
 5
-5
-	skillMotion	attackArea	attack	knockback	knockbackDuration
-	Attack1	0	0	0.4	0.3
-	Attack2	1	10	0.5	0.3
-	Attack3	2	15	0.3	0.3
-	Attack4	3	20	2	0.5
+6
+	skillMotion	attackArea	attack	hitRate	knockback	knockbackDuration
+	Attack1	0	5	0	0.2	0.3
+	Attack2	1	10	0	0.3	0.3
+	Attack3	2	15	5	0.4	0.5
+	Attack4	3	20	10	1	0.5

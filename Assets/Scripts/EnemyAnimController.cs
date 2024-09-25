@@ -6,12 +6,13 @@ public class EnemyAnimController : AnimationController
 {
     public enum Motion
     {
+        None = -1,
         Idle,
         Walk,
         Run,
         Jump,
         Hit,
-        Die,
+        Death,
         Attack1,
         Max
     }

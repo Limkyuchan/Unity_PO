@@ -1,0 +1,8 @@
+6
+11
+	type	hp	hpMax	attack	defense	hitRate	dodgeRate	criRate	criAttack	attackDist	detectDist
+	MeleeWalk	300	300	20	5	80	5	5	100	3	8
+	MeleeWalk2	300	300	20	5	80	5	5	100	3	8
+	WarriorJump	300	300	20	5	80	5	5	100	2	10
+	WarriorWalk	300	300	20	5	80	5	5	100	2	8
+	MageWalk	300	300	20	5	80	5	5	100	7	10

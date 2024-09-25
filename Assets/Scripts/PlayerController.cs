@@ -9,6 +9,7 @@ public class PlayerController : MonoBehaviour
     CharacterController m_charCtrl;
     PlayerAnimController m_animCtrl;
     SkillController m_skillCtrl;
+    List<GameObject> m_enemyList = new List<GameObject>();
 
     [Header("카메라 관련 정보")]
     [SerializeField]
@@ -62,14 +63,35 @@ public class PlayerController : MonoBehaviour
     void AnimEvent_Attack()
     {
         var skill = SkillTable.Instance.GetSkillData(GetMotion);
+        if (skill.attack == 0) return;
+
         var unitList = m_attackAreas[skill.attackArea].EnemyUnitList;
+
+        m_enemyList.Clear();
+        foreach (var unit in unitList)
+        {
+            if (unit != null)
+            {
+                m_enemyList.Add(unit);
+            }
+        }
+
         DamageType type = DamageType.Miss;
         float damage = 0f;
 
-        for (int i = 0; i < unitList.Count; i++)
+        for (int i = m_enemyList.Count - 1; i >= 0; i--)
         {
-            var enemy = unitList[i].GetComponent<EnemyController>();
-            var status = StatusTable.Instance.GetStatusData(enemy.Type);                        //
+            var enemyObj = m_enemyList[i];
+            if (enemyObj == null)
+            {
+                m_enemyList.RemoveAt(i);
+                continue;
+            }
+
+            var enemy = m_enemyList[i].GetComponent<EnemyController>();
+            if (enemy == null) continue;
+
+            var status = StatusTable.Instance.GetStatusData(enemy.Type);
             type = AttackDecision(enemy, skill, status, out damage);
             enemy.SetDamage(status, skill, type, damage);
         }
@@ -118,10 +140,10 @@ public class PlayerController : MonoBehaviour
         DamageType type = DamageType.Miss;
         damage = 0f;
 
-        if (CalculateDamage.AttackDecision(m_statusData.hitRate + skill.hitRate, status.dodgeRate))             //
+        if (CalculateDamage.AttackDecision(m_statusData.hitRate + skill.hitRate, status.dodgeRate))
         {
             type = DamageType.Normal;
-            damage = CalculateDamage.NormalDamage(m_statusData.attack, skill.attack, status.defense);           //
+            damage = CalculateDamage.NormalDamage(m_statusData.attack, skill.attack, status.defense);
 
             if (CalculateDamage.CriticalDecision(m_statusData.criRate))
             {
