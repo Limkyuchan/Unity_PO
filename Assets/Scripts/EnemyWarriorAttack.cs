@@ -16,7 +16,7 @@ public class EnemyWarriorAttack : MonoBehaviour, IAttackStrategy
         {
             if (enemy.GetUnitFind.PlayerUnitList != null)
             {
-                enemy.GetPlayer.SetDamage();
+                enemy.GetPlayer.SetDamage(enemy.GetStatus.attack);
             }
         }
     }

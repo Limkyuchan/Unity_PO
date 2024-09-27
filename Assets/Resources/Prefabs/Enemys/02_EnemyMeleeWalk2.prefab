@@ -671,6 +671,37 @@ Transform:
   m_Children: []
   m_Father: {fileID: 6692835502679040584}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1594323702855944305
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 8119040346482260754}
+  m_Layer: 0
+  m_Name: Dummy_HUD
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &8119040346482260754
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1594323702855944305}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 3, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 4312602465814860178}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1693129215685044058
 GameObject:
   m_ObjectHideFlags: 0
@@ -937,6 +968,7 @@ Transform:
   - {fileID: 1813288520278373773}
   - {fileID: 5107952115949702579}
   - {fileID: 4760513514662779706}
+  - {fileID: 8119040346482260754}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!95 &5275837093371658217
@@ -1090,21 +1122,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_state: 0
-  m_status:
-    hp: 300
-    hpMax: 300
-    attack: 20
-    defense: 5
-    hitRate: 80
-    dodgeRate: 5
-    criRate: 5
-    criAttack: 100
   m_attackAreaObj: {fileID: 6242856424970059258}
-  m_detectDist: 8
-  m_attackDist: 3
+  m_maxHp: 0
+  m_currentHp: 0
   m_maxChaseDistance: 15
   m_idleDuration: 5
   m_idleTime: 0
+  Dummy_HUD: {fileID: 8119040346482260754}
 --- !u!136 &8278156169109384986
 CapsuleCollider:
   m_ObjectHideFlags: 0

@@ -5,6 +5,7 @@ using UnityEngine;
 
 public enum DamageType
 {
+    None = -1,
     Normal,
     Critical,
     Miss

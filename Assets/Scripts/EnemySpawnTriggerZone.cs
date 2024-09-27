@@ -19,9 +19,9 @@ public class EnemySpawnTriggerZone : MonoBehaviour
     {
         if (other.CompareTag("Player") && !enemySpawn)
         {
-            m_enemyManager.CreateEnemy(EnemyManager.EnemyType.MeleeWalk, m_pathA, 1);
-            //m_enemyManager.CreateEnemy(EnemyManager.EnemyType.WarriorWalk, m_pathB, 1);
-            //m_enemyManager.CreateEnemy(EnemyManager.EnemyType.WarriorJump, m_pathC, 1);
+            m_enemyManager.CreateEnemy(EnemyManager.EnemyType.MeleeWalk, m_pathA, 2);
+            m_enemyManager.CreateEnemy(EnemyManager.EnemyType.WarriorWalk, m_pathB, 2);
+            m_enemyManager.CreateEnemy(EnemyManager.EnemyType.WarriorJump, m_pathC, 1);
 
             enemySpawn = true;
         }

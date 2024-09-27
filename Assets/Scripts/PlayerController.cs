@@ -23,10 +23,14 @@ public class PlayerController : MonoBehaviour
     [SerializeField]
     GameObject m_attackAreaObj;
     [SerializeField]
+    HUD_Controller m_playerHUD;
+    [SerializeField]
     float m_speed = 1.5f;
     [SerializeField]
     float m_scale;
 
+    float m_currentHp;
+    float m_maxHp;
     int hash_Speed;
     Vector3 m_dir;
     #endregion Constants and Fields
@@ -38,8 +42,12 @@ public class PlayerController : MonoBehaviour
     #endregion Public Properties
 
     #region Public Methods
-    public void SetDamage()
+    public void SetDamage(float damage)
     {
+        m_currentHp -= Mathf.RoundToInt(damage);
+        var type = DamageType.None;
+        m_playerHUD.UpdateHUD(type, damage, m_currentHp / (float)m_maxHp);
+
         m_animCtrl.Play(PlayerAnimController.Motion.Hit, false);
         m_virtualCamEffect.SetActive(true);
     }
@@ -93,7 +101,7 @@ public class PlayerController : MonoBehaviour
 
             var status = StatusTable.Instance.GetStatusData(enemy.Type);
             type = AttackDecision(enemy, skill, status, out damage);
-            enemy.SetDamage(status, skill, type, damage);
+            enemy.SetDamage(skill, type, damage);
         }
     }
 
@@ -177,6 +185,8 @@ public class PlayerController : MonoBehaviour
 
         m_virtualCamEffect.SetActive(false);
         hash_Speed = Animator.StringToHash("Speed");
+        m_currentHp = m_statusData.hp;
+        m_maxHp = m_statusData.hpMax;
 
         Cursor.lockState = CursorLockMode.Locked;       // 마우스 커서 고정
     }

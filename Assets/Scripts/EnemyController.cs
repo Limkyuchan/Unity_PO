@@ -27,6 +27,7 @@ public class EnemyController : MonoBehaviour
     AttackAreaUnitFind m_attackArea;
     NavMeshAgent m_navAgent;
     PathController m_path;
+    HUD_Controller m_hudCtrl;
     GameObject m_rangeAttackEffect;
     Transform m_dummyFire;
     EnemyManager.EnemyType m_enemyType;
@@ -58,11 +59,13 @@ public class EnemyController : MonoBehaviour
     int m_curWaypointIndex;
     int m_playerLayer;
     int m_backgroundLayer;
+
     Coroutine m_coChaseTarget;
     Coroutine m_coSearchTarget;
     Coroutine m_coDestroy;
+    public Transform Dummy_HUD;
     #endregion Constants and Fields
-
+  
     #region Public Properties
     public AiState GetMotion { get { return m_state; } }
 
@@ -99,17 +102,19 @@ public class EnemyController : MonoBehaviour
     #endregion Public Properties
 
     #region Public Methods
-    public void SetEnemy(PathController path, int waypointIndex)
+    public void SetEnemy(PathController path, HUD_Controller hud, int waypointIndex)
     {
         m_path = path;
+        m_hudCtrl = hud;
         m_curWaypointIndex = waypointIndex;
         transform.position = m_path.Points[m_curWaypointIndex];
     }
 
-    public void SetDamage(StatusData status, SkillData skill, DamageType type, float damage)
+    public void SetDamage(SkillData skill, DamageType type, float damage)
     {
         m_currentHp -= Mathf.RoundToInt(damage);
         Debug.Log("Àû Ã¼·Â: " + m_currentHp);
+        m_hudCtrl.UpdateHUD(type, damage, m_currentHp / (float)m_maxHp);
 
         if (type == DamageType.Miss) return;
         SetState(AiState.Damaged);
@@ -377,6 +382,11 @@ public class EnemyController : MonoBehaviour
 
         Gizmos.color = Color.red;
         Gizmos.DrawWireSphere(transform.position, m_maxChaseDistance);
+    }
+
+    void Awake()
+    {
+        Dummy_HUD = Utility.FindChildObject(gameObject, "Dummy_HUD").transform;
     }
 
     void Start()

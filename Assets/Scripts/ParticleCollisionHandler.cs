@@ -15,7 +15,7 @@ public class ParticleCollisionHandler : MonoBehaviour
     {
         if (other.CompareTag("Player"))
         {
-            m_enemy.GetPlayer.SetDamage();
+            m_enemy.GetPlayer.SetDamage(m_enemy.GetStatus.attack);
         }
     }
 }
