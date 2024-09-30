@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class EnemySpawnTriggerZone : MonoBehaviour
 {
@@ -14,16 +15,31 @@ public class EnemySpawnTriggerZone : MonoBehaviour
     PathController m_pathC;
 
     bool enemySpawn = false;
+    string sceneName;
 
     void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("Player") && !enemySpawn)
         {
-            m_enemyManager.CreateEnemy(EnemyManager.EnemyType.MeleeWalk, m_pathA, 2);
-            m_enemyManager.CreateEnemy(EnemyManager.EnemyType.WarriorWalk, m_pathB, 2);
-            m_enemyManager.CreateEnemy(EnemyManager.EnemyType.WarriorJump, m_pathC, 1);
+            if (sceneName == "GameScene01")
+            {
+                m_enemyManager.CreateEnemy(EnemyManager.EnemyType.MeleeWalk, m_pathA, 2);
+                m_enemyManager.CreateEnemy(EnemyManager.EnemyType.WarriorWalk, m_pathB, 2);
+                m_enemyManager.CreateEnemy(EnemyManager.EnemyType.WarriorJump, m_pathC, 1);
+            }
+            else if (sceneName == "GameScene02")
+            {
+                m_enemyManager.CreateEnemy(EnemyManager.EnemyType.MageWalk, m_pathA, 1);
+                m_enemyManager.CreateEnemy(EnemyManager.EnemyType.MageWalk, m_pathB, 1);
+                m_enemyManager.CreateEnemy(EnemyManager.EnemyType.MageWalk, m_pathC, 1);
+            }
 
             enemySpawn = true;
         }
+    }
+
+    void Start()
+    {
+        sceneName = SceneManager.GetActiveScene().name;
     }
 }

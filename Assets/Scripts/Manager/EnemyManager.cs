@@ -63,7 +63,7 @@ public class EnemyManager : SingletonMonoBehaviour<EnemyManager>
 
     protected override void OnStart()
     {
-        m_enemyPrefabs = Resources.LoadAll<GameObject>("Prefabs/Enemys");
+        m_enemyPrefabs = Resources.LoadAll<GameObject>("Prefab/Enemys");
 
         for (int i = 0; i < m_enemyPrefabs.Length; i++)
         {

@@ -1,0 +1,22 @@
+20
+7
+	Id	 	Dummy	Prefab_1	Prefab_2	Prefab_3	Prefab_4
+	1	몬스터 데미지 받음	Dummy_MonHit_1	FX_Hit_01	FX_HitCritical_01	FX_HitCritical_01	FX_HitCritical_01
+	2	 	Dummy_MonHit_1	FX_Attack01_01	FX_Attack01_01	FX_Attack01_01	FX_Attack01_01
+	3	몬스터 큰 데미지 받음	Dummy_MonHit_1	FX_AttackCritical_01	FX_AttackCritical_01	FX_AttackCritical_01	FX_AttackCritical_01
+	4	 	Dummy_MonHit_1	FX_Attack01_01_Big	FX_Attack01_01_Big	FX_AttackCritical_01	FX_AttackCritical_01
+	5	무기 검기 (좌→우)	Dummy_Attack_LR	FX_AttackTrail_02	FX_AttackTrail_01	FX_AttackTrail_01	FX_AttackTrail_01
+	6	무기 검기 (우→좌)	Dummy_Attack_RL	FX_AttackTrail_02	FX_AttackTrail_01	FX_AttackTrail_01	FX_AttackTrail_01
+	7	무기 검기 (상→하)	Dummy_Attack_UD	FX_AttackTrail_02	FX_AttackTrail_01	FX_AttackTrail_01	FX_AttackTrail_01
+	8	무기 검기 (하→상)	Dummy_Attack_DU	FX_AttackTrail_02	FX_AttackTrail_01	FX_AttackTrail_01	FX_AttackTrail_01
+	9	먼지	Dummy_Ground_Center	FX_Attack01_01_dust	FX_Attack01_01_dust	FX_Attack01_01_dust	FX_Attack01_01_dust
+	10	발자국먼지	Dummy_Ground_Center	FX_Dash_dust_01	FX_Dash_dust_01	FX_Dash_dust_01	FX_Dash_dust_01
+	11	무기 룬 발동 시작효과	RuneEffect_01_Start	FX_RuneEffect_01_Start	FX_RuneEffect_01_Start	FX_RuneEffect_01_Start	FX_RuneEffect_01_Start
+	12	무기 룬 발동 유지효과	RuneEffect_01_Loop	FX_RuneEffect_01_Loop	FX_RuneEffect_01_Loop	FX_RuneEffect_01_Loop	FX_RuneEffect_01_Loop
+	13	무기 룬 타격 폭발 효과	Dummy_MonHit_1	FX_RuneEffect_01_Hit	FX_RuneEffect_01_Hit	FX_RuneEffect_01_Hit	FX_RuneEffect_01_Hit
+	14	피버모드 발동	Dummy_Ground_Center	FX_Fever_01	FX_Fever_01	FX_Fever_01	FX_Fever_01
+	15	파워어택	Dumy_Weapon_R	FX_PowerAttack_01	FX_PowerAttack_01	FX_PowerAttack_01	FX_PowerAttack_01
+	16	함성 디버프	Dummy_Face	FX_DeBuff_01	FX_DeBuff_01	FX_DeBuff_01	FX_DeBuff_01
+	17	방어 이펙트	Dummy_Attack	FX_Shield_01	FX_Shield_01	FX_Shield_01	FX_Shield_01
+	18	출혈 이펙트	EffectDummy	FX_State_Bleed_01	FX_State_Bleed_01	FX_State_Bleed_01	FX_State_Bleed_01
+	19	 	Dummy_Fire	FX_Fireball_Shooting_Straight_01	FX_Fireball_Shooting_Straight_01	FX_Fireball_Shooting_Straight_01	FX_Fireball_Shooting_Straight_01

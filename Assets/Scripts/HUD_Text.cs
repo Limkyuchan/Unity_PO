@@ -11,12 +11,18 @@ public class HUD_Text : MonoBehaviour
     float m_alphaSpeed = 1f;
 
     TextMeshProUGUI m_text;
-    //Vector3 m_initPos;
+    Vector3 m_initPos;
     Color m_alpha;
 
     public void SetText(string text)
     {
+        if (m_text == null)
+        {
+            m_text = GetComponent<TextMeshProUGUI>();
+        }
         m_text.text = text;
+
+        m_initPos = transform.localPosition;
     }
 
     public void SetColor(Color color)
@@ -24,31 +30,24 @@ public class HUD_Text : MonoBehaviour
         m_alpha = color;
     }
 
-    //void ResetPosition()
-    //{
-    //    transform.position = m_initPos;
-    //}
-
-    void ShowData()
+    void ShowText()
     {
-        transform.localPosition += new Vector3(0, m_moveSpeed * Time.deltaTime, 0);
+        transform.localPosition = m_initPos + new Vector3(0, m_moveSpeed * Time.deltaTime, 0);
         m_alpha.a = Mathf.Lerp(m_alpha.a, 0, Time.deltaTime * m_alphaSpeed);
         m_text.color = m_alpha;
-
-        //Invoke("ResetPosition", 2f);
     }
 
     void Start()
     {
         m_text = GetComponent<TextMeshProUGUI>();
 
-        //m_initPos = transform.position;
+        m_initPos = transform.localPosition;
         m_alpha = m_text.color;
         m_alpha.a = 1;
     }
 
     void Update()
     {
-        ShowData();
+        ShowText();
     }
 }

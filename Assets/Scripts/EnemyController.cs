@@ -422,7 +422,7 @@ public class EnemyController : MonoBehaviour
                 m_attackStrategy = GetComponent<RangeAttack>();
                 m_movementStrategy = GetComponent<WalkMovement>();
                 m_dummyFire = Utility.FindChildObject(gameObject, "Dummy_Fire").transform;
-                m_rangeAttackEffect = Resources.Load<GameObject>("FX/FX_Fireball_Shooting_Straight");
+                m_rangeAttackEffect = Resources.Load<GameObject>("Prefab/Effect/FX_Fireball_Shooting_Straight");
                 break;
         }
     }

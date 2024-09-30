@@ -2,7 +2,6 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.AI;
 
 [Serializable]
 public class SkillDataClassDictionary : SerializableDictionary<PlayerAnimController.Motion, SkillData> { }
@@ -35,6 +34,7 @@ public class SkillTable : SingletonMonoBehaviour<SkillTable>
 
     void LoadData()
     {
+        m_table.Clear();
         ExcelDataLoader.Instance.LoadTable("Skill");
         for (int i = 0; i < ExcelDataLoader.Instance.Count; i++)
         {
@@ -47,6 +47,7 @@ public class SkillTable : SingletonMonoBehaviour<SkillTable>
             data.knockbackDuration = ExcelDataLoader.Instance.GetFloat("knockbackDuration", i);
             m_table.Add(data.skillMotion, data);
         }
+        ExcelDataLoader.Instance.Clear();
     }
 
     protected override void OnStart()

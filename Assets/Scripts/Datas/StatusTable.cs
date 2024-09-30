@@ -39,6 +39,7 @@ public class StatusTable : SingletonMonoBehaviour<StatusTable>
 
     void LoadData()
     {
+        m_table.Clear();
         ExcelDataLoader.Instance.LoadTable("Status");
         for (int i = 0; i < ExcelDataLoader.Instance.Count; i++)
         {
@@ -56,6 +57,7 @@ public class StatusTable : SingletonMonoBehaviour<StatusTable>
             data.detectDist = ExcelDataLoader.Instance.GetFloat("detectDist", i);
             m_table.Add(data.type, data);
         }
+        ExcelDataLoader.Instance.Clear();
     }
 
     protected override void OnStart()

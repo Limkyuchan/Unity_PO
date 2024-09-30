@@ -26,6 +26,12 @@ public class HUD_Controller : MonoBehaviour
         {
             m_followTarget = GetComponent<UIFollowTarget>();
         }
+
+        if (m_hudText != null)
+        {
+            m_hudText.SetText("");
+        }
+
         m_followTarget.SetTarget(target);
         m_hpBar.value = 1f;
         m_iD.text = enemy.GetStatus.type.ToString();
@@ -51,7 +57,7 @@ public class HUD_Controller : MonoBehaviour
             case DamageType.None:
                 m_sb.Append(Mathf.RoundToInt(damage));
                 m_hudText.SetText(m_sb.ToString());
-                m_hudText.SetColor(Color.red);
+                m_hudText.SetColor(Color.blue);
                 m_sb.Clear();
                 break;
             case DamageType.Normal:
