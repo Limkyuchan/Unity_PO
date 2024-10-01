@@ -5,17 +5,17 @@ using UnityEngine;
 public class EffectPoolUnit : MonoBehaviour
 {
     [SerializeField]
-    float m_delay = 0.5f;
-    float m_inactiveTime;
+    float m_delay = 0.5f;       // 이팩트 딜레이 시간
+    float m_inactiveTime;       // 이팩트 꺼지는 시간
     string m_effectName;
 
     public bool IsReady
     {
         get
         {
-            if (!gameObject.activeSelf)
+            if (!gameObject.activeSelf)                     // 이팩트가 꺼져 있다면
             {
-                if (Time.time > m_inactiveTime + m_delay)
+                if (Time.time > m_inactiveTime + m_delay)   // 이팩트 꺼진시간 + 딜레이시간보다 시간이 지났다면 이팩트 사용 가능
                 {
                     return true;
                 }
@@ -32,7 +32,7 @@ public class EffectPoolUnit : MonoBehaviour
         transform.localScale = Vector3.one;
     }
 
-    void OnDisable()
+    void OnDisable()    // 이팩트가 꺼졌을 때
     {
         m_inactiveTime = Time.time;
         EffectPool.Instance.AddPool(m_effectName, this);

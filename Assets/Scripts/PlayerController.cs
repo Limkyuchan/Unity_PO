@@ -1,6 +1,7 @@
 using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Mathematics;
 
 public class PlayerController : MonoBehaviour
 {
@@ -71,10 +72,10 @@ public class PlayerController : MonoBehaviour
     void AnimEvent_Attack()
     {
         var skill = SkillTable.Instance.GetSkillData(GetMotion);
-        if (skill.attack == 0) return;
-
         var unitList = m_attackAreas[skill.attackArea].EnemyUnitList;
+        var effectData = EffectTable.Instance.GetData(skill.effectId);
 
+        if (skill.attack == 0) return;
         m_enemyList.Clear();
         foreach (var unit in unitList)
         {
@@ -102,6 +103,15 @@ public class PlayerController : MonoBehaviour
             var status = StatusTable.Instance.GetStatusData(enemy.Type);
             type = AttackDecision(enemy, skill, status, out damage);
             enemy.SetDamage(skill, type, damage);
+
+            if (type != DamageType.Miss)
+            {
+                var effect = EffectPool.Instance.Create(effectData.Prefabs[type == DamageType.Normal ? 0 : 1]);
+                effect.transform.position = enemy.transform.position + Vector3.up * 0.6f;
+                var dir = transform.position - effect.transform.position;
+                dir.y = 0f;
+                effect.transform.rotation = Quaternion.FromToRotation(effect.transform.forward, dir.normalized);
+            }
         }
     }
 
