@@ -22,11 +22,14 @@ public class SkillTable : SingletonMonoBehaviour<SkillTable>
             var defaultSkillData = new SkillData
             {
                 skillMotion = PlayerAnimController.Motion.None,
+                effectId = 0,
                 attackArea = 0,
                 attack = 0,
                 hitRate = 0,
                 knockback = 0,
-                knockbackDuration = 0
+                knockbackDuration = 0,
+                debuff = Debuff.None,
+                debuffDuration = 0
             };
             return defaultSkillData;
         }
@@ -46,6 +49,8 @@ public class SkillTable : SingletonMonoBehaviour<SkillTable>
             data.hitRate = ExcelDataLoader.Instance.GetFloat("hitRate", i);
             data.knockback = ExcelDataLoader.Instance.GetFloat("knockback", i);
             data.knockbackDuration = ExcelDataLoader.Instance.GetFloat("knockbackDuration", i);
+            data.debuff = ExcelDataLoader.Instance.GetEnum<Debuff>("debuff", i);
+            data.debuffDuration = ExcelDataLoader.Instance.GetFloat("debuffDuration", i);
             m_table.Add(data.skillMotion, data);
         }
         ExcelDataLoader.Instance.Clear();

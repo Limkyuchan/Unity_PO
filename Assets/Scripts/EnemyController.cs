@@ -1,4 +1,3 @@
-using Cinemachine.Utility;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -15,6 +14,7 @@ public class EnemyController : MonoBehaviour
         Patrol,
         Jump,
         Damaged,
+        Debuff,
         Death,
         Max
     }
@@ -28,8 +28,8 @@ public class EnemyController : MonoBehaviour
     NavMeshAgent m_navAgent;
     PathController m_path;
     HUD_Controller m_hudCtrl;
-    GameObject m_rangeAttackEffect;
-    Transform m_dummyFire;
+    //GameObject m_rangeAttackEffect;
+    //Transform m_dummyFire;
     EnemyManager.EnemyType m_enemyType;
     IMovementStrategy m_movementStrategy;
     IAttackStrategy m_attackStrategy;
@@ -62,6 +62,7 @@ public class EnemyController : MonoBehaviour
 
     Coroutine m_coChaseTarget;
     Coroutine m_coSearchTarget;
+    Coroutine m_coSetDebuff;
     Coroutine m_coDestroy;
     public Transform Dummy_HUD;
     #endregion Constants and Fields
@@ -88,17 +89,19 @@ public class EnemyController : MonoBehaviour
 
     public AttackAreaUnitFind GetUnitFind { get { return m_attackArea; } }
 
-    public GameObject GetRangeAttackEffect { get { return m_rangeAttackEffect; } }
+    //public GameObject GetRangeAttackEffect { get { return m_rangeAttackEffect; } }          // 이팩트 수정 후 삭제 ㄱㄱ
 
-    public Transform GetDummyFire { get { return m_dummyFire; } }
-
-    public float GetAttackDist { get { return GetStatus.attackDist; } }
+    //public Transform GetDummyFire { get { return m_dummyFire; } }                           // 더미 가져와보기
 
     public bool IsChase { get { return m_isChase; } set { m_isChase = value; } }
 
     public bool IsPatrol { get { return m_isPatrol; } set { m_isPatrol = value; } }
 
     public bool IsEnemyAttack { get { return m_isEnemyAttack; } set { m_isEnemyAttack = value; } }
+
+    public bool IsDebuff { get { return m_state == AiState.Debuff; } }
+
+    public float GetAttackDist { get { return GetStatus.attackDist; } }
     #endregion Public Properties
 
     #region Public Methods
@@ -117,9 +120,34 @@ public class EnemyController : MonoBehaviour
         m_hudCtrl.UpdateHUD(type, damage, m_currentHp / (float)m_maxHp);
 
         if (type == DamageType.Miss) return;
-        SetState(AiState.Damaged);
-        m_animCtrl.Play(EnemyAnimController.Motion.Hit, false);
-
+        if (skill.debuff != Debuff.None)
+        {
+            SetState(AiState.Debuff);
+            switch (skill.debuff) 
+            {
+                case Debuff.Stun:
+                    m_animCtrl.Play(EnemyAnimController.Motion.Stun, false);
+                    break;
+                case Debuff.Knockdown:
+                    m_animCtrl.Play(EnemyAnimController.Motion.Knockdown, false);
+                    break;
+            }
+            if (m_coSetDebuff != null)
+            {
+                StopCoroutine(m_coSetDebuff);
+                m_coSetDebuff = null;
+            }
+            m_coSetDebuff = StartCoroutine(CoSetDebuff(skill.debuffDuration));
+        }
+        else
+        {
+            if (!IsDebuff)
+            {
+                SetState(AiState.Damaged);
+                m_animCtrl.Play(EnemyAnimController.Motion.Hit, false);
+            }
+        }
+        
         Vector3 from = transform.position;
         Vector3 dir = transform.position - m_player.transform.position;
         dir.y = 0f;
@@ -214,6 +242,13 @@ public class EnemyController : MonoBehaviour
             }
             yield return Utility.GetWaitForSeconds(sec);
         }
+    }
+
+    IEnumerator CoSetDebuff(float duration)
+    {
+        yield return Utility.GetWaitForSeconds(duration);
+        SetIdle(1f);
+        m_coSetDebuff = null;
     }
 
     IEnumerator CoDestroyGameObject(float sec)
@@ -367,6 +402,12 @@ public class EnemyController : MonoBehaviour
                     m_isInvokeJumpPatrolMove = true;
                 }
                 break;
+            case AiState.Damaged:
+                break;
+            case AiState.Debuff:
+                break;
+            case AiState.Death:
+                break;
         }
     }
     #endregion Methods
@@ -421,8 +462,8 @@ public class EnemyController : MonoBehaviour
             case EnemyManager.EnemyType.MageWalk:
                 m_attackStrategy = GetComponent<RangeAttack>();
                 m_movementStrategy = GetComponent<WalkMovement>();
-                m_dummyFire = Utility.FindChildObject(gameObject, "Dummy_Fire").transform;
-                m_rangeAttackEffect = Resources.Load<GameObject>("Prefab/Effect/FX_Fireball_Shooting_Straight");
+                //m_dummyFire = Utility.FindChildObject(gameObject, "Dummy_Fire").transform;
+                //m_rangeAttackEffect = Resources.Load<GameObject>("Prefab/Effect/FX_Fireball_Shooting_Straight");
                 break;
         }
     }

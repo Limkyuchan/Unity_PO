@@ -23,7 +23,7 @@ public class EffectTable : SingletonMonoBehaviour<EffectTable>
             {
                 Id = 0,
                 Dummy = "",
-                Prefabs = new string[4] {"", "", "", ""}
+                Prefabs = new string[2] {"", ""}
             };
             return defaultEffectData;
         }

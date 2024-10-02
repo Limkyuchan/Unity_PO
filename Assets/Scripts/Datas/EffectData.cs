@@ -8,5 +8,5 @@ public class EffectData
 {
     public int Id;
     public string Dummy;
-    public string[] Prefabs = new string[4];
+    public string[] Prefabs = new string[2];
 }

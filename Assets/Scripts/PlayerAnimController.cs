@@ -14,6 +14,9 @@ public class PlayerAnimController : AnimationController
         Attack2,
         Attack3,
         Attack4,
+        Skill1,
+        Skill2,
+        Death,
         Max
     }
 

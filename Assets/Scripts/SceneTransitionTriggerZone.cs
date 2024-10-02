@@ -1,12 +1,15 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class SceneTransitionTriggerZone : MonoBehaviour
 {
     [SerializeField]
     GameObject m_nextSceneTriggerZone;
-    bool enemiesAllDie;
+    string sceneName;
+    bool enemiesAllDie = false;
+
 
     public void AllEnemiesDie()
     {
@@ -18,13 +21,16 @@ public class SceneTransitionTriggerZone : MonoBehaviour
     {
         if (other.CompareTag("Player") && enemiesAllDie)
         {
-            LoadingSceneManager.LoadScene("GameScene02");
+            if (sceneName == "GameScene01")
+            {
+                LoadingSceneManager.LoadScene("GameScene02");
+            }
         }
     }
 
     void Start()
     {
-        enemiesAllDie = false;
+        sceneName = SceneManager.GetActiveScene().name;
         m_nextSceneTriggerZone.SetActive(false);
     }
 }

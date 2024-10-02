@@ -12,6 +12,8 @@ public class EffectPool : SingletonMonoBehaviour<EffectPool>
     Dictionary<string, GameObjectPool<EffectPoolUnit>> m_effectPool = new Dictionary<string, GameObjectPool<EffectPoolUnit>>();
     Dictionary<string, GameObject> m_prefabList = new Dictionary<string, GameObject>();
 
+    public Dictionary<string, GameObject> GetPrefabList { get { return m_prefabList; } }
+
     public EffectPoolUnit Create(string effectName)
     {
         return Create(effectName, Vector3.zero, Quaternion.identity);

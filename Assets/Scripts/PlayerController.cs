@@ -1,7 +1,6 @@
 using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
-using Unity.Mathematics;
 
 public class PlayerController : MonoBehaviour
 {
@@ -51,6 +50,11 @@ public class PlayerController : MonoBehaviour
 
         m_animCtrl.Play(PlayerAnimController.Motion.Hit, false);
         m_virtualCamEffect.SetActive(true);
+
+        if (m_currentHp <= 0)
+        {
+            m_animCtrl.Play(PlayerAnimController.Motion.Death);
+        }
     }
 
     public bool IsAttack
@@ -65,6 +69,17 @@ public class PlayerController : MonoBehaviour
             return false;
         }
 
+    }
+
+    public bool IsSkill
+    {
+        get
+        {
+            if (GetMotion == PlayerAnimController.Motion.Skill1 ||
+                GetMotion == PlayerAnimController.Motion.Skill2)
+                return true;
+            return false;
+        }
     }
     #endregion Public Methods
 
@@ -193,8 +208,8 @@ public class PlayerController : MonoBehaviour
         m_charCtrl = GetComponent<CharacterController>();
         m_attackAreas = m_attackAreaObj.GetComponentsInChildren<AttackAreaUnitFind>();
 
-        m_virtualCamEffect.SetActive(false);
         hash_Speed = Animator.StringToHash("Speed");
+        m_virtualCamEffect.SetActive(false);
         m_currentHp = m_statusData.hp;
         m_maxHp = m_statusData.hpMax;
 
@@ -204,6 +219,17 @@ public class PlayerController : MonoBehaviour
     void Update()
     {
         RotateCamera();
+
+        if (Input.GetKeyDown(KeyCode.Z))
+        {
+            m_animCtrl.Play(PlayerAnimController.Motion.Skill1, false);
+            ResetMove();
+        }
+        if (Input.GetKeyDown(KeyCode.X))
+        {
+            m_animCtrl.Play(PlayerAnimController.Motion.Skill2, false);
+            ResetMove();
+        }
 
         if (Input.GetKeyDown(KeyCode.Space))
         {
@@ -223,7 +249,7 @@ public class PlayerController : MonoBehaviour
         Vector3 right = transform.right;
         m_dir = (forward * Input.GetAxis("Vertical")) + (right * Input.GetAxis("Horizontal"));
 
-        if (m_dir != Vector3.zero && !IsAttack)
+        if (m_dir != Vector3.zero && !IsAttack && !IsSkill)
         {
             // 주인공 회전속도 조절
             Quaternion targetRotation = Quaternion.LookRotation(m_dir);
@@ -238,7 +264,7 @@ public class PlayerController : MonoBehaviour
                 m_scale = 1f;
             }
         }
-        else if (!IsAttack)
+        else if (!IsAttack && !IsSkill)
         {
             if (m_scale > 0f)
             {
@@ -261,7 +287,7 @@ public class PlayerController : MonoBehaviour
         }
 
         m_animCtrl.SetFloat(hash_Speed, m_scale);
-        if (m_charCtrl.enabled && !IsAttack)
+        if (m_charCtrl.enabled && !IsAttack && !IsSkill)
         {
             m_charCtrl.Move(m_dir * m_speed * m_scale * Time.deltaTime);
         }

@@ -57,7 +57,7 @@ public class HUD_Controller : MonoBehaviour
             case DamageType.None:
                 m_sb.Append(Mathf.RoundToInt(damage));
                 m_hudText.SetText(m_sb.ToString());
-                m_hudText.SetColor(Color.blue);
+                m_hudText.SetColor(Color.red);
                 m_sb.Clear();
                 break;
             case DamageType.Normal:
@@ -73,7 +73,7 @@ public class HUD_Controller : MonoBehaviour
                 m_sb.Clear();
                 break;
             case DamageType.Miss:
-                m_sb.Append("Miss!");
+                m_sb.Append("Miss");
                 m_hudText.SetText(m_sb.ToString());
                 m_hudText.SetColor(Color.white);
                 m_sb.Clear();
