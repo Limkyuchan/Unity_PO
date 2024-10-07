@@ -64,6 +64,9 @@ public class EffectPool : SingletonMonoBehaviour<EffectPool>
 
     protected override void OnStart()
     {
+        m_effectNameList.Clear();
+        m_effectPool.Clear();
+        m_prefabList.Clear();
         EffectTable.Instance.LoadData();
 
         foreach (KeyValuePair<int, EffectData> pair in EffectTable.Instance.m_table)

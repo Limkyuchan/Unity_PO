@@ -16,18 +16,13 @@ public class RangeAttack : MonoBehaviour, IAttackStrategy
         {
             if (enemy.CheckArea(enemy.GetPlayer.transform, enemy.GetAttackDist))
             {
-                var dummy_fire = EffectTable.Instance.GetData(6).Dummy;
-                Transform m_dummyFire = Utility.FindChildObject(gameObject, "dummy_fire").transform;
+                var effectData = EffectTable.Instance.GetData(6);
+                Transform m_dummyFire = Utility.FindChildObject(gameObject, effectData.Dummy).transform;
 
-                //var dir = enemy.GetPlayer.transform.position - enemy.GetDummyFire.position;
                 var dir = enemy.GetPlayer.transform.position - m_dummyFire.position;
                 dir.y = 0f;
 
-                //var effectPrefab = enemy.GetRangeAttackEffect;
-                var effectPrefab = EffectPool.Instance.GetPrefabList["FX_Fireball_Shooting_Straight"];
-
-                var effect = GameObject.Instantiate(effectPrefab);
-                //effect.gameObject.transform.position = enemy.GetDummyFire.position;
+                var effect = EffectPool.Instance.Create(effectData.Prefabs[0]);
                 effect.gameObject.transform.position = m_dummyFire.position;
                 effect.transform.forward = dir.normalized;
 

@@ -28,8 +28,6 @@ public class EnemyController : MonoBehaviour
     NavMeshAgent m_navAgent;
     PathController m_path;
     HUD_Controller m_hudCtrl;
-    //GameObject m_rangeAttackEffect;
-    //Transform m_dummyFire;
     EnemyManager.EnemyType m_enemyType;
     IMovementStrategy m_movementStrategy;
     IAttackStrategy m_attackStrategy;
@@ -88,10 +86,6 @@ public class EnemyController : MonoBehaviour
     public EnemyAnimController GetAnimator { get { return m_animCtrl; } }
 
     public AttackAreaUnitFind GetUnitFind { get { return m_attackArea; } }
-
-    //public GameObject GetRangeAttackEffect { get { return m_rangeAttackEffect; } }          // 이팩트 수정 후 삭제 ㄱㄱ
-
-    //public Transform GetDummyFire { get { return m_dummyFire; } }                           // 더미 가져와보기
 
     public bool IsChase { get { return m_isChase; } set { m_isChase = value; } }
 
@@ -462,8 +456,6 @@ public class EnemyController : MonoBehaviour
             case EnemyManager.EnemyType.MageWalk:
                 m_attackStrategy = GetComponent<RangeAttack>();
                 m_movementStrategy = GetComponent<WalkMovement>();
-                //m_dummyFire = Utility.FindChildObject(gameObject, "Dummy_Fire").transform;
-                //m_rangeAttackEffect = Resources.Load<GameObject>("Prefab/Effect/FX_Fireball_Shooting_Straight");
                 break;
         }
     }

@@ -20,7 +20,7 @@ public class EnemyManager : SingletonMonoBehaviour<EnemyManager>
     PlayerController m_player;
     [SerializeField]
     SceneTransitionTriggerZone m_triggerZone;
-    [SerializeField]
+    [SerializeField] 
     GameObject m_hudTransform;
     [SerializeField]
     GameObject m_hudPrefab;
@@ -30,6 +30,8 @@ public class EnemyManager : SingletonMonoBehaviour<EnemyManager>
     List<EnemyController> m_enemyList = new List<EnemyController>();
     Dictionary<EnemyType, GameObjectPool<EnemyController>> m_enemyPool = new Dictionary<EnemyType, GameObjectPool<EnemyController>>();
     GameObjectPool<HUD_Controller> m_hudPool;
+
+    public List<EnemyController> GetEnemyList() { return m_enemyList; }
 
     public void CreateEnemy(EnemyType type, PathController path, int count)
     {

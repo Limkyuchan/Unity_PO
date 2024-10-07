@@ -22,8 +22,8 @@ public class EffectTable : SingletonMonoBehaviour<EffectTable>
             var defaultEffectData = new EffectData
             {
                 Id = 0,
-                Dummy = "",
-                Prefabs = new string[2] {"", ""}
+                Dummy = "None",
+                Prefabs = new string[2] {"None", "None"}
             };
             return defaultEffectData;
         }

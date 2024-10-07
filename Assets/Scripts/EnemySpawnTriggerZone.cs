@@ -23,8 +23,8 @@ public class EnemySpawnTriggerZone : MonoBehaviour
         {
             if (sceneName == "GameScene01")
             {
-                m_enemyManager.CreateEnemy(EnemyManager.EnemyType.MeleeWalk, m_pathA, 2);
-                m_enemyManager.CreateEnemy(EnemyManager.EnemyType.WarriorWalk, m_pathB, 2);
+                m_enemyManager.CreateEnemy(EnemyManager.EnemyType.MeleeWalk, m_pathA, 1);
+                m_enemyManager.CreateEnemy(EnemyManager.EnemyType.WarriorWalk, m_pathB, 3);
                 m_enemyManager.CreateEnemy(EnemyManager.EnemyType.WarriorJump, m_pathC, 1);
             }
             else if (sceneName == "GameScene02")
