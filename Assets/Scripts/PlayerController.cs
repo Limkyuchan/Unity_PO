@@ -9,7 +9,6 @@ public class PlayerController : MonoBehaviour
     CharacterController m_charCtrl;
     PlayerAnimController m_animCtrl;
     SkillController m_skillCtrl;
-    List<GameObject> m_enemyList = new List<GameObject>();
 
     [Header("카메라 관련 정보")]
     [SerializeField]
@@ -29,16 +28,17 @@ public class PlayerController : MonoBehaviour
     [SerializeField]
     float m_scale;
 
+    bool isSkillActive;
     float m_currentHp;
     float m_maxHp;
     int hash_Speed;
     Vector3 m_dir;
+    List<GameObject> m_enemyList = new List<GameObject>();
     #endregion Constants and Fields
 
     #region Public Properties
     PlayerAnimController.Motion GetMotion { get { return m_animCtrl.GetMotion; } }
-
-    public StatusData GetStatus { get { return m_statusData; } }
+    //public StatusData GetStatus { get { return m_statusData; } }
     #endregion Public Properties
 
     #region Public Methods
@@ -61,24 +61,20 @@ public class PlayerController : MonoBehaviour
     {
         get
         {
-            if (GetMotion == PlayerAnimController.Motion.Attack1 ||
+            return GetMotion == PlayerAnimController.Motion.Attack1 ||
                 GetMotion == PlayerAnimController.Motion.Attack2 ||
                 GetMotion == PlayerAnimController.Motion.Attack3 ||
-                GetMotion == PlayerAnimController.Motion.Attack4)
-                return true;
-            return false;
+                GetMotion == PlayerAnimController.Motion.Attack4;
         }
-
     }
 
     public bool IsSkill
     {
         get
         {
-            if (GetMotion == PlayerAnimController.Motion.Skill1 ||
-                GetMotion == PlayerAnimController.Motion.Skill2)
-                return true;
-            return false;
+            return isSkillActive ||
+                   GetMotion == PlayerAnimController.Motion.Skill1 ||
+                   GetMotion == PlayerAnimController.Motion.Skill2;
         }
     }
     #endregion Public Methods
@@ -159,6 +155,12 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    void AnimEvent_SkillFinished()
+    {
+        isSkillActive = false;
+        m_animCtrl.Play(PlayerAnimController.Motion.Idle);
+    }
+
     void AnimEvent_HitFinished()
     {
         ResetMove();
@@ -210,6 +212,7 @@ public class PlayerController : MonoBehaviour
 
         hash_Speed = Animator.StringToHash("Speed");
         m_virtualCamEffect.SetActive(false);
+        isSkillActive = false;
         m_currentHp = m_statusData.hp;
         m_maxHp = m_statusData.hpMax;
 
@@ -220,13 +223,15 @@ public class PlayerController : MonoBehaviour
     {
         RotateCamera();
 
-        if (Input.GetKeyDown(KeyCode.Z))
+        if (Input.GetKeyDown(KeyCode.Z) && !isSkillActive)
         {
+            isSkillActive = true;
             m_animCtrl.Play(PlayerAnimController.Motion.Skill1, false);
             ResetMove();
         }
-        if (Input.GetKeyDown(KeyCode.X))
+        if (Input.GetKeyDown(KeyCode.X) && !isSkillActive)
         {
+            isSkillActive = true;
             m_animCtrl.Play(PlayerAnimController.Motion.Skill2, false);
             ResetMove();
         }

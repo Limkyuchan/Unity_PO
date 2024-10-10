@@ -6,10 +6,9 @@ using UnityEngine.UI;
 
 public class LoadingSceneManager : MonoBehaviour
 {
-    [SerializeField]
-    Image m_progressBar;
-    [SerializeField]
-    Text m_progressLabel;
+    Image m_progressBar;           
+    Text m_progressLabel;           
+    float m_minimumLoadTime = 2f;
 
     static string nextScene;
 
@@ -24,28 +23,30 @@ public class LoadingSceneManager : MonoBehaviour
         AsyncOperation op = SceneManager.LoadSceneAsync(nextScene);
         op.allowSceneActivation = false;
 
-        float time = 0f;
+        float totalTime = 0f;
+        float loadingProgress = 0f;
+
         while (!op.isDone)
         {
-            yield return null;
+            totalTime += Time.unscaledDeltaTime;
 
             if (op.progress < 0.9f)
             {
-                m_progressBar.fillAmount = op.progress;
-                m_progressLabel.text = $"{(op.progress * 100):0}%";
+                m_progressBar.fillAmount = Mathf.Lerp(loadingProgress, op.progress, totalTime / m_minimumLoadTime);
+                m_progressLabel.text = $"{(loadingProgress * 100):0}%";
             }
             else
             {
-                time += Time.unscaledDeltaTime;
-                m_progressBar.fillAmount = Mathf.Lerp(0.9f, 1f, time);
-                m_progressLabel.text = $"{(Mathf.Lerp(90f, 100f, time)):0}%";
+                m_progressBar.fillAmount = Mathf.Lerp(0.9f, 1f, (totalTime - m_minimumLoadTime) / 1f);
+                m_progressLabel.text = $"{(Mathf.Lerp(90f, 100f, (totalTime - m_minimumLoadTime) / 1f)):0}%";
 
-                if (m_progressBar.fillAmount >= 1f)
+                if (m_progressBar.fillAmount >= 1f && totalTime >= m_minimumLoadTime)
                 {
                     op.allowSceneActivation = true;
                     yield break;
                 }
             }
+            yield return null;
         }
     }
 

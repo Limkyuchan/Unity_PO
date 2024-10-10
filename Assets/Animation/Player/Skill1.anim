@@ -42335,7 +42335,7 @@ AnimationClip:
     intParameter: 0
     messageOptions: 0
   - time: 1.2
-    functionName: AnimEvent_AttackFinished
+    functionName: AnimEvent_SkillFinished
     data: 
     objectReferenceParameter: {fileID: 0}
     floatParameter: 0

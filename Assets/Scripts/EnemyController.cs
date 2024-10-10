@@ -66,7 +66,7 @@ public class EnemyController : MonoBehaviour
     #endregion Constants and Fields
   
     #region Public Properties
-    public AiState GetMotion { get { return m_state; } }
+    //public AiState GetMotion { get { return m_state; } }
 
     public EnemyManager.EnemyType Type { get { return m_enemyType; } set { m_enemyType = value; } }
 

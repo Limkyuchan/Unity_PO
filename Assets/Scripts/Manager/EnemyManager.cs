@@ -21,7 +21,7 @@ public class EnemyManager : SingletonMonoBehaviour<EnemyManager>
     [SerializeField]
     SceneTransitionTriggerZone m_triggerZone;
     [SerializeField] 
-    GameObject m_hudTransform;
+    GameObject m_hudParents;
     [SerializeField]
     GameObject m_hudPrefab;
     [SerializeField]
@@ -88,7 +88,7 @@ public class EnemyManager : SingletonMonoBehaviour<EnemyManager>
         m_hudPool = new GameObjectPool<HUD_Controller>(5, () =>
         {
             var obj = Instantiate(m_hudPrefab);
-            obj.transform.SetParent(m_hudTransform.transform, false);
+            obj.transform.SetParent(m_hudParents.transform, false);
             obj.SetActive(false);
             obj.transform.localScale = Vector3.one;
             var hud = obj.GetComponent<HUD_Controller>();
