@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class IndicatorManager : SingletonMonoBehaviour<IndicatorManager>
+public class IndicatorManager : MonoBehaviour
 {
     [SerializeField]
     PlayerController m_player;
@@ -11,32 +11,107 @@ public class IndicatorManager : SingletonMonoBehaviour<IndicatorManager>
     [SerializeField]
     GameObject m_indicatorParents;
 
-    List<GameObject> m_indicatorList = new List<GameObject>();
-    GameObjectPool<IndicatorController> m_indicatorPool;
+    Camera m_camera;
+    EnemyManager m_enemyManager;
 
-    public List<GameObject> GetIndicatorList { get { return m_indicatorList; } }
+    List<Transform> m_enemies = new List<Transform>();
+    GameObjectPool<RectTransform> m_indicatorPool;
+    Dictionary<Transform, RectTransform> m_enemyIndicatorList = new Dictionary<Transform, RectTransform>();
 
-    public void CreateIndicatorList()
+    // Indicator 위치 설정
+    Vector2 GetEdgePosition(Vector2 screenCenter, Vector2 direction)
     {
-        for (int i = 0; i < m_indicatorPool.Count; i++)
+        float screenWidth = Screen.width;
+        float screenHeight = Screen.height;
+        Vector2 edgePosition = screenCenter;
+
+        float margin = 20f;
+
+        if (Mathf.Abs(direction.x) > Mathf.Abs(direction.y))
         {
-            var indicator = m_indicatorPool.Get();
+            edgePosition.x = (direction.x > 0) ? screenWidth - margin : margin;
+            edgePosition.y = screenCenter.y + direction.y * (screenWidth / 2);
+        }
+        else
+        {
+            edgePosition.x = screenCenter.x + direction.x * (screenHeight / 2);
+            edgePosition.y = (direction.y > 0) ? screenHeight - margin : margin;
+        }
+
+        return edgePosition;
+    }
+
+    void ShowIndicator(Vector3 screenPosition, Transform enemy)
+    {
+        if (m_enemyIndicatorList.Count >= 10)
+        {
+            return;
+        }
+
+        if (!m_enemyIndicatorList.ContainsKey(enemy))
+        {
+            RectTransform indicatorRect = m_indicatorPool.Get();
+            m_enemyIndicatorList[enemy] = indicatorRect;
+        }
+
+        RectTransform activeIndicator = m_enemyIndicatorList[enemy];
+        activeIndicator.gameObject.SetActive(true);
+
+        Vector2 screenCenter = new Vector2(Screen.width / 2, Screen.height / 2);
+        Vector2 direction = (new Vector2(screenPosition.x, screenPosition.y) - screenCenter).normalized;
+
+        Vector2 indicatorPosition = GetEdgePosition(screenCenter, direction);
+        activeIndicator.position = indicatorPosition;
+        activeIndicator.rotation = Quaternion.identity;
+    }
+
+    void HideIndicator(Transform enemy)
+    {
+        if (m_enemyIndicatorList.ContainsKey(enemy))
+        {
+            RectTransform indicator = m_enemyIndicatorList[enemy];
             indicator.gameObject.SetActive(false);
-            m_indicatorList.Add(indicator.gameObject);
+            m_indicatorPool.Set(indicator);
+            m_enemyIndicatorList.Remove(enemy);
         }
     }
 
-    protected override void OnStart()
+    void Start()
     {
-        m_indicatorPool = new GameObjectPool<IndicatorController>(7, () =>
+        m_camera = Camera.main;
+        m_enemyManager = EnemyManager.Instance;
+
+        m_indicatorPool = new GameObjectPool<RectTransform>(10, () =>
         {
             var obj = Instantiate(m_indicatorPrefab);
             obj.transform.SetParent(m_indicatorParents.transform, false);
             obj.SetActive(false);
-            //obj.transform.localScale = Vector3.one;
-            var indicator = obj.GetComponent<IndicatorController>();
-            indicator.InitPlayer(m_player);
+            var indicator = obj.GetComponent<RectTransform>();
             return indicator;
         });
+    }
+
+    void Update()
+    {
+        m_enemies = m_enemyManager.GetEnemyList().ConvertAll(enemy => enemy.transform);
+
+        foreach (Transform enemy in m_enemies)
+        {
+            Vector3 screenPosition = m_camera.WorldToScreenPoint(enemy.position);
+            float distanceToPlayer = Vector3.Distance(enemy.position, m_player.transform.position);
+
+            if (distanceToPlayer <= enemy.GetComponent<EnemyController>().GetStatus.detectDist && screenPosition.z > 0 &&
+                (screenPosition.x < 0 || screenPosition.x > Screen.width || screenPosition.y < 0 || screenPosition.y > Screen.height))
+            {
+                ShowIndicator(screenPosition, enemy);
+            }
+            else
+            {
+                if (m_enemyIndicatorList.ContainsKey(enemy))
+                {
+                    HideIndicator(enemy);
+                }
+            }
+        }
     }
 }

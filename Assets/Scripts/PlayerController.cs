@@ -14,6 +14,8 @@ public class PlayerController : MonoBehaviour
     [SerializeField]
     GameObject m_virtualCamEffect;
     [SerializeField]
+    GameObject m_virtualCamRun;
+    [SerializeField]
     float mouseSensitivity = 100f;
 
     [Header("Player 관련 정보")]
@@ -212,6 +214,7 @@ public class PlayerController : MonoBehaviour
 
         hash_Speed = Animator.StringToHash("Speed");
         m_virtualCamEffect.SetActive(false);
+        m_virtualCamRun.SetActive(false);
         isSkillActive = false;
         m_currentHp = m_statusData.hp;
         m_maxHp = m_statusData.hpMax;
@@ -284,10 +287,12 @@ public class PlayerController : MonoBehaviour
         // 주인공 이동속도 조절
         if (Input.GetKeyDown(KeyCode.LeftShift))
         {
+            m_virtualCamRun.SetActive(true);
             m_speed = 3f;
         }
         if (Input.GetKeyUp(KeyCode.LeftShift))
         {
+            m_virtualCamRun.SetActive(false);
             m_speed = 1.5f;
         }
 

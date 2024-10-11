@@ -6,7 +6,9 @@ using UnityEngine.UI;
 
 public class LoadingSceneManager : MonoBehaviour
 {
-    Image m_progressBar;           
+    [SerializeField]
+    Image m_progressBar;
+    [SerializeField]
     Text m_progressLabel;           
     float m_minimumLoadTime = 2f;
 
