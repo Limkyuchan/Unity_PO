@@ -219,7 +219,7 @@ public class PlayerController : MonoBehaviour
         m_currentHp = m_statusData.hp;
         m_maxHp = m_statusData.hpMax;
 
-        Cursor.lockState = CursorLockMode.Locked;       // 마우스 커서 고정
+        //Cursor.lockState = CursorLockMode.Locked;       // 마우스 커서 고정
     }
 
     void Update()

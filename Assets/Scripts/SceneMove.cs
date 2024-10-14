@@ -6,7 +6,7 @@ public class SceneMove : MonoBehaviour
 {
     public void GoGameScene()
     {
-        LoadingSceneManager.LoadScene("GameScene01");
+        LoadSceneManager.Instance.LoadSceneAsync(SceneState.GameScene01);
     }
 
     public void GameExit()
