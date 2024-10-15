@@ -1,6 +1,7 @@
 using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEngine.EventSystems;
 
 public class PlayerController : MonoBehaviour
 {
@@ -40,7 +41,6 @@ public class PlayerController : MonoBehaviour
 
     #region Public Properties
     PlayerAnimController.Motion GetMotion { get { return m_animCtrl.GetMotion; } }
-    //public StatusData GetStatus { get { return m_statusData; } }
     #endregion Public Properties
 
     #region Public Methods
@@ -219,13 +219,25 @@ public class PlayerController : MonoBehaviour
         m_currentHp = m_statusData.hp;
         m_maxHp = m_statusData.hpMax;
 
-        //Cursor.lockState = CursorLockMode.Locked;       // 마우스 커서 고정
+        //Cursor.lockState = CursorLockMode.Locked;       // 마우스 커서 고정 
     }
 
     void Update()
     {
         RotateCamera();
 
+        //if (Input.GetMouseButtonDown(0))
+        //{
+        //    if (EventSystem.current.IsPointerOverGameObject())
+        //    {
+        //        Cursor.lockState = CursorLockMode.None;
+        //    }
+        //    else 
+        //    {
+        //        Cursor.lockState = CursorLockMode.Locked;
+        //    }
+        //}
+        
         if (Input.GetKeyDown(KeyCode.Z) && !isSkillActive)
         {
             isSkillActive = true;
@@ -284,13 +296,13 @@ public class PlayerController : MonoBehaviour
             }
         }
 
-        // 주인공 이동속도 조절
-        if (Input.GetKeyDown(KeyCode.LeftShift))
+        // 주인공 이동속도, 카메라 조절
+        if (Input.GetKeyDown(KeyCode.LeftShift) && m_dir != Vector3.zero)
         {
             m_virtualCamRun.SetActive(true);
             m_speed = 3f;
         }
-        if (Input.GetKeyUp(KeyCode.LeftShift))
+        if (Input.GetKeyUp(KeyCode.LeftShift) && m_dir != Vector3.zero)
         {
             m_virtualCamRun.SetActive(false);
             m_speed = 1.5f;

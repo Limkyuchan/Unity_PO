@@ -457,6 +457,8 @@ public class EnemyController : MonoBehaviour
                 m_attackStrategy = GetComponent<RangeAttack>();
                 m_movementStrategy = GetComponent<WalkMovement>();
                 break;
+            case EnemyManager.EnemyType.BossMonster:
+                break;
         }
     }
 

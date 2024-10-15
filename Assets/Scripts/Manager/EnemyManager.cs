@@ -13,6 +13,7 @@ public class EnemyManager : SingletonMonoBehaviour<EnemyManager>
         WarriorJump,
         WarriorWalk,
         MageWalk,
+        BossMonster,
         Max
     }
 

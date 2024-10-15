@@ -63,19 +63,4 @@ public class PopupManager : SingletonDontDestroy<PopupManager>
         m_popupOkPrefab = Resources.Load<GameObject>("Popup/Popup_Ok");
         m_popupDepth = 10;
     }
-
-    void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            if (UnityEngine.Random.Range(0, 100) % 2 == 0)
-            {
-                Popup_OpenOk("<color=#ff0000>奢雖餌о</color>", "礎熱礎熱礎熱");
-            }
-            else
-            {
-                Popup_OpenOkCancel("<color=#000000>奢雖餌о</color>", "�汝鶲汝鶲汝�");
-            }
-        }
-    }
 }

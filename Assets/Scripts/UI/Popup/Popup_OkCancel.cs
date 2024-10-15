@@ -36,7 +36,7 @@ public class Popup_OkCancel : MonoBehaviour
         }
         else
         {
-            PopupManager.Instance.Popup_Close();    // 팝업 버튼이 할 일이 없다면 팝업을 닫아라
+            PopupManager.Instance.Popup_Close();
         }
     }
 
