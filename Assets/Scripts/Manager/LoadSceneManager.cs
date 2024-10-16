@@ -73,6 +73,20 @@ public class LoadSceneManager : SingletonDontDestroy<LoadSceneManager>
         }
     }
 
+    void UpdateCursorState(SceneState state)
+    {
+        if (state == SceneState.GameScene01 || state == SceneState.GameScene02 || state == SceneState.GameScene03)
+        {
+            Cursor.lockState = CursorLockMode.Locked;  // 게임 씬에서 커서 고정
+            Cursor.visible = false;                    // 커서 숨기기
+        }
+        else
+        {
+            Cursor.lockState = CursorLockMode.None;    // 타이틀 등 UI 씬에서 커서 고정 해제
+            Cursor.visible = true;                     // 커서 보이기
+        }
+    }
+
     IEnumerator CoLoadSceneProcess(int sceneIndex)
     {
         ShowUI();
@@ -108,6 +122,7 @@ public class LoadSceneManager : SingletonDontDestroy<LoadSceneManager>
         m_state = m_loadState;              // 현재 상태를 로드한 상태로 설정
         m_loadState = SceneState.None;      // 로드 상태 초기화
         m_loadingState = null;
+        UpdateCursorState(m_state);
         HideUI();
     }
 
@@ -146,6 +161,7 @@ public class LoadSceneManager : SingletonDontDestroy<LoadSceneManager>
         m_state = m_loadState;
         m_loadState = SceneState.None;
         m_loadingState = null;
+        UpdateCursorState(m_state);
         HideUI();
     }
 
@@ -174,7 +190,11 @@ public class LoadSceneManager : SingletonDontDestroy<LoadSceneManager>
 #else
                             Application.Quit();
 #endif
-                        }, null, "예", "아니오");
+                        }, () => 
+                        {
+                            LoadSceneAsync(SceneState.GameScene03);
+                            PopupManager.Instance.Popup_Close();
+                        }, "예", "아니오");
                         break;
                     case SceneState.GameScene01:
                         PopupManager.Instance.Popup_OpenOkCancel("<color=#ff0000>Notice</color>", "<color=#000000>게임을 종료하고 타이틀로 돌아가시겠습니까?\r\n저장하지 않은 내용은 전부 삭제됩니다.</color>", () => 

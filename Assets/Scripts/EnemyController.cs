@@ -53,6 +53,7 @@ public class EnemyController : MonoBehaviour
     bool m_isEnemyAttack;
     bool m_isInvokeJumpPatrolMove;  // Invoke가 호출된 상태인지 확인
     bool m_isEnemyPatrol;           // Patrol 중인지 확인
+    bool m_isBoss;
     int m_curWaypoint;              // 현재 지정되어 있는 Waypoint
     int m_curWaypointIndex;
     int m_playerLayer;
@@ -66,8 +67,6 @@ public class EnemyController : MonoBehaviour
     #endregion Constants and Fields
   
     #region Public Properties
-    //public AiState GetMotion { get { return m_state; } }
-
     public EnemyManager.EnemyType Type { get { return m_enemyType; } set { m_enemyType = value; } }
 
     public StatusData GetStatus
@@ -109,12 +108,16 @@ public class EnemyController : MonoBehaviour
 
     public void SetDamage(SkillData skill, DamageType type, float damage)
     {
+        // 적 체력 감소
         m_currentHp -= Mathf.RoundToInt(damage);
         Debug.Log("적 체력: " + m_currentHp);
+
+        // HUD 업데이트
         m_hudCtrl.UpdateHUD(type, damage, m_currentHp / (float)m_maxHp);
 
+        // Debuff 유형에 따라 애니메이션 재생
         if (type == DamageType.Miss) return;
-        if (skill.debuff != Debuff.None)
+        if (!m_isBoss && skill.debuff != Debuff.None)
         {
             SetState(AiState.Debuff);
             switch (skill.debuff) 
@@ -126,6 +129,7 @@ public class EnemyController : MonoBehaviour
                     m_animCtrl.Play(EnemyAnimController.Motion.Knockdown, false);
                     break;
             }
+
             if (m_coSetDebuff != null)
             {
                 StopCoroutine(m_coSetDebuff);
@@ -135,13 +139,14 @@ public class EnemyController : MonoBehaviour
         }
         else
         {
-            if (!IsDebuff)
+            if (!IsDebuff || m_isBoss)
             {
                 SetState(AiState.Damaged);
                 m_animCtrl.Play(EnemyAnimController.Motion.Hit, false);
             }
         }
         
+        // Knockback 처리 (스킬의 Knockback 적용)
         Vector3 from = transform.position;
         Vector3 dir = transform.position - m_player.transform.position;
         dir.y = 0f;
@@ -149,6 +154,7 @@ public class EnemyController : MonoBehaviour
         float duration = skill.knockbackDuration;
         m_hittedFeedback.Play(from, to, duration);
 
+        // 적 체력이 0 이하일 때 사망처리
         if (m_currentHp <= 0)
         {
             SetState(AiState.Death);
@@ -437,6 +443,7 @@ public class EnemyController : MonoBehaviour
         m_backgroundLayer = 1 << LayerMask.NameToLayer("Background");
         m_isInvokeJumpPatrolMove = false;
         m_isEnemyAttack = false;
+        m_isBoss = false;
 
         switch (Type)
         {
@@ -458,6 +465,9 @@ public class EnemyController : MonoBehaviour
                 m_movementStrategy = GetComponent<WalkMovement>();
                 break;
             case EnemyManager.EnemyType.BossMonster:
+                m_attackStrategy = GetComponent<MeleeAttack>();
+                m_movementStrategy = GetComponent<WalkMovement>();
+                m_isBoss = true;
                 break;
         }
     }

@@ -20,7 +20,9 @@ public class EnemyManager : SingletonMonoBehaviour<EnemyManager>
     [SerializeField]
     PlayerController m_player;
     [SerializeField]
-    SceneTransitionTriggerZone m_triggerZone;
+    EnemySpawnTriggerZone m_spawnZone;
+    [SerializeField]
+    SceneTransitionTriggerZone m_nextSceneZone;
     [SerializeField] 
     GameObject m_hudParents;
     [SerializeField]
@@ -60,7 +62,8 @@ public class EnemyManager : SingletonMonoBehaviour<EnemyManager>
 
         if (m_enemyList.Count == 0)
         {
-            m_triggerZone.AllEnemiesDie();
+            m_spawnZone.CheckEnableBossMonster();
+            m_nextSceneZone.AllEnemiesDie();
         }
     }
 

@@ -218,25 +218,23 @@ public class PlayerController : MonoBehaviour
         isSkillActive = false;
         m_currentHp = m_statusData.hp;
         m_maxHp = m_statusData.hpMax;
-
-        //Cursor.lockState = CursorLockMode.Locked;       // 마우스 커서 고정 
     }
 
     void Update()
     {
-        RotateCamera();
+        // 마우스 커서 고정
+        if (PopupManager.Instance.IsPopupOpened)
+        {
+            Cursor.lockState = CursorLockMode.None;
+            Cursor.visible = true;
+        }
+        else
+        {
+            Cursor.lockState = CursorLockMode.Locked;
+            Cursor.visible = false;
+        }
 
-        //if (Input.GetMouseButtonDown(0))
-        //{
-        //    if (EventSystem.current.IsPointerOverGameObject())
-        //    {
-        //        Cursor.lockState = CursorLockMode.None;
-        //    }
-        //    else 
-        //    {
-        //        Cursor.lockState = CursorLockMode.Locked;
-        //    }
-        //}
+        RotateCamera();
         
         if (Input.GetKeyDown(KeyCode.Z) && !isSkillActive)
         {
