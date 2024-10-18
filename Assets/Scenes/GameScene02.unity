@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 705507994}
-  m_IndirectSpecularColor: {r: 0.18028331, g: 0.2257133, b: 0.3069217, a: 1}
+  m_IndirectSpecularColor: {r: 0.18028378, g: 0.22571412, b: 0.30692285, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -5973,7 +5973,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 854dac95ac58a4e449f024d2c0756a57, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_player: {fileID: 4437913786748187703}
+  m_player: {fileID: 4437913786748187702}
   m_indicatorPrefab: {fileID: 4709752050646634648, guid: f5226c149d4e9a14182c4274d302b687, type: 3}
   m_indicatorParents: {fileID: 778024712}
 --- !u!1 &1076350916
@@ -6094,6 +6094,11 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 27432e16b7432a541be02f7989176721, type: 3}
+--- !u!1 &1110578593 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 4186740832947074702, guid: 27432e16b7432a541be02f7989176721, type: 3}
+  m_PrefabInstance: {fileID: 1110578592}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1113058492
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -7281,6 +7286,11 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 4bddb9ae1f780154aa47e86d4f27f41a, type: 3}
+--- !u!1 &1766317975 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 8189267173055164739, guid: 4bddb9ae1f780154aa47e86d4f27f41a, type: 3}
+  m_PrefabInstance: {fileID: 1766317974}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1772342588
 GameObject:
   m_ObjectHideFlags: 0
@@ -7776,11 +7786,11 @@ PrefabInstance:
     - target: {fileID: 6444900272773837446, guid: 13dab98559222d34b8fa3d2d1a698050, type: 3}
       propertyPath: m_virtualCamRun
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 1766317975}
     - target: {fileID: 6444900272773837446, guid: 13dab98559222d34b8fa3d2d1a698050, type: 3}
       propertyPath: m_virtualCamEffect
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 1110578593}
     - target: {fileID: 9173695580758162371, guid: 13dab98559222d34b8fa3d2d1a698050, type: 3}
       propertyPath: m_LocalPosition.x
       value: -13.4
@@ -7837,11 +7847,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: edf3f827a3c04c94eaacaed8e9834872, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!4 &4437913786748187703 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 9173695580758162371, guid: 13dab98559222d34b8fa3d2d1a698050, type: 3}
-  m_PrefabInstance: {fileID: 1282331421531172562}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &7919468568034622162
 PrefabInstance:
   m_ObjectHideFlags: 0
