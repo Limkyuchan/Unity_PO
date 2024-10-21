@@ -27,6 +27,10 @@ public class PlayerController : MonoBehaviour
     [SerializeField]
     HUD_Controller m_playerHUD;
     [SerializeField]
+    FillAmount m_skillZCoolTime;
+    [SerializeField]
+    FillAmount m_skillXCoolTime;
+    [SerializeField]
     float m_speed = 1.5f;
     [SerializeField]
     float m_scale;
@@ -236,16 +240,18 @@ public class PlayerController : MonoBehaviour
 
         RotateCamera();
         
-        if (Input.GetKeyDown(KeyCode.Z) && !isSkillActive)
+        if (Input.GetKeyDown(KeyCode.Z) && !isSkillActive && !m_skillZCoolTime.IsSkillCoolTime)
         {
             isSkillActive = true;
             m_animCtrl.Play(PlayerAnimController.Motion.Skill1, false);
+            m_skillZCoolTime.StartCoolTime();
             ResetMove();
         }
-        if (Input.GetKeyDown(KeyCode.X) && !isSkillActive)
+        if (Input.GetKeyDown(KeyCode.X) && !isSkillActive && !m_skillXCoolTime.IsSkillCoolTime)
         {
             isSkillActive = true;
             m_animCtrl.Play(PlayerAnimController.Motion.Skill2, false);
+            m_skillXCoolTime.StartCoolTime();
             ResetMove();
         }
 
