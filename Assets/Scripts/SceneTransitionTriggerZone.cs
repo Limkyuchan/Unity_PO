@@ -23,7 +23,17 @@ public class SceneTransitionTriggerZone : MonoBehaviour
         {
             if (sceneName == "GameScene01")
             {
-                LoadSceneManager.Instance.LoadSceneAsync("GameScene02");
+                LoadSceneManager.Instance.LoadSceneAsync(SceneState.GameScene02);
+            }
+
+            if (sceneName == "GameScene02")
+            {
+                LoadSceneManager.Instance.LoadSceneAsync(SceneState.GameScene03);
+            }
+
+            if (sceneName == "GameScene03")
+            {
+                Debug.Log("GameOver!");
             }
         }
     }

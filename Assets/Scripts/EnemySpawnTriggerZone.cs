@@ -43,7 +43,7 @@ public class EnemySpawnTriggerZone : MonoBehaviour
             }
             else if (sceneName == "GameScene03")
             {
-                m_enemyManager.CreateEnemy(EnemyManager.EnemyType.MeleeWalk2, m_pathA, 1);
+                m_enemyManager.CreateEnemy(EnemyManager.EnemyType.MeleeWalk2, m_pathA, 2);
                 m_enemyManager.CreateEnemy(EnemyManager.EnemyType.MeleeWalk2, m_pathB, 1);
             }
 

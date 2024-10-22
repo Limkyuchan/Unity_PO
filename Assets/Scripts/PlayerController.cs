@@ -1,7 +1,6 @@
 using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
-using UnityEngine.EventSystems;
 
 public class PlayerController : MonoBehaviour
 {
@@ -206,9 +205,23 @@ public class PlayerController : MonoBehaviour
         float mouseX = Input.GetAxis("Mouse X") * mouseSensitivity * Time.deltaTime;
         transform.Rotate(Vector3.up * mouseX);
     }
-    #endregion Methods
 
-    #region Unity Methods
+    void MouseCursorControl()
+    {
+        if (PopupManager.Instance.IsPopupOpened)
+        {
+            Cursor.lockState = CursorLockMode.None;
+            Cursor.visible = true;
+        }
+        else
+        {
+            Cursor.lockState = CursorLockMode.Locked;
+            Cursor.visible = false;
+        }
+    }
+#endregion Methods
+
+#region Unity Methods
     void Start()
     {
         m_animCtrl = GetComponent<PlayerAnimController>();
@@ -226,18 +239,7 @@ public class PlayerController : MonoBehaviour
 
     void Update()
     {
-        // 마우스 커서 고정
-        if (PopupManager.Instance.IsPopupOpened)
-        {
-            Cursor.lockState = CursorLockMode.None;
-            Cursor.visible = true;
-        }
-        else
-        {
-            Cursor.lockState = CursorLockMode.Locked;
-            Cursor.visible = false;
-        }
-
+        MouseCursorControl();
         RotateCamera();
         
         if (Input.GetKeyDown(KeyCode.Z) && !isSkillActive && !m_skillZCoolTime.IsSkillCoolTime)
