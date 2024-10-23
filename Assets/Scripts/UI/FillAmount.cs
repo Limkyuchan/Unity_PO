@@ -16,24 +16,35 @@ public class FillAmount : MonoBehaviour
     [SerializeField]
     TextMeshProUGUI m_textCoolTime;
     [SerializeField]
-    float m_coolTime = 7f;
+    float m_coolTime;
+    [SerializeField]
+    GameObject m_skillShadow;
 
     bool m_isSkillCoolTime;
     Coroutine m_coCoolTime;
 
-    public bool IsSkillCoolTime { get { return m_isSkillCoolTime;} }
+    public bool IsSkillCoolTime { get { return m_isSkillCoolTime; } }
+
+    public void SetSkillShadow(bool result)
+    {
+        m_skillCoolTime.SetActive(false);
+        m_skillShadow.SetActive(result);
+    }
 
     public void Init()
     {
         m_skillCoolTime.gameObject.SetActive(false);
         m_imgSkill.fillAmount = 0f;
         m_isSkillCoolTime = false;
+        m_skillShadow.SetActive(false);
     }
 
-    public void StartCoolTime()
+    public void StartCoolTime(float coolTimeDuration)
     {
         if (m_coCoolTime == null)
         {
+            m_skillShadow.SetActive(false);
+            m_coolTime = coolTimeDuration;
             m_coCoolTime = StartCoroutine(CoCoolTime());
         }
     }
@@ -42,6 +53,7 @@ public class FillAmount : MonoBehaviour
     {
         m_isSkillCoolTime = true;
         m_skillCoolTime.gameObject.SetActive(true);
+        m_skillShadow.SetActive(false);
         var time = m_coolTime;
 
         while (true)

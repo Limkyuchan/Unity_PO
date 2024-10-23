@@ -1,6 +1,6 @@
-using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
@@ -26,17 +26,23 @@ public class PlayerController : MonoBehaviour
     [SerializeField]
     HUD_Controller m_playerHUD;
     [SerializeField]
+    SkillGauge_Controller m_skillGauge;
+    [SerializeField]
     FillAmount m_skillZCoolTime;
     [SerializeField]
     FillAmount m_skillXCoolTime;
+    [SerializeField]
+    float m_damageToActiveSkill = 100f;
     [SerializeField]
     float m_speed = 1.5f;
     [SerializeField]
     float m_scale;
 
     bool isSkillActive;
+    bool isSkillCanUse;
     float m_currentHp;
     float m_maxHp;
+    float m_curSkillGauge = 0f;
     int hash_Speed;
     Vector3 m_dir;
     List<GameObject> m_enemyList = new List<GameObject>();
@@ -122,6 +128,15 @@ public class PlayerController : MonoBehaviour
 
             if (type != DamageType.Miss)
             {
+                // 공격 데미지에 따른 스킬게이지 계산
+                m_curSkillGauge += damage;
+                m_skillGauge.UpdateGauge(m_curSkillGauge / m_damageToActiveSkill);
+                if (m_curSkillGauge >= m_damageToActiveSkill)
+                {
+                    EnableSkill();
+                }
+
+                // 공격 이팩트 효과 적용
                 var effect = EffectPool.Instance.Create(effectData.Prefabs[type == DamageType.Normal ? 0 : 1]);
                 effect.transform.position = enemy.transform.position + Vector3.up * 0.6f;
                 var dir = transform.position - effect.transform.position;
@@ -194,6 +209,20 @@ public class PlayerController : MonoBehaviour
         return type;
     }
 
+    void EnableSkill()
+    {
+        isSkillCanUse = true;
+        m_skillZCoolTime.SetSkillShadow(false);
+    }
+
+    void ResetSkillGauge()
+    {
+        isSkillCanUse = false;
+        m_skillZCoolTime.SetSkillShadow(true);
+        m_curSkillGauge = 0;
+        m_skillGauge.UpdateGauge(m_curSkillGauge);
+    }
+
     void ResetMove()
     {
         m_scale = 0f;
@@ -219,9 +248,9 @@ public class PlayerController : MonoBehaviour
             Cursor.visible = false;
         }
     }
-#endregion Methods
+    #endregion Methods
 
-#region Unity Methods
+    #region Unity Methods
     void Start()
     {
         m_animCtrl = GetComponent<PlayerAnimController>();
@@ -232,7 +261,9 @@ public class PlayerController : MonoBehaviour
         hash_Speed = Animator.StringToHash("Speed");
         m_virtualCamEffect.SetActive(false);
         m_virtualCamRun.SetActive(false);
+        m_skillZCoolTime.SetSkillShadow(true);
         isSkillActive = false;
+        isSkillCanUse = false;
         m_currentHp = m_statusData.hp;
         m_maxHp = m_statusData.hpMax;
     }
@@ -241,21 +272,21 @@ public class PlayerController : MonoBehaviour
     {
         MouseCursorControl();
         RotateCamera();
-        
-        if (Input.GetKeyDown(KeyCode.Z) && !isSkillActive && !m_skillZCoolTime.IsSkillCoolTime)
+
+        if (Input.GetKeyDown(KeyCode.Z) && isSkillCanUse && !isSkillActive)
         {
             isSkillActive = true;
             m_animCtrl.Play(PlayerAnimController.Motion.Skill1, false);
-            m_skillZCoolTime.StartCoolTime();
             ResetMove();
+            ResetSkillGauge();
         }
         if (Input.GetKeyDown(KeyCode.X) && !isSkillActive && !m_skillXCoolTime.IsSkillCoolTime)
         {
             isSkillActive = true;
             m_animCtrl.Play(PlayerAnimController.Motion.Skill2, false);
-            m_skillXCoolTime.StartCoolTime();
+            m_skillXCoolTime.StartCoolTime(20f);
             ResetMove();
-        }
+        } 
 
         if (Input.GetKeyDown(KeyCode.Space))
         {

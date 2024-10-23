@@ -823,6 +823,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_virtualCamEffect: {fileID: 0}
+  m_virtualCamRun: {fileID: 0}
   mouseSensitivity: 100
   m_statusData:
     type: -1
@@ -838,6 +839,10 @@ MonoBehaviour:
     detectDist: 0
   m_attackAreaObj: {fileID: 5963930129364235686}
   m_playerHUD: {fileID: 0}
+  m_skillGauge: {fileID: 0}
+  m_skillZCoolTime: {fileID: 0}
+  m_skillXCoolTime: {fileID: 0}
+  m_damageToActiveSkill: 100
   m_speed: 1.5
   m_scale: 0
 --- !u!1 &1542132851717454765
