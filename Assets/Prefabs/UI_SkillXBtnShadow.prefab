@@ -258,7 +258,7 @@ MonoBehaviour:
   m_skillCoolTime: {fileID: 8201630389951029732}
   m_imgSkill: {fileID: 4445316931676233845}
   m_textCoolTime: {fileID: 9095565932301958742}
-  m_coolTime: 0
+  m_coolTime: 30
   m_skillShadow: {fileID: 2835815686003204293}
 --- !u!222 &5773264642092900587
 CanvasRenderer:
@@ -556,7 +556,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 100, y: 100}
+  m_SizeDelta: {x: 102, y: 102}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &1459186552490699819
 CanvasRenderer:
@@ -661,7 +661,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 20
+  m_text: 30
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 37931ac93f0b4c14bb1646ca9cc7d2a7, type: 2}
   m_sharedMaterial: {fileID: -1195345562238789372, guid: 37931ac93f0b4c14bb1646ca9cc7d2a7, type: 2}

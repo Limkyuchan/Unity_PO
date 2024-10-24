@@ -90,7 +90,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &2369194536356652229
 RectTransform:
   m_ObjectHideFlags: 0
@@ -302,7 +302,7 @@ MonoBehaviour:
   m_skillCoolTime: {fileID: 1448030975164856168}
   m_imgSkill: {fileID: 5405174878242173263}
   m_textCoolTime: {fileID: 2469529239265727101}
-  m_coolTime: 7
+  m_coolTime: 0
   m_skillShadow: {fileID: 3036075568585184956}
 --- !u!222 &6620539654761303083
 CanvasRenderer:
@@ -593,7 +593,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 100, y: 100}
+  m_SizeDelta: {x: 102, y: 102}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &3768700460167222822
 CanvasRenderer:

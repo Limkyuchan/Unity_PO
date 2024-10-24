@@ -10,6 +10,10 @@ public class PlayerController : MonoBehaviour
     PlayerAnimController m_animCtrl;
     SkillController m_skillCtrl;
 
+    [Header("게임 정보")]
+    [SerializeField]
+    InformationMessage m_introduceGame;
+
     [Header("카메라 관련 정보")]
     [SerializeField]
     GameObject m_virtualCamEffect;
@@ -26,7 +30,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField]
     HUD_Controller m_playerHUD;
     [SerializeField]
-    SkillGauge_Controller m_skillGauge;
+    SkillGauge_Controller m_playerSkillGauge;
     [SerializeField]
     FillAmount m_skillZCoolTime;
     [SerializeField]
@@ -97,9 +101,9 @@ public class PlayerController : MonoBehaviour
         var unitList = m_attackAreas[skill.attackArea].EnemyUnitList;
         var effectData = EffectTable.Instance.GetData(skill.effectId);
 
-        if (skill.attack == 0) return;
+        if (skill.attack == 0) return;      // skill Data 못 가져오면 return
         m_enemyList.Clear();
-        foreach (var unit in unitList)
+        foreach (var unit in unitList)      // unitList에 적 추가
         {
             if (unit != null)
             {
@@ -128,9 +132,9 @@ public class PlayerController : MonoBehaviour
 
             if (type != DamageType.Miss)
             {
-                // 공격 데미지에 따른 스킬게이지 계산
+                // 공격 데미지에 따른 Z스킬 게이지 계산
                 m_curSkillGauge += damage;
-                m_skillGauge.UpdateGauge(m_curSkillGauge / m_damageToActiveSkill);
+                m_playerSkillGauge.UpdateGauge(m_curSkillGauge / m_damageToActiveSkill);
                 if (m_curSkillGauge >= m_damageToActiveSkill)
                 {
                     EnableSkill();
@@ -149,7 +153,7 @@ public class PlayerController : MonoBehaviour
     void AnimEvent_AttackFinished()
     {
         bool isCombo = false;
-        if (m_skillCtrl.CommandCount > 0)
+        if (m_skillCtrl.CommandCount > 0)           // 기본 공격을 활용한 콤보 공격 구현
         {
             var command = m_skillCtrl.GetCommand();
             if (command == KeyCode.Space)
@@ -220,7 +224,7 @@ public class PlayerController : MonoBehaviour
         isSkillCanUse = false;
         m_skillZCoolTime.SetSkillShadow(true);
         m_curSkillGauge = 0;
-        m_skillGauge.UpdateGauge(m_curSkillGauge);
+        m_playerSkillGauge.UpdateGauge(m_curSkillGauge);
     }
 
     void ResetMove()
@@ -273,18 +277,25 @@ public class PlayerController : MonoBehaviour
         MouseCursorControl();
         RotateCamera();
 
-        if (Input.GetKeyDown(KeyCode.Z) && isSkillCanUse && !isSkillActive)
+        if (Input.GetKeyDown(KeyCode.H))
+        {
+            m_introduceGame.IntroduceHowToPlayGame();
+        }
+
+        if (Input.GetKeyDown(KeyCode.Z) && !isSkillActive && isSkillCanUse)
         {
             isSkillActive = true;
             m_animCtrl.Play(PlayerAnimController.Motion.Skill1, false);
-            ResetMove();
+            m_virtualCamEffect.SetActive(false);
             ResetSkillGauge();
+            ResetMove();
         }
         if (Input.GetKeyDown(KeyCode.X) && !isSkillActive && !m_skillXCoolTime.IsSkillCoolTime)
         {
             isSkillActive = true;
             m_animCtrl.Play(PlayerAnimController.Motion.Skill2, false);
-            m_skillXCoolTime.StartCoolTime(20f);
+            m_virtualCamEffect.SetActive(false);
+            m_skillXCoolTime.StartCoolTime(30f);
             ResetMove();
         } 
 
