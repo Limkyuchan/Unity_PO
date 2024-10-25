@@ -53,7 +53,7 @@ public class EnemyController : MonoBehaviour
     bool m_isEnemyAttack;
     bool m_isInvokeJumpPatrolMove;  // Invoke가 호출된 상태인지 확인
     bool m_isEnemyPatrol;           // Patrol 중인지 확인
-    bool m_isBoss;
+    bool m_isDebuffImmunity;
     int m_curWaypoint;              // 현재 지정되어 있는 Waypoint
     int m_curWaypointIndex;
     int m_playerLayer;
@@ -112,12 +112,12 @@ public class EnemyController : MonoBehaviour
         m_currentHp -= Mathf.RoundToInt(damage);
         Debug.Log("적 체력: " + m_currentHp);
 
-        // HUD 업데이트
+        // 적 HUD 업데이트
         m_hudCtrl.UpdateHUD(type, damage, m_currentHp / (float)m_maxHp);
 
         // Debuff 유형에 따라 애니메이션 재생
         if (type == DamageType.Miss) return;
-        if (!m_isBoss && skill.debuff != Debuff.None)
+        if (!m_isDebuffImmunity && skill.debuff != Debuff.None)
         {
             SetState(AiState.Debuff);
             switch (skill.debuff) 
@@ -139,7 +139,7 @@ public class EnemyController : MonoBehaviour
         }
         else
         {
-            if (!IsDebuff || m_isBoss)
+            if (!IsDebuff || m_isDebuffImmunity)
             {
                 SetState(AiState.Damaged);
                 m_animCtrl.Play(EnemyAnimController.Motion.Hit, false);
@@ -443,7 +443,7 @@ public class EnemyController : MonoBehaviour
         m_backgroundLayer = 1 << LayerMask.NameToLayer("Background");
         m_isInvokeJumpPatrolMove = false;
         m_isEnemyAttack = false;
-        m_isBoss = false;
+        m_isDebuffImmunity = false;
 
         switch (Type)
         {
@@ -455,6 +455,7 @@ public class EnemyController : MonoBehaviour
             case EnemyManager.EnemyType.WarriorJump:
                 m_attackStrategy = GetComponent<WarriorAttack>();
                 m_movementStrategy = GetComponent<JumpMovement>();
+                m_isDebuffImmunity = true;
                 break;
             case EnemyManager.EnemyType.WarriorWalk:
                 m_attackStrategy = GetComponent<WarriorAttack>();
@@ -467,7 +468,7 @@ public class EnemyController : MonoBehaviour
             case EnemyManager.EnemyType.BossMonster:
                 m_attackStrategy = GetComponent<MeleeAttack>();
                 m_movementStrategy = GetComponent<WalkMovement>();
-                m_isBoss = true;
+                m_isDebuffImmunity = true;
                 break;
         }
     }

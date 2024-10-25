@@ -6,6 +6,13 @@ public class MeleeAttack : MonoBehaviour, IAttackStrategy
 {
     public void Attack(EnemyController enemy)
     {
+        if (enemy.GetPlayer.PlayerCurHp <= 0)
+        {
+            enemy.IsEnemyAttack = false;
+            enemy.SetState(EnemyController.AiState.Idle);
+            return;
+        }
+
         if (!enemy.IsEnemyAttack)
         {
             enemy.SetState(EnemyController.AiState.Attack);

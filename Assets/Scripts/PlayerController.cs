@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
 
 public class PlayerController : MonoBehaviour
@@ -42,8 +43,9 @@ public class PlayerController : MonoBehaviour
     [SerializeField]
     float m_scale;
 
-    bool isSkillActive;
-    bool isSkillCanUse;
+    bool m_isSkillActive;
+    bool m_isSkillCanUse;
+    bool m_isPlayerDead;
     float m_currentHp;
     float m_maxHp;
     float m_curSkillGauge = 0f;
@@ -54,6 +56,8 @@ public class PlayerController : MonoBehaviour
 
     #region Public Properties
     PlayerAnimController.Motion GetMotion { get { return m_animCtrl.GetMotion; } }
+
+    public float PlayerCurHp { get { return m_currentHp; } }
     #endregion Public Properties
 
     #region Public Methods
@@ -68,7 +72,7 @@ public class PlayerController : MonoBehaviour
 
         if (m_currentHp <= 0)
         {
-            m_animCtrl.Play(PlayerAnimController.Motion.Death);
+            Die();
         }
     }
 
@@ -87,7 +91,7 @@ public class PlayerController : MonoBehaviour
     {
         get
         {
-            return isSkillActive ||
+            return m_isSkillActive ||
                    GetMotion == PlayerAnimController.Motion.Skill1 ||
                    GetMotion == PlayerAnimController.Motion.Skill2;
         }
@@ -181,7 +185,7 @@ public class PlayerController : MonoBehaviour
 
     void AnimEvent_SkillFinished()
     {
-        isSkillActive = false;
+        m_isSkillActive = false;
         m_animCtrl.Play(PlayerAnimController.Motion.Idle);
     }
 
@@ -192,6 +196,29 @@ public class PlayerController : MonoBehaviour
         m_animCtrl.Play(PlayerAnimController.Motion.Idle);
     }
     #endregion Animation Event Methods
+
+    #region Coroutine Methods
+    IEnumerator CoShowGameOverPopup()
+    {
+        yield return Utility.GetWaitForSeconds(1.5f);
+
+        PopupManager.Instance.Popup_OpenOkCancel("<color=#ff0000>GameOver!</color>",
+            "플레이어가 사망하여 게임이 종료되었습니다. \r\n" +
+            "\"확인\" 클릭 시 타이틀 화면으로 이동합니다. \r\n" +
+            "\"종료\" 클릭 시 게임을 종료합니다.", () =>
+            {
+                LoadSceneManager.Instance.LoadSceneAsync(SceneState.Title);
+                PopupManager.Instance.Popup_Close();
+            }, () =>
+            {
+#if UNITY_EDITOR
+                EditorApplication.isPlaying = false;
+#else
+                Application.Quit();
+#endif
+            }, "확인", "종료");
+    }
+    #endregion Coroutine Methods
 
     #region Methods
     DamageType AttackDecision(EnemyController enemy, SkillData skill, StatusData status, out float damage)
@@ -213,15 +240,23 @@ public class PlayerController : MonoBehaviour
         return type;
     }
 
+    void Die()
+    {
+        m_isPlayerDead = true;
+        m_animCtrl.Play(PlayerAnimController.Motion.Death);
+        m_virtualCamEffect.SetActive(false);
+        StartCoroutine(CoShowGameOverPopup());
+    }
+
     void EnableSkill()
     {
-        isSkillCanUse = true;
+        m_isSkillCanUse = true;
         m_skillZCoolTime.SetSkillShadow(false);
     }
 
     void ResetSkillGauge()
     {
-        isSkillCanUse = false;
+        m_isSkillCanUse = false;
         m_skillZCoolTime.SetSkillShadow(true);
         m_curSkillGauge = 0;
         m_playerSkillGauge.UpdateGauge(m_curSkillGauge);
@@ -235,8 +270,11 @@ public class PlayerController : MonoBehaviour
 
     void RotateCamera()
     {
-        float mouseX = Input.GetAxis("Mouse X") * mouseSensitivity * Time.deltaTime;
-        transform.Rotate(Vector3.up * mouseX);
+        if (!m_isPlayerDead)
+        {
+            float mouseX = Input.GetAxis("Mouse X") * mouseSensitivity * Time.deltaTime;
+            transform.Rotate(Vector3.up * mouseX);
+        }
     }
 
     void MouseCursorControl()
@@ -266,8 +304,10 @@ public class PlayerController : MonoBehaviour
         m_virtualCamEffect.SetActive(false);
         m_virtualCamRun.SetActive(false);
         m_skillZCoolTime.SetSkillShadow(true);
-        isSkillActive = false;
-        isSkillCanUse = false;
+
+        m_isSkillActive = false;
+        m_isSkillCanUse = false;
+        m_isPlayerDead = false;
         m_currentHp = m_statusData.hp;
         m_maxHp = m_statusData.hpMax;
     }
@@ -282,17 +322,17 @@ public class PlayerController : MonoBehaviour
             m_introduceGame.IntroduceHowToPlayGame();
         }
 
-        if (Input.GetKeyDown(KeyCode.Z) && !isSkillActive && isSkillCanUse)
+        if (Input.GetKeyDown(KeyCode.Z) && !m_isSkillActive && m_isSkillCanUse)
         {
-            isSkillActive = true;
+            m_isSkillActive = true;
             m_animCtrl.Play(PlayerAnimController.Motion.Skill1, false);
             m_virtualCamEffect.SetActive(false);
             ResetSkillGauge();
             ResetMove();
         }
-        if (Input.GetKeyDown(KeyCode.X) && !isSkillActive && !m_skillXCoolTime.IsSkillCoolTime)
+        if (Input.GetKeyDown(KeyCode.X) && !m_isSkillActive && !m_skillXCoolTime.IsSkillCoolTime)
         {
-            isSkillActive = true;
+            m_isSkillActive = true;
             m_animCtrl.Play(PlayerAnimController.Motion.Skill2, false);
             m_virtualCamEffect.SetActive(false);
             m_skillXCoolTime.StartCoolTime(30f);
