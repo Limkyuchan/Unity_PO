@@ -33,8 +33,11 @@ public class EnemyManager : SingletonMonoBehaviour<EnemyManager>
     List<EnemyController> m_enemyList = new List<EnemyController>();
     Dictionary<EnemyType, GameObjectPool<EnemyController>> m_enemyPool = new Dictionary<EnemyType, GameObjectPool<EnemyController>>();
     GameObjectPool<HUD_Controller> m_hudPool;
+    int m_deathEnemyCnt;
 
     public List<EnemyController> GetEnemyList() { return m_enemyList; }
+
+    public int GetDeathEnemyCnt { get { return m_deathEnemyCnt; } }
 
     public void CreateEnemy(EnemyType type, PathController path, int count)
     {
@@ -58,6 +61,9 @@ public class EnemyManager : SingletonMonoBehaviour<EnemyManager>
         if (m_enemyList.Contains(enemy))
         {
             m_enemyList.Remove(enemy);
+            m_deathEnemyCnt++;
+            m_player.DeathEnemyCnt = m_deathEnemyCnt;
+            m_player.PlayerAttackUpgrade();
         }
 
         if (m_enemyList.Count == 0)
@@ -65,10 +71,12 @@ public class EnemyManager : SingletonMonoBehaviour<EnemyManager>
             m_spawnZone.CheckEnableBossMonster();
             m_nextSceneZone.AllEnemiesDie();
         }
+        Debug.Log(m_deathEnemyCnt);
     }
 
     protected override void OnStart()
     {
+        m_deathEnemyCnt = 0;
         m_enemyPrefabs = Resources.LoadAll<GameObject>("Prefab/Enemys");
 
         for (int i = 0; i < m_enemyPrefabs.Length; i++)

@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEditor;
+using UnityEditor.ShaderGraph.Internal;
 using UnityEngine;
 
 public class PlayerController : MonoBehaviour
@@ -46,8 +47,12 @@ public class PlayerController : MonoBehaviour
     bool m_isSkillActive;
     bool m_isSkillCanUse;
     bool m_isPlayerDead;
+
+    int m_deathEnemyCnt;
     float m_currentHp;
     float m_maxHp;
+    float m_attack;
+    float m_defense;
     float m_curSkillGauge = 0f;
     int hash_Speed;
     Vector3 m_dir;
@@ -57,7 +62,15 @@ public class PlayerController : MonoBehaviour
     #region Public Properties
     PlayerAnimController.Motion GetMotion { get { return m_animCtrl.GetMotion; } }
 
-    public float PlayerCurHp { get { return m_currentHp; } }
+    public float GetPlayerCurHp { get { return m_currentHp; } }
+
+    public float GetPlayerMaxHp {  get { return m_maxHp; } }
+
+    public float GetPlayerAttack {  get { return m_attack; } }
+
+    public float GetPlayerDefense {  get { return m_defense; } }
+
+    public int DeathEnemyCnt { get { return m_deathEnemyCnt; } set { m_deathEnemyCnt = value; } }
     #endregion Public Properties
 
     #region Public Methods
@@ -74,6 +87,11 @@ public class PlayerController : MonoBehaviour
         {
             Die();
         }
+    }
+
+    public void PlayerAttackUpgrade()
+    {
+        m_attack += 2;
     }
 
     public bool IsAttack
@@ -308,8 +326,11 @@ public class PlayerController : MonoBehaviour
         m_isSkillActive = false;
         m_isSkillCanUse = false;
         m_isPlayerDead = false;
+
         m_currentHp = m_statusData.hp;
         m_maxHp = m_statusData.hpMax;
+        m_attack = m_statusData.attack;
+        m_defense = m_statusData.defense;
     }
 
     void Update()
@@ -317,9 +338,22 @@ public class PlayerController : MonoBehaviour
         MouseCursorControl();
         RotateCamera();
 
+        // 게임 정보 확인하기
         if (Input.GetKeyDown(KeyCode.H))
         {
-            m_introduceGame.IntroduceHowToPlayGame();
+            if (!PopupManager.Instance.IsPopupOpened)
+            {
+                m_introduceGame.IntroduceHowToPlayGame();
+            }
+        }
+
+        // 주인공 스탯 확인하기
+        if (Input.GetKeyDown(KeyCode.Tab))
+        {
+            if (!PopupManager.Instance.IsPopupOpened)
+            {
+                m_introduceGame.CheckPlayerStat();
+            }
         }
 
         if (Input.GetKeyDown(KeyCode.Z) && !m_isSkillActive && m_isSkillCanUse)
