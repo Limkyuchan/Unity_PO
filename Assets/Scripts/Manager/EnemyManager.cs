@@ -5,6 +5,7 @@ using UnityEngine;
 
 public class EnemyManager : SingletonMonoBehaviour<EnemyManager>
 {
+    #region Enum Methods
     public enum EnemyType
     {
         None = -1,
@@ -16,7 +17,9 @@ public class EnemyManager : SingletonMonoBehaviour<EnemyManager>
         BossMonster,
         Max
     }
+    #endregion Enum Methods
 
+    #region Constants and Fields
     [SerializeField]
     PlayerController m_player;
     [SerializeField]
@@ -34,11 +37,18 @@ public class EnemyManager : SingletonMonoBehaviour<EnemyManager>
     Dictionary<EnemyType, GameObjectPool<EnemyController>> m_enemyPool = new Dictionary<EnemyType, GameObjectPool<EnemyController>>();
     GameObjectPool<HUD_Controller> m_hudPool;
     int m_deathEnemyCnt;
+    bool m_bossDeath;
+    #endregion Constants and Fields
 
+    #region Public Properties
     public List<EnemyController> GetEnemyList() { return m_enemyList; }
 
     public int GetDeathEnemyCnt { get { return m_deathEnemyCnt; } }
 
+    public bool GetBossMonsterDeath { get { return m_bossDeath; } }
+    #endregion Public Properties 
+
+    #region Public Methods
     public void CreateEnemy(EnemyType type, PathController path, int count)
     {
         var waypoints = path.Waypoints;
@@ -66,17 +76,26 @@ public class EnemyManager : SingletonMonoBehaviour<EnemyManager>
             m_player.PlayerAttackUpgrade();
         }
 
+        if (enemy.Type == EnemyType.BossMonster && !m_bossDeath)
+        {
+            m_bossDeath = true;
+            m_nextSceneZone.EndGame();
+            return;
+        }
+
         if (m_enemyList.Count == 0)
         {
-            m_spawnZone.CheckEnableBossMonster();
             m_nextSceneZone.AllEnemiesDie();
+            m_spawnZone.CheckEnableBossMonster();
         }
-        Debug.Log(m_deathEnemyCnt);
     }
+    #endregion Public Methods
 
+    #region Unity Methods
     protected override void OnStart()
     {
         m_deathEnemyCnt = 0;
+        m_bossDeath = false;
         m_enemyPrefabs = Resources.LoadAll<GameObject>("Prefab/Enemys");
 
         for (int i = 0; i < m_enemyPrefabs.Length; i++)
@@ -107,4 +126,5 @@ public class EnemyManager : SingletonMonoBehaviour<EnemyManager>
             return hud;
         });
     }
+    #endregion Unity Methods
 }

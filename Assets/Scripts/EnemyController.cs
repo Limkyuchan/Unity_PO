@@ -18,7 +18,7 @@ public class EnemyController : MonoBehaviour
         Death,
         Max
     }
-    #endregion
+    #endregion Enum Methods
 
     #region Constants and Fields
     PlayerController m_player;

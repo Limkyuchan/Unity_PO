@@ -14,7 +14,7 @@ public class PlayerController : MonoBehaviour
 
     [Header("게임 정보")]
     [SerializeField]
-    InformationMessage m_introduceGame;
+    UIGameInformationMessage m_introduceGame;
 
     [Header("카메라 관련 정보")]
     [SerializeField]
@@ -32,7 +32,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField]
     HUD_Controller m_playerHUD;
     [SerializeField]
-    SkillGauge_Controller m_playerSkillGauge;
+    UISkillGauge_Controller m_playerSkillGauge;
     [SerializeField]
     FillAmount m_skillZCoolTime;
     [SerializeField]

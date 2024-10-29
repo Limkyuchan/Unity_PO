@@ -13,15 +13,17 @@ public class EnemySpawnTriggerZone : MonoBehaviour
     PathController m_pathB;
     [SerializeField]
     PathController m_pathC;
+    [SerializeField]
+    UIBossSpawn m_bossSpawnUI;
 
     bool enemySpawn = false;
     string sceneName;
 
     public void CheckEnableBossMonster()
     {
-        if (sceneName == "GameScene03")
+        if (sceneName == "GameScene03" && !m_enemyManager.GetBossMonsterDeath)
         {
-            m_enemyManager.CreateEnemy(EnemyManager.EnemyType.BossMonster, m_pathC, 1);
+            m_bossSpawnUI.ShowBossSpawnMessage();
         }
     }
 
@@ -31,7 +33,7 @@ public class EnemySpawnTriggerZone : MonoBehaviour
         {
             if (sceneName == "GameScene01")
             {
-                m_enemyManager.CreateEnemy(EnemyManager.EnemyType.WarriorWalk, m_pathA, 1);
+                m_enemyManager.CreateEnemy(EnemyManager.EnemyType.WarriorWalk, m_pathA, 2);
                 m_enemyManager.CreateEnemy(EnemyManager.EnemyType.WarriorWalk, m_pathB, 2);
                 m_enemyManager.CreateEnemy(EnemyManager.EnemyType.WarriorJump, m_pathC, 1);
             }
