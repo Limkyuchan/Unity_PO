@@ -36,14 +36,13 @@ public class EnemyManager : SingletonMonoBehaviour<EnemyManager>
     List<EnemyController> m_enemyList = new List<EnemyController>();
     Dictionary<EnemyType, GameObjectPool<EnemyController>> m_enemyPool = new Dictionary<EnemyType, GameObjectPool<EnemyController>>();
     GameObjectPool<HUD_Controller> m_hudPool;
+
     int m_deathEnemyCnt;
     bool m_bossDeath;
     #endregion Constants and Fields
 
     #region Public Properties
     public List<EnemyController> GetEnemyList() { return m_enemyList; }
-
-    public int GetDeathEnemyCnt { get { return m_deathEnemyCnt; } }
 
     public bool GetBossMonsterDeath { get { return m_bossDeath; } }
     #endregion Public Properties 
@@ -64,6 +63,8 @@ public class EnemyManager : SingletonMonoBehaviour<EnemyManager>
 
             enemy.gameObject.SetActive(true);
         }
+
+        m_player.TotalEnemyCnt = m_enemyList.Count;
     } 
 
     public void RemoveEnemy(EnemyController enemy)

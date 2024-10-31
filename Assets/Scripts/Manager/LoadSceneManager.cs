@@ -183,7 +183,7 @@ public class LoadSceneManager : SingletonDontDestroy<LoadSceneManager>
                 switch (m_state)
                 {
                     case SceneState.Title:
-                        PopupManager.Instance.Popup_OpenOkCancel("<color=#ff0000>Information</color>", "<color=#000000>게임을 종료하시겠습니까?</color>", () =>
+                        PopupManager.Instance.Popup_OpenOkCancel("<color=#ff0000>Notice</color>", "<color=#000000>게임을 종료하시겠습니까?</color>", () =>
                         {
 #if UNITY_EDITOR
                             EditorApplication.isPlaying = false;
@@ -193,21 +193,21 @@ public class LoadSceneManager : SingletonDontDestroy<LoadSceneManager>
                         }, null, "예", "아니오");
                         break;
                     case SceneState.GameScene01:
-                        PopupManager.Instance.Popup_OpenOkCancel("<color=#ff0000>Information</color>", "<color=#000000>게임을 종료하고 타이틀로 돌아가시겠습니까?\r\n저장하지 않은 내용은 전부 삭제됩니다.</color>", () => 
+                        PopupManager.Instance.Popup_OpenOkCancel("<color=#ff0000>Notice</color>", "<color=#000000>게임을 종료하고 타이틀로 돌아가시겠습니까?\r\n저장하지 않은 내용은 전부 삭제됩니다.</color>", () => 
                         {
                             LoadSceneAsync(SceneState.Title);
                             PopupManager.Instance.Popup_Close();
                         }, null, "종료", "취소");
                         break;
                     case SceneState.GameScene02:
-                        PopupManager.Instance.Popup_OpenOkCancel("<color=#ff0000>Information</color>", "<color=#000000>게임을 종료하고 타이틀로 돌아가시겠습니까?\r\n저장하지 않은 내용은 전부 삭제됩니다.</color>", () =>
+                        PopupManager.Instance.Popup_OpenOkCancel("<color=#ff0000>Notice</color>", "<color=#000000>게임을 종료하고 타이틀로 돌아가시겠습니까?\r\n저장하지 않은 내용은 전부 삭제됩니다.</color>", () =>
                         {
                             LoadSceneAsync(SceneState.Title);
                             PopupManager.Instance.Popup_Close();
                         }, null, "종료", "취소");
                         break;
                     case SceneState.GameScene03:
-                        PopupManager.Instance.Popup_OpenOkCancel("<color=#ff0000>Information</color>", "<color=#000000>게임을 종료하고 타이틀로 돌아가시겠습니까?\r\n저장하지 않은 내용은 전부 삭제됩니다.</color>", () =>
+                        PopupManager.Instance.Popup_OpenOkCancel("<color=#ff0000>Notice</color>", "<color=#000000>게임을 종료하고 타이틀로 돌아가시겠습니까?\r\n저장하지 않은 내용은 전부 삭제됩니다.</color>", () =>
                         {
                             LoadSceneAsync(SceneState.Title);
                             PopupManager.Instance.Popup_Close();

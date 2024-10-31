@@ -7,12 +7,13 @@ public class IndicatorManager : MonoBehaviour
     [SerializeField]
     PlayerController m_player;
     [SerializeField]
+    EnemyManager m_enemyManager;
+    [SerializeField]
     GameObject m_indicatorPrefab;
     [SerializeField]
     GameObject m_indicatorParents;
 
     Camera m_camera;
-    EnemyManager m_enemyManager;
 
     List<Transform> m_enemies = new List<Transform>();
     GameObjectPool<RectTransform> m_indicatorPool;
@@ -79,7 +80,6 @@ public class IndicatorManager : MonoBehaviour
     void Start()
     {
         m_camera = Camera.main;
-        m_enemyManager = EnemyManager.Instance;
 
         m_indicatorPool = new GameObjectPool<RectTransform>(10, () =>
         {
