@@ -87,6 +87,7 @@ public class EnemyManager : SingletonMonoBehaviour<EnemyManager>
         if (m_enemyList.Count == 0)
         {
             m_nextSceneZone.AllEnemiesDie();
+            m_player.AllEnemiesDie();
             m_spawnZone.CheckEnableBossMonster();
         }
     }

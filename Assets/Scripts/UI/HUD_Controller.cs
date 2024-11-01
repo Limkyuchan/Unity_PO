@@ -38,6 +38,11 @@ public class HUD_Controller : MonoBehaviour
         HideUI();
     }
 
+    public void UpdateHUD(float normalizedHp)
+    {
+        m_hpBar.value = normalizedHp;
+    }
+
     public void UpdateHUD(DamageType type, float damage, float normalizedHp)
     {
         if (type != DamageType.None)

@@ -1,7 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEditor;
-using UnityEditor.ShaderGraph.Internal;
 using UnityEngine;
 
 public class PlayerController : MonoBehaviour
@@ -20,13 +19,13 @@ public class PlayerController : MonoBehaviour
     [SerializeField]
     GameObject m_virtualCamEffect;
     [SerializeField]
+    GameObject m_virtualShield;
+    [SerializeField]
     GameObject m_virtualCamRun;
     [SerializeField]
     float mouseSensitivity = 100f;
 
     [Header("Player 관련 정보")]
-    [SerializeField]
-    StatusData m_statusData;
     [SerializeField]
     GameObject m_attackAreaObj;
     [SerializeField]
@@ -48,13 +47,13 @@ public class PlayerController : MonoBehaviour
     bool m_isSkillCanUse;
     bool m_isPlayerDead;
 
+    int hash_Speed;
     int m_deathEnemyCnt;
     int m_totalEnemyCnt;
-    float m_currentHp;
-    float m_attack;
-    float m_defense;
-    float m_curSkillGauge = 0f;
-    int hash_Speed;
+    int m_curHp;
+    int m_maxHp;
+    float m_curAttack;
+    float m_curSkillGauge;
     Vector3 m_dir;
     List<GameObject> m_enemyList = new List<GameObject>();
     #endregion Constants and Fields
@@ -72,7 +71,7 @@ public class PlayerController : MonoBehaviour
                 GetMotion == PlayerAnimController.Motion.Attack4;
         }
     }
-
+     
     public bool IsSkill
     {
         get
@@ -85,13 +84,15 @@ public class PlayerController : MonoBehaviour
 
     public bool IsShield { get { return GetMotion == PlayerAnimController.Motion.Shield; } }
 
-    public float GetPlayerCurHp { get { return m_currentHp; } }
+    public int PlayerCurHp { get { return m_curHp; } set { m_curHp = value; } }
 
-    public float GetPlayerMaxHp {  get { return m_statusData.hpMax; } }
+    public float PlayerMaxHp {  get { return m_maxHp; } }
 
-    public float GetPlayerAttack {  get { return m_attack; } }
+    public float PlayerAttack {  get { return m_curAttack; } set { m_curAttack = value; } }
 
-    public float GetPlayerDefense {  get { return m_defense; } }
+    public float PlayerCurSkillGauge { get { return m_curSkillGauge; } set { m_curSkillGauge = value; } }
+    
+    public float PlayerMaxSkillGauge { get { return m_damageToActiveSkill; } }
 
     public int DeathEnemyCnt { get { return m_deathEnemyCnt; } set { m_deathEnemyCnt = value; } }
 
@@ -103,23 +104,35 @@ public class PlayerController : MonoBehaviour
     {
         if (!IsShield)
         {
-            m_currentHp -= Mathf.RoundToInt(damage);
+            m_curHp -= Mathf.RoundToInt(damage);
             var type = DamageType.None;
-            m_playerHUD.UpdateHUD(type, damage, m_currentHp / (float)m_statusData.hpMax);
+            m_playerHUD.UpdateHUD(type, damage, m_curHp / (float)m_maxHp);
 
             m_animCtrl.Play(PlayerAnimController.Motion.Hit, false);
             m_virtualCamEffect.SetActive(true);
 
-            if (m_currentHp <= 0)
+            if (m_curHp <= 0)
             {
                 Die();
             }
+        }
+        else
+        {
+            StartCoroutine(CoShieldCameraControl());   
+        }
+    }
+
+    public void AllEnemiesDie()
+    {
+        if (PlayerStatus.Instance != null)
+        {
+            PlayerStatus.Instance.UpdateStatus(m_curHp, m_curAttack, m_curSkillGauge);
         }
     }
 
     public void PlayerAttackUpgrade()
     {
-        m_attack += 2;
+        m_curAttack += 2;
     }
     #endregion Public Methods
 
@@ -164,7 +177,7 @@ public class PlayerController : MonoBehaviour
                 // 공격 데미지에 따른 Z스킬 게이지 계산 및 활성화
                 if (enemy.GetMotion != EnemyController.AiState.Death && !m_isSkillActive)
                 {
-                    m_curSkillGauge += damage;
+                    m_curSkillGauge += damage / 2.5f;
                     m_playerSkillGauge.UpdateGauge(m_curSkillGauge / m_damageToActiveSkill);
                 }
                 if (m_curSkillGauge >= m_damageToActiveSkill)
@@ -246,6 +259,13 @@ public class PlayerController : MonoBehaviour
 #endif
             }, "확인", "종료");
     }
+
+    IEnumerator CoShieldCameraControl()
+    {
+        m_virtualShield.SetActive(true);
+        yield return Utility.GetWaitForSeconds(1.5f);
+        m_virtualShield.SetActive(false);
+    }
     #endregion Coroutine Methods
 
     #region Methods
@@ -254,15 +274,15 @@ public class PlayerController : MonoBehaviour
         DamageType type = DamageType.Miss;
         damage = 0f;
 
-        if (CalculateDamage.AttackDecision(m_statusData.hitRate + skill.hitRate, status.dodgeRate))
+        if (CalculateDamage.AttackDecision(PlayerStatus.Instance.hitRate + skill.hitRate, status.dodgeRate))
         {
             type = DamageType.Normal;
-            damage = CalculateDamage.NormalDamage(m_attack, skill.attack, status.defense);                  // m_statusData.attack : StatusData에서 가져온 공격력
+            damage = CalculateDamage.NormalDamage(m_curAttack, skill.attack, status.defense);
 
-            if (CalculateDamage.CriticalDecision(m_statusData.criRate))
+            if (CalculateDamage.CriticalDecision(PlayerStatus.Instance.criRate))
             {
                 type = DamageType.Critical;
-                damage = CalculateDamage.CriticalDamage(damage, m_statusData.criAttack);
+                damage = CalculateDamage.CriticalDamage(damage, PlayerStatus.Instance.criAttack);
             }
         }
         return type;
@@ -330,6 +350,7 @@ public class PlayerController : MonoBehaviour
 
         hash_Speed = Animator.StringToHash("Speed");
         m_virtualCamEffect.SetActive(false);
+        m_virtualShield.SetActive(false);
         m_virtualCamRun.SetActive(false);
         m_skillZCoolTime.SetSkillShadow(true);
 
@@ -337,9 +358,17 @@ public class PlayerController : MonoBehaviour
         m_isSkillCanUse = false;
         m_isPlayerDead = false;
 
-        m_currentHp = m_statusData.hp;
-        m_attack = m_statusData.attack;
-        m_defense = m_statusData.defense;
+        if (PlayerStatus.Instance != null)
+        {
+            m_curHp = PlayerStatus.Instance.hp;
+            m_maxHp = PlayerStatus.Instance.hpMax;
+            m_curAttack = PlayerStatus.Instance.attack;
+            m_curSkillGauge = PlayerStatus.Instance.skillGauge;
+            m_deathEnemyCnt = PlayerStatus.Instance.deathEnemyCnt;
+            m_totalEnemyCnt = PlayerStatus.Instance.totalEnemyCnt;
+            m_playerHUD.UpdateHUD(m_curHp / (float)m_maxHp);
+            m_playerSkillGauge.UpdateGauge(m_curSkillGauge / m_damageToActiveSkill);
+        }
     }
 
     void Update()
@@ -365,6 +394,7 @@ public class PlayerController : MonoBehaviour
             }
         }
 
+        // 주인공 스킬 공격
         if (Input.GetKeyDown(KeyCode.Z) && !m_isSkillActive && m_isSkillCanUse)
         {
             m_isSkillActive = true;
@@ -382,6 +412,7 @@ public class PlayerController : MonoBehaviour
             ResetMove();
         } 
 
+        // 주인공 기본 공격
         if (Input.GetKeyDown(KeyCode.Space))
         {
             ResetMove();
@@ -395,14 +426,19 @@ public class PlayerController : MonoBehaviour
             }
         }
 
+        // 주인공 쉴드 방어
         if (Input.GetKeyDown(KeyCode.C))
         {
-            m_animCtrl.Play(PlayerAnimController.Motion.Shield, false);
+            ResetMove();
+            m_virtualCamEffect.SetActive(false);
+            m_animCtrl.Play(PlayerAnimController.Motion.Shield);
         }
-        //if (Input.GetKeyUp(KeyCode.C))
-        //{
-        //    m_animCtrl.Play(PlayerAnimController.Motion.Idle);
-        //}
+        if (Input.GetKeyUp(KeyCode.C))
+        {
+            m_virtualCamEffect.SetActive(false);
+            m_virtualShield.SetActive(false);
+            m_animCtrl.Play(PlayerAnimController.Motion.Idle);
+        }
 
         // 주인공 방향전환 
         Vector3 forward = transform.forward;

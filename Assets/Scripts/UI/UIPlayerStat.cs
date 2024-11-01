@@ -14,7 +14,7 @@ public class UIPlayerStat : MonoBehaviour
 
     void Update()
     {
-        m_textAttack.text = m_player.GetPlayerAttack.ToString();
+        m_textAttack.text = m_player.PlayerAttack.ToString();
         m_textKillScore.text = m_player.DeathEnemyCnt.ToString();
     }
 }

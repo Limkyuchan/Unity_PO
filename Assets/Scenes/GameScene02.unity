@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 705507994}
-  m_IndirectSpecularColor: {r: 0.05768367, g: 0.07753138, b: 0.11608741, a: 1}
+  m_IndirectSpecularColor: {r: 0.057683513, g: 0.0775312, b: 0.11608705, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -25043,6 +25043,68 @@ Transform:
   - {fileID: 1303891860}
   m_Father: {fileID: 1534791406}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1001 &955248723
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 7088364026999506027, guid: 29c039a2bd3cc434dbaf02e6e48d2146, type: 3}
+      propertyPath: m_Name
+      value: Virtual Camera_Shield
+      objectReference: {fileID: 0}
+    - target: {fileID: 8519424013570316380, guid: 29c039a2bd3cc434dbaf02e6e48d2146, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 2.22
+      objectReference: {fileID: 0}
+    - target: {fileID: 8519424013570316380, guid: 29c039a2bd3cc434dbaf02e6e48d2146, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 2.918
+      objectReference: {fileID: 0}
+    - target: {fileID: 8519424013570316380, guid: 29c039a2bd3cc434dbaf02e6e48d2146, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -4.99
+      objectReference: {fileID: 0}
+    - target: {fileID: 8519424013570316380, guid: 29c039a2bd3cc434dbaf02e6e48d2146, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0.9920918
+      objectReference: {fileID: 0}
+    - target: {fileID: 8519424013570316380, guid: 29c039a2bd3cc434dbaf02e6e48d2146, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0.12551509
+      objectReference: {fileID: 0}
+    - target: {fileID: 8519424013570316380, guid: 29c039a2bd3cc434dbaf02e6e48d2146, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8519424013570316380, guid: 29c039a2bd3cc434dbaf02e6e48d2146, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8519424013570316380, guid: 29c039a2bd3cc434dbaf02e6e48d2146, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 14.421
+      objectReference: {fileID: 0}
+    - target: {fileID: 8519424013570316380, guid: 29c039a2bd3cc434dbaf02e6e48d2146, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8519424013570316380, guid: 29c039a2bd3cc434dbaf02e6e48d2146, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 29c039a2bd3cc434dbaf02e6e48d2146, type: 3}
+--- !u!1 &955248724 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 7088364026999506027, guid: 29c039a2bd3cc434dbaf02e6e48d2146, type: 3}
+  m_PrefabInstance: {fileID: 955248723}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &957763524
 GameObject:
   m_ObjectHideFlags: 0
@@ -58253,6 +58315,10 @@ PrefabInstance:
       propertyPath: m_virtualCamRun
       value: 
       objectReference: {fileID: 1766317975}
+    - target: {fileID: 6444900272773837446, guid: 13dab98559222d34b8fa3d2d1a698050, type: 3}
+      propertyPath: m_virtualShield
+      value: 
+      objectReference: {fileID: 955248724}
     - target: {fileID: 6444900272773837446, guid: 13dab98559222d34b8fa3d2d1a698050, type: 3}
       propertyPath: m_skillXCoolTime
       value: 
@@ -127361,6 +127427,7 @@ SceneRoots:
   - {fileID: 7919468568034622162}
   - {fileID: 1766317974}
   - {fileID: 1110578592}
+  - {fileID: 955248723}
   - {fileID: 1488295364}
   - {fileID: 1282331421531172562}
   - {fileID: 1276547548}

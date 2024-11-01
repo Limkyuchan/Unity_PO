@@ -6,7 +6,7 @@ public class WarriorAttack : MonoBehaviour, IAttackStrategy
 {
     public void Attack(EnemyController enemy)
     {
-        if (enemy.GetPlayer.GetPlayerCurHp <= 0)
+        if (enemy.GetPlayer.PlayerCurHp <= 0)
         {
             enemy.IsEnemyAttack = false;
             enemy.SetState(EnemyController.AiState.Idle);

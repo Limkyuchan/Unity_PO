@@ -11,7 +11,6 @@ public class SceneTransitionTriggerZone : MonoBehaviour
     string sceneName;
     bool enemiesAllDie = false;
 
-
     public void AllEnemiesDie()
     {
         enemiesAllDie = true;
@@ -43,7 +42,6 @@ public class SceneTransitionTriggerZone : MonoBehaviour
 #endif
         }, "확인", "종료");
     }
-
 
     void OnTriggerEnter(Collider other)
     {

@@ -824,20 +824,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_introduceGame: {fileID: 0}
   m_virtualCamEffect: {fileID: 0}
+  m_virtualShield: {fileID: 0}
   m_virtualCamRun: {fileID: 0}
   mouseSensitivity: 100
-  m_statusData:
-    type: -1
-    hp: 200
-    hpMax: 200
-    attack: 30
-    defense: 10
-    hitRate: 90
-    dodgeRate: 10
-    criRate: 15
-    criAttack: 200
-    attackDist: 0
-    detectDist: 0
   m_attackAreaObj: {fileID: 5963930129364235686}
   m_playerHUD: {fileID: 0}
   m_playerSkillGauge: {fileID: 0}
