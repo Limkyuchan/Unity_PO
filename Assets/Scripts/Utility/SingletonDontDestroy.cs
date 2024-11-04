@@ -16,6 +16,7 @@ public class SingletonDontDestroy<T> : MonoBehaviour where T : SingletonDontDest
         if (m_instance == null)
         {
             m_instance = (T)this;
+            transform.SetParent(null);
             DontDestroyOnLoad(gameObject);
             OnAwake();
         }

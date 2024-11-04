@@ -12,11 +12,49 @@ public class UIItemManager : MonoBehaviour
     [SerializeField]
     GameObject m_itemParents;
 
+    Camera m_camera;
     GameObjectPool<RectTransform> m_bloodPool;
     GameObjectPool<RectTransform> m_attackPool;
 
+    public void SpawnBloodItem(Vector3 position)
+    {
+        var bloodItem = m_bloodPool.Get();
+        Vector3 screenPosition = m_camera.WorldToScreenPoint(position);
+        bloodItem.position = screenPosition; // 월드 좌표를 화면 좌표로 변환
+        bloodItem.gameObject.SetActive(true);
+        StartCoroutine(CoMoveAndDestroy(bloodItem));
+    }
+
+    public void SpawnAttackItem(Vector3 position)
+    {
+        var attackItem = m_attackPool.Get();
+        Vector3 screenPosition = m_camera.WorldToScreenPoint(position);
+        attackItem.position = screenPosition; // 월드 좌표를 화면 좌표로 변환
+        attackItem.gameObject.SetActive(true);
+        StartCoroutine(CoMoveAndDestroy(attackItem));
+    }
+
+    IEnumerator CoMoveAndDestroy(RectTransform item)
+    {
+        float time = 0f;
+        Vector3 initialPosition = item.position;
+        Vector3 targetPosition = initialPosition + new Vector3(0, 50, 0);
+
+        while (time < 1.5f)
+        {
+            item.position = Vector3.Lerp(initialPosition, targetPosition, (time / 1f));
+            time += Time.deltaTime;
+            yield return null;
+        }
+
+        item.gameObject.SetActive(false); 
+        item.position = initialPosition;
+    }
+
     void Start()
     {
+        m_camera = Camera.main;
+
         m_bloodPool = new GameObjectPool<RectTransform>(2, () =>
         {
             var obj = Instantiate(m_itemBloodPrefab);

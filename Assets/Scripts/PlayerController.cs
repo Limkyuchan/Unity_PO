@@ -134,6 +134,15 @@ public class PlayerController : MonoBehaviour
     {
         m_curAttack += 2;
     }
+
+    public void PlayerHpUpgrade()
+    {
+        m_curHp += 20;
+        if (m_curHp > m_maxHp)
+        {
+            m_curHp = m_maxHp;
+        }
+    }
     #endregion Public Methods
 
     #region Animation Event Methods
@@ -177,14 +186,14 @@ public class PlayerController : MonoBehaviour
                 // 공격 데미지에 따른 Z스킬 게이지 계산 및 활성화
                 if (enemy.GetMotion != EnemyController.AiState.Death && !m_isSkillActive)
                 {
-                    m_curSkillGauge += damage / 2.5f;
+                    m_curSkillGauge = Mathf.Min(100, Mathf.Round(m_curSkillGauge + damage / 2.5f));
                     m_playerSkillGauge.UpdateGauge(m_curSkillGauge / m_damageToActiveSkill);
                 }
                 if (m_curSkillGauge >= m_damageToActiveSkill)
                 {
                     EnableSkill();
                 }
-
+                 
                 // 공격 이팩트 효과 적용
                 var effect = EffectPool.Instance.Create(effectData.Prefabs[type == DamageType.Normal ? 0 : 1]);
                 effect.transform.position = enemy.transform.position + Vector3.up * 0.6f;
@@ -368,6 +377,12 @@ public class PlayerController : MonoBehaviour
             m_totalEnemyCnt = PlayerStatus.Instance.totalEnemyCnt;
             m_playerHUD.UpdateHUD(m_curHp / (float)m_maxHp);
             m_playerSkillGauge.UpdateGauge(m_curSkillGauge / m_damageToActiveSkill);
+
+            if (m_curSkillGauge >= 100)
+            {
+                m_skillZCoolTime.SetSkillShadow(false);
+                m_isSkillCanUse = true;
+            }
         }
     }
 

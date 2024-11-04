@@ -20,9 +20,11 @@ public class HUD_Text : MonoBehaviour
         {
             m_text = GetComponent<TextMeshProUGUI>();
         }
-        m_text.text = text;
 
+        m_text.text = text;
         m_initPos = transform.localPosition;
+        m_alpha = m_text.color; 
+        m_alpha.a = 1;
     }
 
     public void SetColor(Color color)
@@ -32,7 +34,7 @@ public class HUD_Text : MonoBehaviour
 
     void ShowText()
     {
-        transform.localPosition = m_initPos + new Vector3(0, m_moveSpeed * Time.deltaTime, 0);
+        transform.localPosition = m_initPos += new Vector3(0, m_moveSpeed * Time.deltaTime, 0);
         m_alpha.a = Mathf.Lerp(m_alpha.a, 0, Time.deltaTime * m_alphaSpeed);
         m_text.color = m_alpha;
     }

@@ -31,6 +31,8 @@ public class EnemyManager : SingletonMonoBehaviour<EnemyManager>
     [SerializeField]
     GameObject m_hudPrefab;
     [SerializeField]
+    UIItemManager m_itemManager;
+    [SerializeField]
     GameObject[] m_enemyPrefabs;
 
     List<EnemyController> m_enemyList = new List<EnemyController>();
@@ -74,7 +76,18 @@ public class EnemyManager : SingletonMonoBehaviour<EnemyManager>
             m_enemyList.Remove(enemy);
             m_deathEnemyCnt++;
             m_player.DeathEnemyCnt = m_deathEnemyCnt;
-            m_player.PlayerAttackUpgrade();
+
+            float dropChance = UnityEngine.Random.Range(0f, 100f);
+            if (dropChance < 33f)
+            {
+                m_itemManager.SpawnBloodItem(enemy.transform.position);
+                m_player.PlayerHpUpgrade();
+            }
+            else if (dropChance < 66f)
+            {
+                m_itemManager.SpawnAttackItem(enemy.transform.position);
+                m_player.PlayerAttackUpgrade();
+            }
         }
 
         if (enemy.Type == EnemyType.BossMonster && !m_bossDeath)
