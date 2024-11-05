@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 705507994}
-  m_IndirectSpecularColor: {r: 0.057683513, g: 0.0775312, b: 0.11608705, a: 1}
+  m_IndirectSpecularColor: {r: 0.05768367, g: 0.07753138, b: 0.11608741, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -25087,6 +25087,14 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 3921900244833889284, guid: 29c039a2bd3cc434dbaf02e6e48d2146, type: 3}
+      propertyPath: m_Follow
+      value: 
+      objectReference: {fileID: 209560399}
+    - target: {fileID: 3921900244833889284, guid: 29c039a2bd3cc434dbaf02e6e48d2146, type: 3}
+      propertyPath: m_LookAt
+      value: 
+      objectReference: {fileID: 209560399}
     - target: {fileID: 7088364026999506027, guid: 29c039a2bd3cc434dbaf02e6e48d2146, type: 3}
       propertyPath: m_Name
       value: Virtual Camera_Shield

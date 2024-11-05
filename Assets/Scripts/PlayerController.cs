@@ -15,7 +15,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField]
     UIGameInformationMessage m_introduceGame;
 
-    [Header("카메라 관련 정보")]
+    [Header("카메라 정보")]
     [SerializeField]
     GameObject m_virtualCamEffect;
     [SerializeField]
@@ -25,7 +25,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField]
     float mouseSensitivity = 100f;
 
-    [Header("Player 관련 정보")]
+    [Header("Player 정보")]
     [SerializeField]
     GameObject m_attackAreaObj;
     [SerializeField]
@@ -43,10 +43,12 @@ public class PlayerController : MonoBehaviour
     [SerializeField]
     float m_scale;
 
+    Vector3 m_dir;
+    List<GameObject> m_enemyList = new List<GameObject>();
+
     bool m_isSkillActive;
     bool m_isSkillCanUse;
     bool m_isPlayerDead;
-
     int hash_Speed;
     int m_deathEnemyCnt;
     int m_totalEnemyCnt;
@@ -54,8 +56,6 @@ public class PlayerController : MonoBehaviour
     int m_maxHp;
     float m_curAttack;
     float m_curSkillGauge;
-    Vector3 m_dir;
-    List<GameObject> m_enemyList = new List<GameObject>();
     #endregion Constants and Fields
 
     #region Public Properties
@@ -113,7 +113,7 @@ public class PlayerController : MonoBehaviour
 
             if (m_curHp <= 0)
             {
-                Die();
+                PlayerDie();
             }
         }
         else
@@ -138,10 +138,11 @@ public class PlayerController : MonoBehaviour
     public void PlayerHpUpgrade()
     {
         m_curHp += 20;
-        if (m_curHp > m_maxHp)
+        if (m_curHp >= m_maxHp)
         {
             m_curHp = m_maxHp;
         }
+        m_playerHUD.UpdateHUD(m_curHp / (float)m_maxHp);
     }
     #endregion Public Methods
 
@@ -297,7 +298,7 @@ public class PlayerController : MonoBehaviour
         return type;
     }
 
-    void Die()
+    void PlayerDie()
     {
         m_isPlayerDead = true;
         m_animCtrl.Play(PlayerAnimController.Motion.Death);

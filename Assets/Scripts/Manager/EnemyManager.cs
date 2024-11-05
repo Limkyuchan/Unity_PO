@@ -77,13 +77,13 @@ public class EnemyManager : SingletonMonoBehaviour<EnemyManager>
             m_deathEnemyCnt++;
             m_player.DeathEnemyCnt = m_deathEnemyCnt;
 
-            float dropChance = UnityEngine.Random.Range(0f, 100f);
-            if (dropChance < 33f)
+            int dropProbability = UnityEngine.Random.Range(0, 100);
+            if (dropProbability < 30)
             {
                 m_itemManager.SpawnBloodItem(enemy.transform.position);
                 m_player.PlayerHpUpgrade();
             }
-            else if (dropChance < 66f)
+            else if (dropProbability < 60)
             {
                 m_itemManager.SpawnAttackItem(enemy.transform.position);
                 m_player.PlayerAttackUpgrade();

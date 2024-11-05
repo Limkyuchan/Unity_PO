@@ -1,6 +1,5 @@
 using System.Collections;
 using System.Collections.Generic;
-using TMPro;
 using UnityEngine;
 
 public class UIItemManager : MonoBehaviour
@@ -20,7 +19,7 @@ public class UIItemManager : MonoBehaviour
     {
         var bloodItem = m_bloodPool.Get();
         Vector3 screenPosition = m_camera.WorldToScreenPoint(position);
-        bloodItem.position = screenPosition; // 월드 좌표를 화면 좌표로 변환
+        bloodItem.position = screenPosition;
         bloodItem.gameObject.SetActive(true);
         StartCoroutine(CoMoveAndDestroy(bloodItem));
     }
@@ -29,7 +28,7 @@ public class UIItemManager : MonoBehaviour
     {
         var attackItem = m_attackPool.Get();
         Vector3 screenPosition = m_camera.WorldToScreenPoint(position);
-        attackItem.position = screenPosition; // 월드 좌표를 화면 좌표로 변환
+        attackItem.position = screenPosition;
         attackItem.gameObject.SetActive(true);
         StartCoroutine(CoMoveAndDestroy(attackItem));
     }
