@@ -78,16 +78,22 @@ public class EnemyManager : SingletonMonoBehaviour<EnemyManager>
             m_player.DeathEnemyCnt = m_deathEnemyCnt;
 
             int dropProbability = UnityEngine.Random.Range(0, 100);
-            if (dropProbability < 30)
+            if (dropProbability < 25)
             {
                 m_itemManager.SpawnBloodItem(enemy.transform.position);
                 m_player.PlayerHpUpgrade();
             }
-            else if (dropProbability < 60)
+            else if (dropProbability < 50)
             {
                 m_itemManager.SpawnAttackItem(enemy.transform.position);
                 m_player.PlayerAttackUpgrade();
             }
+            else if (dropProbability < 75)
+            {
+                m_itemManager.SpawnSkillGaugeItem(enemy.transform.position);
+                m_player.PlayerSkillGaugeUpgrade();
+            }
+            Debug.Log(dropProbability);
         }
 
         if (enemy.Type == EnemyType.BossMonster && !m_bossDeath)

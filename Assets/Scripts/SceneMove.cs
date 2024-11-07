@@ -4,9 +4,9 @@ using UnityEngine;
 
 public class SceneMove : MonoBehaviour
 {
-    public void GoGameScene()
+    public void GoGameSettingScene()
     {
-        LoadSceneManager.Instance.LoadSceneAsync(SceneState.GameScene01);
+        LoadSceneManager.Instance.LoadSceneAsync(SceneState.GameSettingScene);
     }
 
     public void GameExit()

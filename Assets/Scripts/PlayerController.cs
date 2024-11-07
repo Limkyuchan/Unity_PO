@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEditor;
 using UnityEngine;
 
@@ -27,7 +28,13 @@ public class PlayerController : MonoBehaviour
 
     [Header("Player Á¤º¸")]
     [SerializeField]
+    GameObject m_weaponAxe;
+    [SerializeField]
+    GameObject m_weaponSword;
+    [SerializeField]
     GameObject m_attackAreaObj;
+    [SerializeField]
+    TextMeshProUGUI m_playerNameText;
     [SerializeField]
     HUD_Controller m_playerHUD;
     [SerializeField]
@@ -56,6 +63,8 @@ public class PlayerController : MonoBehaviour
     int m_maxHp;
     float m_curAttack;
     float m_curSkillGauge;
+    string m_playerName;
+    string m_playerWeapon;
     #endregion Constants and Fields
 
     #region Public Properties
@@ -71,7 +80,7 @@ public class PlayerController : MonoBehaviour
                 GetMotion == PlayerAnimController.Motion.Attack4;
         }
     }
-     
+
     public bool IsSkill
     {
         get
@@ -86,12 +95,12 @@ public class PlayerController : MonoBehaviour
 
     public int PlayerCurHp { get { return m_curHp; } set { m_curHp = value; } }
 
-    public float PlayerMaxHp {  get { return m_maxHp; } }
+    public float PlayerMaxHp { get { return m_maxHp; } }
 
-    public float PlayerAttack {  get { return m_curAttack; } set { m_curAttack = value; } }
+    public float PlayerAttack { get { return m_curAttack; } set { m_curAttack = value; } }
 
     public float PlayerCurSkillGauge { get { return m_curSkillGauge; } set { m_curSkillGauge = value; } }
-    
+
     public float PlayerMaxSkillGauge { get { return m_damageToActiveSkill; } }
 
     public int DeathEnemyCnt { get { return m_deathEnemyCnt; } set { m_deathEnemyCnt = value; } }
@@ -118,7 +127,7 @@ public class PlayerController : MonoBehaviour
         }
         else
         {
-            StartCoroutine(CoShieldCameraControl());   
+            StartCoroutine(CoShieldCameraControl());
         }
     }
 
@@ -143,6 +152,16 @@ public class PlayerController : MonoBehaviour
             m_curHp = m_maxHp;
         }
         m_playerHUD.UpdateHUD(m_curHp / (float)m_maxHp);
+    }
+
+    public void PlayerSkillGaugeUpgrade()
+    {
+        m_curSkillGauge += 10;
+        if (m_curSkillGauge >= m_damageToActiveSkill)
+        {
+            m_curSkillGauge = m_damageToActiveSkill;
+        }
+        m_playerSkillGauge.UpdateGauge(m_curSkillGauge / m_damageToActiveSkill);
     }
     #endregion Public Methods
 
@@ -363,10 +382,26 @@ public class PlayerController : MonoBehaviour
         m_virtualShield.SetActive(false);
         m_virtualCamRun.SetActive(false);
         m_skillZCoolTime.SetSkillShadow(true);
-
+ 
         m_isSkillActive = false;
         m_isSkillCanUse = false;
         m_isPlayerDead = false;
+
+        m_playerName = PlayerPrefs.GetString("PlayerName", "Player");
+        m_playerWeapon = PlayerPrefs.GetString("PlayerWeapon", "Axe");
+        PlayerStatus.Instance.InitializeStatus(m_playerName, m_playerWeapon);
+
+        m_playerNameText.text = PlayerStatus.Instance.playerName;
+        if (m_playerWeapon == "Axe")
+        {
+            m_weaponAxe.gameObject.SetActive(true);
+            m_weaponSword.gameObject.SetActive(false);
+        }
+        else if (m_playerWeapon == "Sword")
+        {
+            m_weaponSword.gameObject.SetActive(true);
+            m_weaponAxe.gameObject.SetActive(false);
+        }
 
         if (PlayerStatus.Instance != null)
         {

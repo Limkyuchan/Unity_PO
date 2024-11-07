@@ -14,6 +14,14 @@ public class PlayerStatus : SingletonDontDestroy<PlayerStatus>
     public float criRate;
     public float criAttack;
     public float skillGauge;
+    public string playerName;
+    public string playerWeapon;
+
+    public void InitializeStatus(string name, string weapon)
+    {
+        playerName = name;
+        playerWeapon = weapon;
+    }
 
     public void UpdateStatus(int currentHp, float currentAttack, float currentSkillGauge)
     {

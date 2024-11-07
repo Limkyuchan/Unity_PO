@@ -1,5 +1,4 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -50,11 +49,6 @@ public class SceneTransitionTriggerZone : MonoBehaviour
             if (sceneName == "GameScene01")
             {
                 LoadSceneManager.Instance.LoadSceneAsync(SceneState.GameScene02);
-            }
-
-            if (sceneName == "GameScene02")
-            {
-                LoadSceneManager.Instance.LoadSceneAsync(SceneState.GameScene03);
             }
         }
     }

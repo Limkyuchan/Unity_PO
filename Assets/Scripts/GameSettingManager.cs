@@ -2,7 +2,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 using System.Collections;
-using UnityEngine.SceneManagement;
+using UnityEngine.EventSystems;
 
 public class GameSettingManager : MonoBehaviour
 {
@@ -10,6 +10,8 @@ public class GameSettingManager : MonoBehaviour
     GameObject m_player;
     [SerializeField]
     TMP_InputField m_playerNameInput;
+    [SerializeField]
+    TextMeshProUGUI m_placeholderText;
     [SerializeField]
     GameObject m_warningParent;
     [SerializeField]
@@ -44,10 +46,16 @@ public class GameSettingManager : MonoBehaviour
 
     public void GoGameScene()
     {
-        // 이름과 무기 선택 확인
-        if (string.IsNullOrEmpty(m_playerNameInput.text) || m_playerNameInput.text.Length > m_maxNameLength)
+        if (string.IsNullOrEmpty(m_playerNameInput.text))
         {
-            m_warningText.text = "영문,공백 포함 8글자 이내로 이름을 입력해주세요!";
+            m_warningText.text = " 이름을 입력해주세요!";
+            StartCoroutine(CoOnOffWarningMessage());
+            return;
+        }
+        
+        if (m_playerNameInput.text.Length > m_maxNameLength)
+        {
+            m_warningText.text = "영문,공백 포함 8글자 이내로 입력해주세요!";
             StartCoroutine(CoOnOffWarningMessage());
             return;
         }
@@ -59,17 +67,16 @@ public class GameSettingManager : MonoBehaviour
             return;
         }
 
-        // 이름과 무기를 PlayerPrefs에 저장
         PlayerPrefs.SetString("PlayerName", m_playerNameInput.text);
         PlayerPrefs.SetString("PlayerWeapon", m_selectedWeapon);
         PlayerPrefs.Save();
 
-        //SceneManager.LoadScene("GameScene01");
+        LoadSceneManager.Instance.LoadSceneAsync(SceneState.GameScene01);
     }
 
     public void GoTitleScene()
     {
-        Debug.Log("타이틀 씬!");
+        LoadSceneManager.Instance.LoadSceneAsync(SceneState.Title);
     }
 
     IEnumerator CoOnOffWarningMessage()
@@ -82,6 +89,11 @@ public class GameSettingManager : MonoBehaviour
 
     void RotateCharacter()
     {
+        if (EventSystem.current.IsPointerOverGameObject())
+        {
+            return;
+        }
+
         if (Input.GetMouseButton(0))
         {
             float rotationSpeed = 10f;
@@ -102,6 +114,7 @@ public class GameSettingManager : MonoBehaviour
     void Start()
     {
         m_maxNameLength = 8;
+        m_placeholderText.text = "  이름을 입력해주세요";
 
         m_weaponAxe.SetActive(false);
         m_weaponSword.SetActive(false);

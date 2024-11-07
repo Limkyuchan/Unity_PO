@@ -9,11 +9,14 @@ public class UIItemManager : MonoBehaviour
     [SerializeField]
     GameObject m_itemAttackPrefab;
     [SerializeField]
+    GameObject m_itemSkillGaugePrefab;
+    [SerializeField]
     GameObject m_itemParents;
 
     Camera m_camera;
     GameObjectPool<RectTransform> m_bloodPool;
     GameObjectPool<RectTransform> m_attackPool;
+    GameObjectPool<RectTransform> m_skillPool;
 
     public void SpawnBloodItem(Vector3 position)
     {
@@ -31,6 +34,15 @@ public class UIItemManager : MonoBehaviour
         attackItem.position = screenPosition;
         attackItem.gameObject.SetActive(true);
         StartCoroutine(CoMoveAndDestroy(attackItem));
+    }
+
+    public void SpawnSkillGaugeItem(Vector3 position)
+    {
+        var skillItem = m_skillPool.Get();
+        Vector3 screenPosiion = m_camera.WorldToScreenPoint(position);
+        skillItem.position = screenPosiion;
+        skillItem.gameObject.SetActive(true);
+        StartCoroutine(CoMoveAndDestroy(skillItem));
     }
 
     IEnumerator CoMoveAndDestroy(RectTransform item)
@@ -70,6 +82,15 @@ public class UIItemManager : MonoBehaviour
             obj.SetActive(false);
             var attack = obj.GetComponent<RectTransform>();
             return attack;
+        });
+
+        m_skillPool = new GameObjectPool<RectTransform>(2, () =>
+        {
+            var obj = Instantiate(m_itemSkillGaugePrefab);
+            obj.transform.SetParent(m_itemParents.transform, false);
+            obj.SetActive(false);
+            var skill = obj.GetComponent<RectTransform>();
+            return skill;
         });
     }
 }

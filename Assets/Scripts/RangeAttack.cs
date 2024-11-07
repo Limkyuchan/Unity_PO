@@ -29,6 +29,7 @@ public class RangeAttack : MonoBehaviour, IAttackStrategy
                 var dir = enemy.GetPlayer.transform.position - m_dummyFire.position;
                 dir.y = 0f;
 
+                // 이펙트 생성 및 방향 설정
                 var effect = EffectPool.Instance.Create(effectData.Prefabs[0]);
                 effect.gameObject.transform.position = m_dummyFire.position;
                 effect.transform.forward = dir.normalized;
