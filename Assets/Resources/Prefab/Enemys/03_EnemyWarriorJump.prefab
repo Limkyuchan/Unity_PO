@@ -717,6 +717,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c0a8f5a5ed1e77d4ba33cc7de8d607fc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_attackAreaObj: {fileID: 8524293378263255382}
 --- !u!114 &-2964640486600773828
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -800,7 +801,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_state: 0
-  m_attackAreaObj: {fileID: 8524293378263255382}
   m_maxHp: 0
   m_currentHp: 0
   m_maxChaseDistance: 15

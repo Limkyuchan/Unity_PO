@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
-public class EnemyController : MonoBehaviour
+public class EnemyController : CharacterBase
 {
     #region Enum Methods
     public enum AiState
@@ -24,7 +24,7 @@ public class EnemyController : MonoBehaviour
     PlayerController m_player;
     EnemyAnimController m_animCtrl;
     HittedFeedback m_hittedFeedback;
-    AttackAreaUnitFind m_attackArea;
+    //AttackAreaUnitFind m_attackArea;
     NavMeshAgent m_navAgent;
     PathController m_path;
     HUD_Controller m_hudCtrl;
@@ -35,8 +35,8 @@ public class EnemyController : MonoBehaviour
     [Header("Enemy 관련 정보")]
     [SerializeField] 
     AiState m_state;
-    [SerializeField]
-    GameObject m_attackAreaObj;
+    //[SerializeField]
+    //GameObject m_attackAreaObj;
     [SerializeField]
     int m_maxHp;                    // 생성된 적 최대 Hp
     [SerializeField]
@@ -86,7 +86,7 @@ public class EnemyController : MonoBehaviour
 
     public EnemyAnimController GetAnimator { get { return m_animCtrl; } }
 
-    public AttackAreaUnitFind GetUnitFind { get { return m_attackArea; } }
+    //public AttackAreaUnitFind GetUnitFind { get { return m_attackArea; } }
 
     public bool IsChase { get { return m_isChase; } set { m_isChase = value; } }
 
@@ -108,7 +108,7 @@ public class EnemyController : MonoBehaviour
         transform.position = m_path.Points[m_curWaypointIndex];
     }
 
-    public void SetDamage(SkillData skill, DamageType type, float damage)
+    public override void SetDamage(SkillData skill, DamageType type, float damage)
     {
         // 적 체력 감소
         m_currentHp -= Mathf.RoundToInt(damage);
@@ -169,6 +169,17 @@ public class EnemyController : MonoBehaviour
             }
             m_coDestroy = StartCoroutine(CoDestroyGameObject(3f));
         }
+    }
+
+    public override void SetDamage(float damage)
+    {
+        // 이 메서드는 호출되지 않음
+        Debug.LogWarning("적에게 단순 데미지만 적용하려 했으나 이 메서드는 사용되지 않음.");
+    }
+
+    public override Transform GetTransform()
+    {
+        return this.transform;
     }
 
     public void SetState(AiState state)
@@ -437,7 +448,7 @@ public class EnemyController : MonoBehaviour
         m_animCtrl = GetComponent<EnemyAnimController>();
         m_navAgent = GetComponent<NavMeshAgent>();
         m_hittedFeedback = GetComponent<HittedFeedback>();
-        m_attackArea = m_attackAreaObj.GetComponentInChildren<AttackAreaUnitFind>();
+        //m_attackArea = m_attackAreaObj.GetComponentInChildren<AttackAreaUnitFind>();
         m_maxHp = StatusTable.Instance.GetStatusData(this.Type).hpMax;
         m_currentHp = StatusTable.Instance.GetStatusData(this.Type).hp;
 

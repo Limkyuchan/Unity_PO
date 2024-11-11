@@ -14,6 +14,7 @@ public class PlayerAnimController : AnimationController
         Attack2,
         Attack3,
         Attack4,
+        RangeAttack,
         Skill1,
         Skill2,
         Shield,

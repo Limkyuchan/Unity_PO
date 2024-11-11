@@ -3,14 +3,23 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEditor;
 using UnityEngine;
-
-public class PlayerController : MonoBehaviour
+ 
+public class PlayerController : CharacterBase
 {
+    #region Enum Methods
+    public enum Type
+    {
+        Warrior,
+        Range
+    }
+    #endregion Enum Methods
+
     #region Constants and Fields
-    AttackAreaUnitFind[] m_attackAreas;
+    //AttackAreaUnitFind[] m_attackAreas;
     CharacterController m_charCtrl;
     PlayerAnimController m_animCtrl;
     SkillController m_skillCtrl;
+    IAttackStrategy m_attackStrategy;
 
     [Header("게임 정보")]
     [SerializeField]
@@ -28,11 +37,17 @@ public class PlayerController : MonoBehaviour
 
     [Header("Player 정보")]
     [SerializeField]
+    Type m_playerType;
+    [SerializeField]
+    GameObject m_playerWarrior;
+    [SerializeField]
+    GameObject m_playerRange;
+    [SerializeField]
     GameObject m_weaponAxe;
     [SerializeField]
     GameObject m_weaponSword;
-    [SerializeField]
-    GameObject m_attackAreaObj;
+    //[SerializeField]
+    //GameObject m_attackAreaObj;
     [SerializeField]
     TextMeshProUGUI m_playerNameText;
     [SerializeField]
@@ -51,7 +66,7 @@ public class PlayerController : MonoBehaviour
     float m_scale;
 
     Vector3 m_dir;
-    List<GameObject> m_enemyList = new List<GameObject>();
+    //List<GameObject> m_enemyList = new List<GameObject>();
 
     bool m_isSkillActive;
     bool m_isSkillCanUse;
@@ -68,7 +83,11 @@ public class PlayerController : MonoBehaviour
     #endregion Constants and Fields
 
     #region Public Properties
-    PlayerAnimController.Motion GetMotion { get { return m_animCtrl.GetMotion; } }
+    public Type GetPlayerType { get { return m_playerType; } set { m_playerType = value; } }
+
+    public PlayerAnimController.Motion GetMotion { get { return m_animCtrl.GetMotion; } }
+
+    public UISkillGauge_Controller GetPlayerSkillGauge { get { return m_playerSkillGauge; } }
 
     public bool IsAttack
     {
@@ -77,7 +96,8 @@ public class PlayerController : MonoBehaviour
             return GetMotion == PlayerAnimController.Motion.Attack1 ||
                 GetMotion == PlayerAnimController.Motion.Attack2 ||
                 GetMotion == PlayerAnimController.Motion.Attack3 ||
-                GetMotion == PlayerAnimController.Motion.Attack4;
+                GetMotion == PlayerAnimController.Motion.Attack4 ||
+                GetMotion == PlayerAnimController.Motion.RangeAttack;
         }
     }
 
@@ -92,6 +112,8 @@ public class PlayerController : MonoBehaviour
     }
 
     public bool IsShield { get { return GetMotion == PlayerAnimController.Motion.Shield; } }
+
+    public bool IsSkillActive { get { return m_isSkillActive; } }
 
     public int PlayerCurHp { get { return m_curHp; } set { m_curHp = value; } }
 
@@ -109,7 +131,7 @@ public class PlayerController : MonoBehaviour
     #endregion Public Properties
 
     #region Public Methods
-    public void SetDamage(float damage)
+    public override void SetDamage(float damage)
     {
         if (!IsShield)
         {
@@ -131,12 +153,48 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    public override void SetDamage(SkillData skill, DamageType type, float damage)
+    {
+        // 이 메서드는 호출되지 않음
+        Debug.LogWarning("주인공에게 SkillData 기반 데미지 적용을 시도했으나 이 메서드는 사용되지 않음.");
+    }
+
+    public override Transform GetTransform()
+    {
+        return this.transform;
+    }
+
+    public DamageType AttackDecision(EnemyController enemy, SkillData skill, StatusData status, out float damage)
+    {
+        DamageType type = DamageType.Miss;
+        damage = 0f;
+
+        if (CalculateDamage.AttackDecision(PlayerStatus.Instance.hitRate + skill.hitRate, status.dodgeRate))
+        {
+            type = DamageType.Normal;
+            damage = CalculateDamage.NormalDamage(m_curAttack, skill.attack, status.defense);
+
+            if (CalculateDamage.CriticalDecision(PlayerStatus.Instance.criRate))
+            {
+                type = DamageType.Critical;
+                damage = CalculateDamage.CriticalDamage(damage, PlayerStatus.Instance.criAttack);
+            }
+        }
+        return type;
+    }
+
     public void AllEnemiesDie()
     {
         if (PlayerStatus.Instance != null)
         {
             PlayerStatus.Instance.UpdateStatus(m_curHp, m_curAttack, m_curSkillGauge);
         }
+    }
+
+    public void EnableSkill()
+    {
+        m_isSkillCanUse = true;
+        m_skillZCoolTime.SetSkillShadow(false);
     }
 
     public void PlayerAttackUpgrade()
@@ -168,87 +226,41 @@ public class PlayerController : MonoBehaviour
     #region Animation Event Methods
     void AnimEvent_Attack()
     {
-        var skill = SkillTable.Instance.GetSkillData(GetMotion);
-        var unitList = m_attackAreas[skill.attackArea].EnemyUnitList;
-        var effectData = EffectTable.Instance.GetData(skill.effectId);
-
-        if (skill.attack == 0) return;      // skill Data 못 가져오면 return
-        m_enemyList.Clear();
-        foreach (var unit in unitList)      // unitList에 적 추가
-        {
-            if (unit != null)
-            {
-                m_enemyList.Add(unit);
-            }
-        }
-
-        DamageType type = DamageType.Miss;
-        float damage = 0f;
-
-        for (int i = m_enemyList.Count - 1; i >= 0; i--)
-        {
-            var enemyObj = m_enemyList[i];
-            if (enemyObj == null)
-            {
-                m_enemyList.RemoveAt(i);
-                continue;
-            }
-
-            var enemy = m_enemyList[i].GetComponent<EnemyController>();
-            if (enemy == null) continue;
-
-            var status = StatusTable.Instance.GetStatusData(enemy.Type);
-            type = AttackDecision(enemy, skill, status, out damage);
-            enemy.SetDamage(skill, type, damage);
-
-            if (type != DamageType.Miss)
-            {
-                // 공격 데미지에 따른 Z스킬 게이지 계산 및 활성화
-                if (enemy.GetMotion != EnemyController.AiState.Death && !m_isSkillActive)
-                {
-                    m_curSkillGauge = Mathf.Min(100, Mathf.Round(m_curSkillGauge + damage / 2.5f));
-                    m_playerSkillGauge.UpdateGauge(m_curSkillGauge / m_damageToActiveSkill);
-                }
-                if (m_curSkillGauge >= m_damageToActiveSkill)
-                {
-                    EnableSkill();
-                }
-                 
-                // 공격 이팩트 효과 적용
-                var effect = EffectPool.Instance.Create(effectData.Prefabs[type == DamageType.Normal ? 0 : 1]);
-                effect.transform.position = enemy.transform.position + Vector3.up * 0.6f;
-                var dir = transform.position - effect.transform.position;
-                dir.y = 0f;
-                effect.transform.rotation = Quaternion.FromToRotation(effect.transform.forward, dir.normalized);
-            }
-        }
+        m_attackStrategy.Attack(this);  
     }
 
     void AnimEvent_AttackFinished()
     {
         bool isCombo = false;
-        if (m_skillCtrl.CommandCount > 0)           // 기본 공격을 활용한 콤보 공격 구현
+        if (m_skillCtrl != null)
         {
-            var command = m_skillCtrl.GetCommand();
-            if (command == KeyCode.Space)
+            if (m_skillCtrl.CommandCount > 0)           // 기본 공격을 활용한 콤보 공격 구현
             {
-                isCombo = true;
+                var command = m_skillCtrl.GetCommand();
+                if (command == KeyCode.Space)
+                {
+                    isCombo = true;
+                }
+
+                if (m_skillCtrl.CommandCount > 0)
+                {
+                    m_skillCtrl.ReleaseKeyBuffer();
+                    isCombo = false;
+                }
             }
 
-            if (m_skillCtrl.CommandCount > 0)
+            if (isCombo)
             {
-                m_skillCtrl.ReleaseKeyBuffer();
-                isCombo = false;
+                m_animCtrl.Play(m_skillCtrl.GetCombo());
             }
-        }
-
-        if (isCombo)
-        {
-            m_animCtrl.Play(m_skillCtrl.GetCombo());
+            else
+            {
+                m_skillCtrl.ResetCombo();
+                m_animCtrl.Play(PlayerAnimController.Motion.Idle);
+            }
         }
         else
         {
-            m_skillCtrl.ResetCombo();
             m_animCtrl.Play(PlayerAnimController.Motion.Idle);
         }
     }
@@ -298,37 +310,12 @@ public class PlayerController : MonoBehaviour
     #endregion Coroutine Methods
 
     #region Methods
-    DamageType AttackDecision(EnemyController enemy, SkillData skill, StatusData status, out float damage)
-    {
-        DamageType type = DamageType.Miss;
-        damage = 0f;
-
-        if (CalculateDamage.AttackDecision(PlayerStatus.Instance.hitRate + skill.hitRate, status.dodgeRate))
-        {
-            type = DamageType.Normal;
-            damage = CalculateDamage.NormalDamage(m_curAttack, skill.attack, status.defense);
-
-            if (CalculateDamage.CriticalDecision(PlayerStatus.Instance.criRate))
-            {
-                type = DamageType.Critical;
-                damage = CalculateDamage.CriticalDamage(damage, PlayerStatus.Instance.criAttack);
-            }
-        }
-        return type;
-    }
-
     void PlayerDie()
     {
         m_isPlayerDead = true;
         m_animCtrl.Play(PlayerAnimController.Motion.Death);
         m_virtualCamEffect.SetActive(false);
         StartCoroutine(CoShowGameOverPopup());
-    }
-
-    void EnableSkill()
-    {
-        m_isSkillCanUse = true;
-        m_skillZCoolTime.SetSkillShadow(false);
     }
 
     void ResetSkillGauge()
@@ -373,9 +360,8 @@ public class PlayerController : MonoBehaviour
     void Start()
     {
         m_animCtrl = GetComponent<PlayerAnimController>();
-        m_skillCtrl = GetComponent<SkillController>();
         m_charCtrl = GetComponent<CharacterController>();
-        m_attackAreas = m_attackAreaObj.GetComponentsInChildren<AttackAreaUnitFind>();
+        //m_attackAreas = m_attackAreaObj.GetComponentsInChildren<AttackAreaUnitFind>();
 
         hash_Speed = Animator.StringToHash("Speed");
         m_virtualCamEffect.SetActive(false);
@@ -387,20 +373,33 @@ public class PlayerController : MonoBehaviour
         m_isSkillCanUse = false;
         m_isPlayerDead = false;
 
-        m_playerName = PlayerPrefs.GetString("PlayerName", "Player");
-        m_playerWeapon = PlayerPrefs.GetString("PlayerWeapon", "Axe");
-        PlayerStatus.Instance.InitializeStatus(m_playerName, m_playerWeapon);
+        switch (m_playerType)
+        {
+            case Type.Warrior:
+                m_skillCtrl = GetComponent<SkillController>();
+                m_attackStrategy = GetComponent<WarriorAttack>();
+                m_playerRange.gameObject.SetActive(false);
 
-        m_playerNameText.text = PlayerStatus.Instance.playerName;
-        if (m_playerWeapon == "Axe")
-        {
-            m_weaponAxe.gameObject.SetActive(true);
-            m_weaponSword.gameObject.SetActive(false);
-        }
-        else if (m_playerWeapon == "Sword")
-        {
-            m_weaponSword.gameObject.SetActive(true);
-            m_weaponAxe.gameObject.SetActive(false);
+                m_playerName = PlayerPrefs.GetString("PlayerName", "PlayerName");
+                m_playerWeapon = PlayerPrefs.GetString("PlayerWeapon", "PlayerWeapon");
+                PlayerStatus.Instance.InitializeStatus(m_playerName, m_playerWeapon, PlayerStatus.PlayerType.Warrior);
+
+                m_playerNameText.text = PlayerStatus.Instance.playerName;
+                if (m_playerWeapon == "Axe")
+                {
+                    m_weaponAxe.gameObject.SetActive(true);
+                    m_weaponSword.gameObject.SetActive(false);
+                }
+                else if (m_playerWeapon == "Sword")
+                {
+                    m_weaponSword.gameObject.SetActive(true);
+                    m_weaponAxe.gameObject.SetActive(false);
+                }
+                break;
+            case Type.Range:
+                m_playerWarrior.gameObject.SetActive(false);
+                m_attackStrategy = GetComponent<RangeAttack>();
+                break;
         }
 
         if (PlayerStatus.Instance != null)
