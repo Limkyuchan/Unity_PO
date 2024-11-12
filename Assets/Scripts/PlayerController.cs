@@ -27,6 +27,12 @@ public class PlayerController : CharacterBase
 
     [Header("카메라 정보")]
     [SerializeField]
+    CameraController m_cameraController;
+    [SerializeField]
+    Transform m_warriorCameraRoot;
+    [SerializeField]
+    Transform m_rangeCameraRoot;
+    [SerializeField]
     GameObject m_virtualCamEffect;
     [SerializeField]
     GameObject m_virtualShield;
@@ -48,6 +54,8 @@ public class PlayerController : CharacterBase
     GameObject m_weaponSword;
     //[SerializeField]
     //GameObject m_attackAreaObj;
+    [SerializeField]
+    UIFollowTarget m_followTarget;
     [SerializeField]
     TextMeshProUGUI m_playerNameText;
     [SerializeField]
@@ -80,6 +88,8 @@ public class PlayerController : CharacterBase
     float m_curSkillGauge;
     string m_playerName;
     string m_playerWeapon;
+
+    public Transform Dummy_HUD;
     #endregion Constants and Fields
 
     #region Public Properties
@@ -357,6 +367,11 @@ public class PlayerController : CharacterBase
     #endregion Methods
 
     #region Unity Methods
+    void Awake()
+    {
+        Dummy_HUD = Utility.FindChildObject(gameObject, "Dummy_HUD").transform;
+    }
+
     void Start()
     {
         m_animCtrl = GetComponent<PlayerAnimController>();
@@ -376,9 +391,13 @@ public class PlayerController : CharacterBase
         switch (m_playerType)
         {
             case Type.Warrior:
+                m_playerRange.gameObject.SetActive(false);
+
                 m_skillCtrl = GetComponent<SkillController>();
                 m_attackStrategy = GetComponent<WarriorAttack>();
-                m_playerRange.gameObject.SetActive(false);
+
+                m_cameraController.SetTarget(m_warriorCameraRoot);
+                m_followTarget.SetTarget(Dummy_HUD);
 
                 m_playerName = PlayerPrefs.GetString("PlayerName", "PlayerName");
                 m_playerWeapon = PlayerPrefs.GetString("PlayerWeapon", "PlayerWeapon");
@@ -399,6 +418,9 @@ public class PlayerController : CharacterBase
             case Type.Range:
                 m_playerWarrior.gameObject.SetActive(false);
                 m_attackStrategy = GetComponent<RangeAttack>();
+
+                m_cameraController.SetTarget(m_rangeCameraRoot);
+                m_followTarget.SetTarget(Dummy_HUD);
                 break;
         }
 
@@ -474,6 +496,11 @@ public class PlayerController : CharacterBase
             {
                 m_skillCtrl.AddCommand(KeyCode.Space);
             }
+        }
+
+        if (Input.GetKeyDown(KeyCode.L))
+        {
+            m_animCtrl.Play(PlayerAnimController.Motion.RangeAttack);
         }
 
         // 주인공 쉴드 방어

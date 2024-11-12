@@ -24,13 +24,15 @@ public class EffectPool : SingletonMonoBehaviour<EffectPool>
         EffectPoolUnit poolUnit = null;
         GameObjectPool<EffectPoolUnit> pool = null;
 
-        m_effectPool.TryGetValue(effectName, out pool);
-        if (pool == null) return null;
+        if (!m_effectPool.TryGetValue(effectName, out pool) || pool == null)
+        {
+            return null;
+        }
 
         for (int i = 0; i < pool.Count; i++)
         {
             poolUnit = pool.Get();
-            if (!poolUnit.IsReady)
+            if (poolUnit == null || !poolUnit.IsReady)
             {
                 pool.Set(poolUnit);
                 poolUnit = null;
@@ -44,6 +46,10 @@ public class EffectPool : SingletonMonoBehaviour<EffectPool>
         if (poolUnit == null)
         {
             poolUnit = pool.New();
+            if (poolUnit == null)
+            {
+                return null;
+            }
         }
 
         poolUnit.transform.position = position;

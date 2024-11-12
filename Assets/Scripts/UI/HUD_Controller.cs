@@ -7,8 +7,6 @@ using UnityEngine.UI;
 
 public class HUD_Controller : MonoBehaviour
 {
-    UIFollowTarget m_followTarget;
-
     [SerializeField]
     HUD_Text m_hudText;
     [SerializeField]
@@ -18,6 +16,7 @@ public class HUD_Controller : MonoBehaviour
     [SerializeField]
     float m_duration = 3f;
 
+    UIFollowTarget m_followTarget;
     StringBuilder m_sb = new StringBuilder();
 
     public void SetHUD(Transform target, EnemyController enemy)

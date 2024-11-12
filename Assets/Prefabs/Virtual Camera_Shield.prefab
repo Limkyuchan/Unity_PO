@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8519424013570316380}
   - component: {fileID: 3921900244833889284}
+  - component: {fileID: 7593437416101379078}
   m_Layer: 0
   m_Name: Virtual Camera_Shield
   m_TagString: Untagged
@@ -72,6 +73,22 @@ MonoBehaviour:
         m_Calls: []
   m_LegacyBlendHint: 0
   m_ComponentOwner: {fileID: 6741426964325448930}
+--- !u!114 &7593437416101379078
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7088364026999506027}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 607cb2705d5d10448a36fe9b641737cc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  virtualCamera: {fileID: 0}
+  virtualEffectCam: {fileID: 0}
+  virtualShieldCam: {fileID: 3921900244833889284}
+  virtualRunCam: {fileID: 0}
 --- !u!1 &8600423028849224162
 GameObject:
   m_ObjectHideFlags: 0

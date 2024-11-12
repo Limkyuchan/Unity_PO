@@ -6,8 +6,17 @@ using UnityEngine.EventSystems;
 
 public class GameSettingManager : MonoBehaviour
 {
+    [Header("초기 캐릭터 설정")]
     [SerializeField]
-    GameObject m_player;
+    GameObject m_choicePlayer;
+    [SerializeField]
+    Button m_buttonWarrior;
+    [SerializeField]
+    Button m_buttonRange;
+
+    [Header("공통적으로 사용되는 UI")]
+    [SerializeField]
+    GameObject m_playerNameParent;
     [SerializeField]
     TMP_InputField m_playerNameInput;
     [SerializeField]
@@ -16,6 +25,12 @@ public class GameSettingManager : MonoBehaviour
     GameObject m_warningParent;
     [SerializeField]
     TextMeshProUGUI m_warningText;
+
+    [Header("근거리 캐릭터 UI")]
+    [SerializeField]
+    GameObject m_playerWarrior;
+    [SerializeField]
+    GameObject m_warriorCharacterUI;
     [SerializeField]
     Button m_buttonAxe;
     [SerializeField]
@@ -25,20 +40,73 @@ public class GameSettingManager : MonoBehaviour
     [SerializeField]
     GameObject m_weaponSword;
 
+    [Header("원거리 캐릭터 UI")]
+    [SerializeField]
+    GameObject m_playerRange;
+    [SerializeField]
+    GameObject m_rangeCharacterUI;
+    [SerializeField]
+    Button m_buttonRangeWeapon1;
+    [SerializeField]
+    Button m_buttonRangeWeapon2;
+    [SerializeField]
+    GameObject m_weaponRange1;
+    [SerializeField]
+    GameObject m_weaponRange2;
+
+    string m_selectCharacterType;
     string m_selectedWeapon;
     int m_maxNameLength;
 
+    public void SelectCharacterType(string characterType)
+    { 
+        m_choicePlayer.SetActive(false);
+
+        if (characterType == "Warrior")
+        {
+            m_warriorCharacterUI.SetActive(true);
+            m_rangeCharacterUI.SetActive(false);
+            m_playerWarrior.SetActive(true);
+            m_playerNameParent.SetActive(true);
+        }
+        else if (characterType == "Range")
+        {
+            m_warriorCharacterUI.SetActive(false);
+            m_rangeCharacterUI.SetActive(true);
+            m_playerRange.SetActive(true);
+            m_playerNameParent.SetActive(true);
+        }
+
+        m_selectCharacterType = characterType;
+    }
+
     public void SelectWeapon(string weapon)
     {
-        if (weapon == "Axe")
+        if (m_selectCharacterType == "Warrior")
         {
-            m_weaponAxe.SetActive(true);
-            m_weaponSword.SetActive(false);
+            if (weapon == "Axe")
+            {
+                m_weaponAxe.SetActive(true);
+                m_weaponSword.SetActive(false);
+            }
+            else if (weapon == "Sword")
+            {
+                m_weaponAxe.SetActive(false);
+                m_weaponSword.SetActive(true);
+            }
         }
-        else if (weapon == "Sword")
+        else if (m_selectCharacterType == "Range")
         {
-            m_weaponAxe.SetActive(false);
-            m_weaponSword.SetActive(true);
+            if (weapon == "Weapon1")
+            {
+                m_weaponRange1.SetActive(true);
+                m_weaponRange2.SetActive(false);
+            }
+            else if (weapon == "Weapon2")
+            {
+                m_weaponRange1.SetActive(false);
+                m_weaponRange2.SetActive(true);
+            }
         }
 
         m_selectedWeapon = weapon;
@@ -69,6 +137,8 @@ public class GameSettingManager : MonoBehaviour
 
         PlayerPrefs.SetString("PlayerName", m_playerNameInput.text);
         PlayerPrefs.SetString("PlayerWeapon", m_selectedWeapon);
+        PlayerPrefs.SetString("PlayerCharacterType", m_selectCharacterType);
+
         PlayerPrefs.Save();
 
         LoadSceneManager.Instance.LoadSceneAsync(SceneState.GameScene01);
@@ -98,7 +168,15 @@ public class GameSettingManager : MonoBehaviour
         {
             float rotationSpeed = 10f;
             float rotation = Input.GetAxis("Mouse X") * rotationSpeed;
-            m_player.transform.Rotate(Vector3.up, -rotation);
+
+            if (m_selectCharacterType == "Warrior")
+            {
+                m_playerWarrior.transform.Rotate(Vector3.up, -rotation);
+            }
+            else if (m_selectCharacterType == "Range")
+            {
+                m_playerRange.transform.Rotate(Vector3.up, -rotation);
+            }
         }
     }
 
@@ -116,12 +194,24 @@ public class GameSettingManager : MonoBehaviour
         m_maxNameLength = 8;
         m_placeholderText.text = "  이름을 입력해주세요";
 
+        m_warriorCharacterUI.SetActive(false);
+        m_rangeCharacterUI.SetActive(false);
+        m_playerWarrior.SetActive(false);
+        m_playerRange.SetActive(false);
         m_weaponAxe.SetActive(false);
         m_weaponSword.SetActive(false);
+        m_weaponRange1.SetActive(false);
+        m_weaponRange2.SetActive(false);
+        m_playerNameParent.gameObject.SetActive(false);
         m_warningParent.gameObject.SetActive(false);
+
+        m_buttonWarrior.onClick.AddListener(() => SelectCharacterType("Warrior"));
+        m_buttonRange.onClick.AddListener(() => SelectCharacterType("Range"));
 
         m_buttonAxe.onClick.AddListener(() => SelectWeapon("Axe"));
         m_buttonSword.onClick.AddListener(() => SelectWeapon("Sword"));
+        m_buttonRangeWeapon1.onClick.AddListener(() => SelectWeapon("Weapon1"));
+        m_buttonRangeWeapon2.onClick.AddListener(() => SelectWeapon("Weapon2"));
 
         m_playerNameInput.onValueChanged.AddListener(ValidateNameLength);
     }

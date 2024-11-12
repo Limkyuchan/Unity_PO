@@ -4,10 +4,8 @@ using UnityEngine;
 
 public class UIFollowTarget : MonoBehaviour
 {
-    [SerializeField]
-    Transform m_target;
-
     Camera m_camera;
+    Transform m_target;
     RectTransform m_rect;
 
     public void SetTarget(Transform target)
@@ -23,6 +21,9 @@ public class UIFollowTarget : MonoBehaviour
 
     void Update()
     {
-        m_rect.position = m_camera.WorldToScreenPoint(m_target.position);
+        if (m_target != null)
+        {
+            m_rect.position = m_camera.WorldToScreenPoint(m_target.position);
+        }
     }
 }

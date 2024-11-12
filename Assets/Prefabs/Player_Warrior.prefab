@@ -753,14 +753,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: edf3f827a3c04c94eaacaed8e9834872, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_followTarget: {fileID: 0}
   m_introduceGame: {fileID: 0}
+  m_cameraController: {fileID: 0}
+  m_warriorCameraRoot: {fileID: 4692540800975899065}
+  m_rangeCameraRoot: {fileID: 0}
   m_virtualCamEffect: {fileID: 0}
   m_virtualShield: {fileID: 0}
   m_virtualCamRun: {fileID: 0}
   mouseSensitivity: 100
   m_playerType: 0
   m_playerWarrior: {fileID: 1290149118588912365}
-  m_playerMage: {fileID: 0}
+  m_playerRange: {fileID: 0}
   m_weaponAxe: {fileID: 6380419182703472751}
   m_weaponSword: {fileID: 9024519631060724255}
   m_playerNameText: {fileID: 0}
@@ -771,6 +775,7 @@ MonoBehaviour:
   m_damageToActiveSkill: 100
   m_speed: 1.5
   m_scale: 0
+  Dummy_HUD: {fileID: 6729490168220809358}
 --- !u!1 &1542132851717454765
 GameObject:
   m_ObjectHideFlags: 0
