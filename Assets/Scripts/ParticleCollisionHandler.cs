@@ -29,16 +29,18 @@ public class ParticleCollisionHandler : MonoBehaviour
 
         if (other.CompareTag("Enemy"))
         {
-            var enemy = other.GetComponent<EnemyController>();
-            if (enemy != null)
+            m_enemy = other.GetComponent<EnemyController>();
+            if (m_enemy != null)
             {
                 float damage = 0f;
-                var status = StatusTable.Instance.GetStatusData(enemy.Type);
-                DamageType type = m_player.AttackDecision(enemy, m_skillData, status, out damage);
+                var status = StatusTable.Instance.GetStatusData(m_enemy.Type);
+                DamageType type = m_player.AttackDecision(m_enemy, m_skillData, status, out damage);
 
-                enemy.SetDamage(m_skillData, type, damage);
+                m_enemy.SetDamage(m_skillData, type, damage);
                 Destroy(gameObject);
             }
+
+            Debug.Log("Àû ¸Â¾Ò¤·¹Ê!!!!");
         }
     }
 }

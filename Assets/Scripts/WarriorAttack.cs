@@ -35,7 +35,7 @@ public class WarriorAttack : MonoBehaviour, IAttackStrategy
     GameObject m_attackAreaObj;
     List<GameObject> m_enemyList = new List<GameObject>();
 
-    public void Attack(CharacterBase target)
+    public void AnimEvent_Attack(CharacterBase target)
     {
         if (target is EnemyController enemy)
         {
@@ -116,6 +116,38 @@ public class WarriorAttack : MonoBehaviour, IAttackStrategy
                     effect.transform.rotation = Quaternion.FromToRotation(effect.transform.forward, dir.normalized);
                 }
             }
+        }
+    }
+
+    public void BasicAttack(CharacterBase target)
+    {
+        if (target is PlayerController player)
+        {
+            if (player.GetMotion == PlayerAnimController.Motion.Idle || player.GetMotion == PlayerAnimController.Motion.Locomotion)
+            {
+                player.GetAnimController.Play(PlayerAnimController.Motion.Attack1);
+            }
+            else
+            {
+                player.GetSkillController.AddCommand(KeyCode.Space);
+            }
+        }
+    }
+
+    public void SkillAttack_1(CharacterBase target)
+    {
+        if (target is PlayerController player)
+        {
+            player.GetAnimController.Play(PlayerAnimController.Motion.Skill1, false);
+            player.ResetSkillGauge();
+        }
+    }
+
+    public void SkillAttack_2(CharacterBase target)
+    {
+        if (target is PlayerController player)
+        {
+            player.GetAnimController.Play(PlayerAnimController.Motion.Skill2, false);
         }
     }
 

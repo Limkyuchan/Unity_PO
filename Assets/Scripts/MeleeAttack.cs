@@ -33,7 +33,7 @@ public class MeleeAttack : MonoBehaviour, IAttackStrategy
     [SerializeField]
     GameObject m_attackAreaObj;
 
-    public void Attack(CharacterBase target)
+    public void AnimEvent_Attack(CharacterBase target)
     {
         if (target is EnemyController enemy)
         {
@@ -52,10 +52,6 @@ public class MeleeAttack : MonoBehaviour, IAttackStrategy
             }
             else if (enemy.IsEnemyAttack)
             {
-                //if (enemy.GetUnitFind.PlayerUnitList != null)
-                //{
-                //    enemy.GetPlayer.SetDamage(enemy.GetStatus.attack);
-                //}
                 if (m_attackArea.PlayerUnitList != null)
                 {
                     enemy.GetPlayer.SetDamage(enemy.GetStatus.attack);
@@ -63,6 +59,12 @@ public class MeleeAttack : MonoBehaviour, IAttackStrategy
             }
         }
     }
+
+    public void BasicAttack(CharacterBase target) { }
+
+    public void SkillAttack_1(CharacterBase target) { }
+
+    public void SkillAttack_2(CharacterBase target) { }
 
     void Start()
     {

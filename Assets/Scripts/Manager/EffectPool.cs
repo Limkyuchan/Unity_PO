@@ -67,7 +67,6 @@ public class EffectPool : SingletonMonoBehaviour<EffectPool>
         }
     }
 
-
     protected override void OnStart()
     {
         m_effectNameList.Clear();

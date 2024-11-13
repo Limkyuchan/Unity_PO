@@ -5,10 +5,13 @@ using UnityEngine.SceneManagement;
 
 public class UIGameInformationMessage : MonoBehaviour
 {
-    [SerializeField]
     PlayerController m_player;
-
     string sceneName;
+
+    public void SetPlayer(PlayerController player)
+    {
+        m_player = player;
+    }
 
     public void IntroduceHowToPlayGame()
     { 

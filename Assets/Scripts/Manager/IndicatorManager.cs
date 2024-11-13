@@ -5,8 +5,6 @@ using UnityEngine;
 public class IndicatorManager : MonoBehaviour
 {
     [SerializeField]
-    PlayerController m_player;
-    [SerializeField]
     EnemyManager m_enemyManager;
     [SerializeField]
     GameObject m_indicatorPrefab;
@@ -14,10 +12,16 @@ public class IndicatorManager : MonoBehaviour
     GameObject m_indicatorParents;
 
     Camera m_camera;
+    PlayerController m_player;
 
     List<Transform> m_enemies = new List<Transform>();
     GameObjectPool<RectTransform> m_indicatorPool;
     Dictionary<Transform, RectTransform> m_enemyIndicatorList = new Dictionary<Transform, RectTransform>();
+
+    public void SetPlayer(PlayerController player)
+    {
+        m_player = player;
+    }
 
     // Indicator 위치 설정
     Vector2 GetEdgePosition(Vector2 screenCenter, Vector2 direction)

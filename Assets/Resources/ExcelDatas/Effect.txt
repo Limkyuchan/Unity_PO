@@ -1,4 +1,4 @@
-7
+8
 4
 	Id	Dummy	Prefab_1	Prefab_2
 	1	None	FX_Hit_01	FX_Hit_01
@@ -7,3 +7,4 @@
 	4	None	FX_Attack01_01_Big	FX_Attack01_01_Big
 	5	None	FX_HitCritical_01	FX_HitCritical_01
 	6	Dummy_Fire	FX_Fireball_Shooting_Straight	FX_Fireball_Shooting_Straight
+	7	None	FX_GroundCrack_Blast	FX_GroundCrack_Blast

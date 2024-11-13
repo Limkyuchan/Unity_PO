@@ -9,8 +9,6 @@ public class FillAmount : MonoBehaviour
 {
     [SerializeField]
     GameObject m_skillCoolTime;
-    //[SerializeField]
-    //Button m_button;
     [SerializeField]
     Image m_imgSkill;
     [SerializeField]
@@ -77,21 +75,8 @@ public class FillAmount : MonoBehaviour
         Init();
     }
 
-    void Start()
+    void Awake()
     {
-        //m_button = GetComponent<Button>();
-        //m_button.onClick.AddListener(() => 
-        //{
-        //    if (m_coCoolTime != null)
-        //    {
-        //        Debug.Log("쿨타임 중입니다..");
-        //    }
-        //    else
-        //    {
-        //        m_coCoolTime = StartCoroutine(CoCoolTime());
-        //    }
-        //});
-
         Init();
     }
 }

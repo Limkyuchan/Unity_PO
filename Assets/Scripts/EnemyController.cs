@@ -171,11 +171,7 @@ public class EnemyController : CharacterBase
         }
     }
 
-    public override void SetDamage(float damage)
-    {
-        // 이 메서드는 호출되지 않음
-        Debug.LogWarning("적에게 단순 데미지만 적용하려 했으나 이 메서드는 사용되지 않음.");
-    }
+    public override void SetDamage(float damage) { }
 
     public override Transform GetTransform()
     {
@@ -209,7 +205,7 @@ public class EnemyController : CharacterBase
         if (!m_isEnemyAttack)
         {
             m_isEnemyAttack = true;
-            m_attackStrategy.Attack(this);
+            m_attackStrategy.AnimEvent_Attack(this);
         }
     }
 
@@ -328,7 +324,7 @@ public class EnemyController : CharacterBase
                         if (CheckArea(m_player.transform, GetStatus.attackDist))    
                         {
                             m_isEnemyAttack = false;
-                            m_attackStrategy.Attack(this);
+                            m_attackStrategy.AnimEvent_Attack(this);
                         }
                         // 1-2) 공격 범위 안에 들어오지 않으면 => Chase
                         else

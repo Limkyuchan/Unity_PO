@@ -13,14 +13,20 @@ public class GameSettingManager : MonoBehaviour
     Button m_buttonWarrior;
     [SerializeField]
     Button m_buttonRange;
+    [SerializeField]
+    GameObject m_settingUI;
+    [SerializeField]
+    TextMeshProUGUI m_settingText;
 
     [Header("공통적으로 사용되는 UI")]
     [SerializeField]
-    GameObject m_playerNameParent;
+    GameObject m_commonParent;
     [SerializeField]
     TMP_InputField m_playerNameInput;
     [SerializeField]
     TextMeshProUGUI m_placeholderText;
+    [SerializeField]
+    TextMeshProUGUI m_textMessage;
     [SerializeField]
     GameObject m_warningParent;
     [SerializeField]
@@ -55,29 +61,82 @@ public class GameSettingManager : MonoBehaviour
     GameObject m_weaponRange2;
 
     string m_selectCharacterType;
+    string m_chectText;
     string m_selectedWeapon;
     int m_maxNameLength;
 
-    public void SelectCharacterType(string characterType)
-    { 
-        m_choicePlayer.SetActive(false);
+    //public void SelectCharacterType(string characterType)
+    //{ 
+    //m_choicePlayer.SetActive(false);
 
-        if (characterType == "Warrior")
+    //if (characterType == "Warrior")
+    //{
+    //    m_warriorCharacterUI.SetActive(true);
+    //    m_rangeCharacterUI.SetActive(false);
+    //    m_playerWarrior.SetActive(true);
+    //    m_playerNameParent.SetActive(true);
+    //}
+    //else if (characterType == "Range")
+    //{
+    //    m_warriorCharacterUI.SetActive(false);
+    //    m_rangeCharacterUI.SetActive(true);
+    //    m_playerRange.SetActive(true);
+    //    m_playerNameParent.SetActive(true);
+    //}
+
+    //m_selectCharacterType = characterType;
+    //}
+
+    public void SelectCharacterType(string characterType)
+    {
+        m_selectCharacterType = characterType;
+        m_settingUI.SetActive(true);
+        
+        if (m_selectCharacterType == "Warrior")
+        {
+            m_chectText = "근거리 캐릭터로\r\n 플레이 하시겠습니까?";
+        }
+        else if (m_selectCharacterType == "Range")
+        {
+            m_chectText = "원거리 캐릭터로\r\n 플레이 하시겠습니까?";
+        }
+
+        m_settingText.text = m_chectText;
+    }
+
+    public void ReturnSelectCharacterType()
+    {
+        m_choicePlayer.SetActive(true);
+        m_settingUI.SetActive(false);
+
+        m_playerNameInput.text = null;
+        m_selectedWeapon = null;
+        m_warriorCharacterUI.SetActive(false);
+        m_rangeCharacterUI.SetActive(false);
+        m_playerWarrior.SetActive(false);
+        m_playerRange.SetActive(false);
+        m_weaponAxe.SetActive(false);
+        m_weaponSword.SetActive(false);
+        m_weaponRange1.SetActive(false);
+        m_weaponRange2.SetActive(false);
+        m_commonParent.gameObject.SetActive(false);
+    }
+
+    public void SettingPlayerCharacter()
+    {
+        m_choicePlayer.SetActive(false);
+        m_commonParent.SetActive(true);
+
+        if (m_selectCharacterType == "Warrior")
         {
             m_warriorCharacterUI.SetActive(true);
-            m_rangeCharacterUI.SetActive(false);
             m_playerWarrior.SetActive(true);
-            m_playerNameParent.SetActive(true);
         }
-        else if (characterType == "Range")
+        else if (m_selectCharacterType == "Range")
         {
-            m_warriorCharacterUI.SetActive(false);
             m_rangeCharacterUI.SetActive(true);
             m_playerRange.SetActive(true);
-            m_playerNameParent.SetActive(true);
         }
-
-        m_selectCharacterType = characterType;
     }
 
     public void SelectWeapon(string weapon)
@@ -193,7 +252,10 @@ public class GameSettingManager : MonoBehaviour
     {
         m_maxNameLength = 8;
         m_placeholderText.text = "  이름을 입력해주세요";
+        m_textMessage.text = "마우스 좌 클릭으로 캐릭터를 회전시킬 수 있습니다.";
 
+        m_choicePlayer.SetActive(true);
+        m_settingUI.SetActive(false);
         m_warriorCharacterUI.SetActive(false);
         m_rangeCharacterUI.SetActive(false);
         m_playerWarrior.SetActive(false);
@@ -202,7 +264,7 @@ public class GameSettingManager : MonoBehaviour
         m_weaponSword.SetActive(false);
         m_weaponRange1.SetActive(false);
         m_weaponRange2.SetActive(false);
-        m_playerNameParent.gameObject.SetActive(false);
+        m_commonParent.gameObject.SetActive(false);
         m_warningParent.gameObject.SetActive(false);
 
         m_buttonWarrior.onClick.AddListener(() => SelectCharacterType("Warrior"));

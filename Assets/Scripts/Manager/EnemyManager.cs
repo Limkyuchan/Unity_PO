@@ -21,7 +21,9 @@ public class EnemyManager : SingletonMonoBehaviour<EnemyManager>
 
     #region Constants and Fields
     [SerializeField]
-    PlayerController m_player;
+    PlayerController m_playerWarrior;
+    [SerializeField]
+    PlayerController m_playerRange;
     [SerializeField]
     EnemySpawnTriggerZone m_spawnZone;
     [SerializeField]
@@ -34,11 +36,13 @@ public class EnemyManager : SingletonMonoBehaviour<EnemyManager>
     UIItemManager m_itemManager;
     [SerializeField]
     GameObject[] m_enemyPrefabs;
+    PlayerController m_player;
 
     List<EnemyController> m_enemyList = new List<EnemyController>();
     Dictionary<EnemyType, GameObjectPool<EnemyController>> m_enemyPool = new Dictionary<EnemyType, GameObjectPool<EnemyController>>();
     GameObjectPool<HUD_Controller> m_hudPool;
 
+    string m_playerCharacterType;
     int m_deathEnemyCnt;
     bool m_bossDeath;
     #endregion Constants and Fields
@@ -115,6 +119,16 @@ public class EnemyManager : SingletonMonoBehaviour<EnemyManager>
     #region Unity Methods
     protected override void OnStart()
     {
+        m_playerCharacterType = PlayerPrefs.GetString("PlayerCharacterType", "PlayerCharacterType");
+        if (m_playerCharacterType == "Warrior")
+        {
+            m_player = m_playerWarrior;
+        }
+        else if (m_playerCharacterType == "Range")
+        {
+            m_player = m_playerRange;
+        }
+
         m_deathEnemyCnt = 0;
         m_bossDeath = false;
         m_enemyPrefabs = Resources.LoadAll<GameObject>("Prefab/Enemys");

@@ -3,7 +3,8 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEditor;
 using UnityEngine;
- 
+
+
 public class PlayerController : CharacterBase
 {
     #region Enum Methods
@@ -15,7 +16,6 @@ public class PlayerController : CharacterBase
     #endregion Enum Methods
 
     #region Constants and Fields
-    //AttackAreaUnitFind[] m_attackAreas;
     CharacterController m_charCtrl;
     PlayerAnimController m_animCtrl;
     SkillController m_skillCtrl;
@@ -52,10 +52,16 @@ public class PlayerController : CharacterBase
     GameObject m_weaponAxe;
     [SerializeField]
     GameObject m_weaponSword;
-    //[SerializeField]
-    //GameObject m_attackAreaObj;
+    [SerializeField]
+    GameObject m_weaponRange1;
+    [SerializeField]
+    GameObject m_weaponRange2;
+    [SerializeField]
+    IndicatorManager m_indicator;
     [SerializeField]
     UIFollowTarget m_followTarget;
+    [SerializeField]
+    UIPlayerStat m_playerStat;
     [SerializeField]
     TextMeshProUGUI m_playerNameText;
     [SerializeField]
@@ -69,16 +75,16 @@ public class PlayerController : CharacterBase
     [SerializeField]
     float m_damageToActiveSkill = 100f;
     [SerializeField]
-    float m_speed = 1.5f;
+    float m_movementSpeed;
     [SerializeField]
     float m_scale;
 
     Vector3 m_dir;
-    //List<GameObject> m_enemyList = new List<GameObject>();
 
     bool m_isSkillActive;
     bool m_isSkillCanUse;
     bool m_isPlayerDead;
+    bool m_isPlayerAttack;
     int hash_Speed;
     int m_deathEnemyCnt;
     int m_totalEnemyCnt;
@@ -86,6 +92,8 @@ public class PlayerController : CharacterBase
     int m_maxHp;
     float m_curAttack;
     float m_curSkillGauge;
+    float m_curSpeed;
+    string m_playerCharacterType;
     string m_playerName;
     string m_playerWeapon;
 
@@ -94,6 +102,10 @@ public class PlayerController : CharacterBase
 
     #region Public Properties
     public Type GetPlayerType { get { return m_playerType; } set { m_playerType = value; } }
+
+    public PlayerAnimController GetAnimController { get { return m_animCtrl; } }
+
+    public SkillController GetSkillController { get { return m_skillCtrl; } }
 
     public PlayerAnimController.Motion GetMotion { get { return m_animCtrl.GetMotion; } }
 
@@ -125,6 +137,8 @@ public class PlayerController : CharacterBase
 
     public bool IsSkillActive { get { return m_isSkillActive; } }
 
+    public bool IsPlayerAttack { get { return m_isPlayerAttack; } set { m_isPlayerAttack = value; } }
+
     public int PlayerCurHp { get { return m_curHp; } set { m_curHp = value; } }
 
     public float PlayerMaxHp { get { return m_maxHp; } }
@@ -151,23 +165,19 @@ public class PlayerController : CharacterBase
 
             m_animCtrl.Play(PlayerAnimController.Motion.Hit, false);
             m_virtualCamEffect.SetActive(true);
-
-            if (m_curHp <= 0)
-            {
-                PlayerDie();
-            }
         }
         else
         {
             StartCoroutine(CoShieldCameraControl());
         }
+
+        if (m_curHp <= 0)
+        {
+            PlayerDie();
+        }
     }
 
-    public override void SetDamage(SkillData skill, DamageType type, float damage)
-    {
-        // 이 메서드는 호출되지 않음
-        Debug.LogWarning("주인공에게 SkillData 기반 데미지 적용을 시도했으나 이 메서드는 사용되지 않음.");
-    }
+    public override void SetDamage(SkillData skill, DamageType type, float damage) { }
 
     public override Transform GetTransform()
     {
@@ -207,6 +217,14 @@ public class PlayerController : CharacterBase
         m_skillZCoolTime.SetSkillShadow(false);
     }
 
+    public void ResetSkillGauge()
+    {
+        m_isSkillCanUse = false;
+        m_skillZCoolTime.SetSkillShadow(true);
+        m_curSkillGauge = 0;
+        m_playerSkillGauge.UpdateGauge(m_curSkillGauge);
+    }
+
     public void PlayerAttackUpgrade()
     {
         m_curAttack += 2;
@@ -236,48 +254,50 @@ public class PlayerController : CharacterBase
     #region Animation Event Methods
     void AnimEvent_Attack()
     {
-        m_attackStrategy.Attack(this);  
+        m_attackStrategy.AnimEvent_Attack(this);  
     }
 
     void AnimEvent_AttackFinished()
     {
         bool isCombo = false;
-        if (m_skillCtrl != null)
+        //if (m_skillCtrl != null)
+        //{
+        if (m_skillCtrl.CommandCount > 0)           // 기본 공격을 활용한 콤보 공격 구현
         {
-            if (m_skillCtrl.CommandCount > 0)           // 기본 공격을 활용한 콤보 공격 구현
+            var command = m_skillCtrl.GetCommand();
+            if (command == KeyCode.Space)
             {
-                var command = m_skillCtrl.GetCommand();
-                if (command == KeyCode.Space)
-                {
-                    isCombo = true;
-                }
-
-                if (m_skillCtrl.CommandCount > 0)
-                {
-                    m_skillCtrl.ReleaseKeyBuffer();
-                    isCombo = false;
-                }
+                isCombo = true;
             }
 
-            if (isCombo)
+            if (m_skillCtrl.CommandCount > 0)
             {
-                m_animCtrl.Play(m_skillCtrl.GetCombo());
+                m_skillCtrl.ReleaseKeyBuffer();
+                isCombo = false;
             }
-            else
-            {
-                m_skillCtrl.ResetCombo();
-                m_animCtrl.Play(PlayerAnimController.Motion.Idle);
-            }
+        }
+
+        if (isCombo)
+        {
+            m_animCtrl.Play(m_skillCtrl.GetCombo());
         }
         else
         {
+            m_skillCtrl.ResetCombo();
             m_animCtrl.Play(PlayerAnimController.Motion.Idle);
         }
+        //}
+        //else
+        //{
+        //    m_animCtrl.Play(PlayerAnimController.Motion.Idle);
+        //    m_isPlayerAttack = false;
+        //}
     }
 
     void AnimEvent_SkillFinished()
     {
         m_isSkillActive = false;
+        m_isPlayerAttack = false;
         m_animCtrl.Play(PlayerAnimController.Motion.Idle);
     }
 
@@ -328,14 +348,6 @@ public class PlayerController : CharacterBase
         StartCoroutine(CoShowGameOverPopup());
     }
 
-    void ResetSkillGauge()
-    {
-        m_isSkillCanUse = false;
-        m_skillZCoolTime.SetSkillShadow(true);
-        m_curSkillGauge = 0;
-        m_playerSkillGauge.UpdateGauge(m_curSkillGauge);
-    }
-
     void ResetMove()
     {
         m_scale = 0f;
@@ -376,34 +388,47 @@ public class PlayerController : CharacterBase
     {
         m_animCtrl = GetComponent<PlayerAnimController>();
         m_charCtrl = GetComponent<CharacterController>();
-        //m_attackAreas = m_attackAreaObj.GetComponentsInChildren<AttackAreaUnitFind>();
 
         hash_Speed = Animator.StringToHash("Speed");
+        m_indicator.SetPlayer(this);
+        m_playerStat.SetPlayer(this);
+        m_introduceGame.SetPlayer(this);
         m_virtualCamEffect.SetActive(false);
         m_virtualShield.SetActive(false);
         m_virtualCamRun.SetActive(false);
         m_skillZCoolTime.SetSkillShadow(true);
- 
+
+        m_isPlayerAttack = false;
         m_isSkillActive = false;
         m_isSkillCanUse = false;
         m_isPlayerDead = false;
+
+        m_playerName = PlayerPrefs.GetString("PlayerName", "PlayerName");
+        m_playerWeapon = PlayerPrefs.GetString("PlayerWeapon", "PlayerWeapon");
+        m_playerCharacterType = PlayerPrefs.GetString("PlayerCharacterType", "PlayerCharacterType");
+        if (m_playerCharacterType == "Warrior")
+        {
+            m_playerType = Type.Warrior;
+        }
+        else if (m_playerCharacterType == "Range")
+        {
+            m_playerType = Type.Range;
+        }
 
         switch (m_playerType)
         {
             case Type.Warrior:
                 m_playerRange.gameObject.SetActive(false);
-
                 m_skillCtrl = GetComponent<SkillController>();
                 m_attackStrategy = GetComponent<WarriorAttack>();
 
                 m_cameraController.SetTarget(m_warriorCameraRoot);
                 m_followTarget.SetTarget(Dummy_HUD);
+                m_movementSpeed = 1.5f;
 
-                m_playerName = PlayerPrefs.GetString("PlayerName", "PlayerName");
-                m_playerWeapon = PlayerPrefs.GetString("PlayerWeapon", "PlayerWeapon");
                 PlayerStatus.Instance.InitializeStatus(m_playerName, m_playerWeapon, PlayerStatus.PlayerType.Warrior);
-
                 m_playerNameText.text = PlayerStatus.Instance.playerName;
+
                 if (m_playerWeapon == "Axe")
                 {
                     m_weaponAxe.gameObject.SetActive(true);
@@ -421,6 +446,21 @@ public class PlayerController : CharacterBase
 
                 m_cameraController.SetTarget(m_rangeCameraRoot);
                 m_followTarget.SetTarget(Dummy_HUD);
+                m_movementSpeed = 2f;
+
+                PlayerStatus.Instance.InitializeStatus(m_playerName, m_playerWeapon, PlayerStatus.PlayerType.Range);
+                m_playerNameText.text = PlayerStatus.Instance.playerName;
+
+                if (m_playerWeapon == "Weapon1")
+                {
+                    m_weaponRange1.gameObject.SetActive(true);
+                    m_weaponRange2.gameObject.SetActive(false);
+                }
+                else if (m_playerWeapon == "Weapon2")
+                {
+                    m_weaponRange1.gameObject.SetActive(false);
+                    m_weaponRange2.gameObject.SetActive(true);
+                }
                 break;
         }
 
@@ -466,41 +506,29 @@ public class PlayerController : CharacterBase
             }
         }
 
+        // 주인공 기본 공격
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            ResetMove();
+            m_attackStrategy.BasicAttack(this);
+            m_isPlayerAttack = true;
+        }
+
         // 주인공 스킬 공격
         if (Input.GetKeyDown(KeyCode.Z) && !m_isSkillActive && m_isSkillCanUse)
         {
             m_isSkillActive = true;
-            m_animCtrl.Play(PlayerAnimController.Motion.Skill1, false);
             m_virtualCamEffect.SetActive(false);
-            ResetSkillGauge();
+            m_attackStrategy.SkillAttack_1(this);
             ResetMove();
         }
         if (Input.GetKeyDown(KeyCode.X) && !m_isSkillActive && !m_skillXCoolTime.IsSkillCoolTime)
         {
             m_isSkillActive = true;
-            m_animCtrl.Play(PlayerAnimController.Motion.Skill2, false);
             m_virtualCamEffect.SetActive(false);
             m_skillXCoolTime.StartCoolTime(30f);
+            m_attackStrategy.SkillAttack_2(this);
             ResetMove();
-        } 
-
-        // 주인공 기본 공격
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            ResetMove();
-            if (GetMotion == PlayerAnimController.Motion.Idle || GetMotion == PlayerAnimController.Motion.Locomotion)
-            {
-                m_animCtrl.Play(PlayerAnimController.Motion.Attack1);
-            }
-            else
-            {
-                m_skillCtrl.AddCommand(KeyCode.Space);
-            }
-        }
-
-        if (Input.GetKeyDown(KeyCode.L))
-        {
-            m_animCtrl.Play(PlayerAnimController.Motion.RangeAttack);
         }
 
         // 주인공 쉴드 방어
@@ -553,18 +581,18 @@ public class PlayerController : CharacterBase
         if (Input.GetKeyDown(KeyCode.LeftShift) && m_dir != Vector3.zero)
         {
             m_virtualCamRun.SetActive(true);
-            m_speed = 3f;
+            m_curSpeed = m_movementSpeed * 2f;
         }
         if (Input.GetKeyUp(KeyCode.LeftShift) && m_dir != Vector3.zero)
         {
             m_virtualCamRun.SetActive(false);
-            m_speed = 1.5f;
+            m_curSpeed = m_movementSpeed;
         }
 
         m_animCtrl.SetFloat(hash_Speed, m_scale);
         if (m_charCtrl.enabled && !IsAttack && !IsSkill && !IsShield)
         {
-            m_charCtrl.Move(m_dir * m_speed * m_scale * Time.deltaTime);
+            m_charCtrl.Move(m_dir * m_curSpeed * m_scale * Time.deltaTime);
         }
     }
     #endregion Unity Methods

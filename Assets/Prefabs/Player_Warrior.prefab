@@ -753,7 +753,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: edf3f827a3c04c94eaacaed8e9834872, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_followTarget: {fileID: 0}
   m_introduceGame: {fileID: 0}
   m_cameraController: {fileID: 0}
   m_warriorCameraRoot: {fileID: 4692540800975899065}
@@ -767,6 +766,9 @@ MonoBehaviour:
   m_playerRange: {fileID: 0}
   m_weaponAxe: {fileID: 6380419182703472751}
   m_weaponSword: {fileID: 9024519631060724255}
+  m_weaponRange1: {fileID: 0}
+  m_weaponRange2: {fileID: 0}
+  m_followTarget: {fileID: 0}
   m_playerNameText: {fileID: 0}
   m_playerHUD: {fileID: 0}
   m_playerSkillGauge: {fileID: 0}

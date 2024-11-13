@@ -17,6 +17,7 @@ public class PlayerAnimController : AnimationController
         RangeAttack,
         Skill1,
         Skill2,
+        Skill3,
         Shield,
         Death,
         Max
