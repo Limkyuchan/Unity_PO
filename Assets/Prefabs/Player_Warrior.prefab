@@ -768,14 +768,16 @@ MonoBehaviour:
   m_weaponSword: {fileID: 9024519631060724255}
   m_weaponRange1: {fileID: 0}
   m_weaponRange2: {fileID: 0}
+  m_indicator: {fileID: 0}
   m_followTarget: {fileID: 0}
+  m_playerStat: {fileID: 0}
   m_playerNameText: {fileID: 0}
   m_playerHUD: {fileID: 0}
   m_playerSkillGauge: {fileID: 0}
   m_skillZCoolTime: {fileID: 0}
   m_skillXCoolTime: {fileID: 0}
   m_damageToActiveSkill: 100
-  m_speed: 1.5
+  m_movementSpeed: 0
   m_scale: 0
   Dummy_HUD: {fileID: 6729490168220809358}
 --- !u!1 &1542132851717454765

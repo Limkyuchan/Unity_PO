@@ -38,9 +38,18 @@ public class ParticleCollisionHandler : MonoBehaviour
 
                 m_enemy.SetDamage(m_skillData, type, damage);
                 Destroy(gameObject);
-            }
 
-            Debug.Log("적 맞았ㅇ믐!!!!");
+                // 공격 데미지에 따른 Z스킬 게이지 계산 및 활성화
+                if (m_enemy.GetMotion != EnemyController.AiState.Death && !m_player.IsSkillActive)
+                {
+                    m_player.PlayerCurSkillGauge = Mathf.Min(100, Mathf.Round(m_player.PlayerCurSkillGauge + damage / 1.5f));
+                    m_player.GetPlayerSkillGauge.UpdateGauge(m_player.PlayerCurSkillGauge / m_player.PlayerMaxSkillGauge);
+                }
+                if (m_player.PlayerCurSkillGauge >= m_player.PlayerMaxSkillGauge)
+                {
+                    m_player.EnableSkill();
+                }
+            }
         }
     }
 }

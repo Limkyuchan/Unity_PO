@@ -24,15 +24,16 @@ public class PlayerStatus : SingletonDontDestroy<PlayerStatus>
     public string playerName;
     public string playerWeapon;
 
-    public PlayerType GetPlayerType {  get { return playerType; } set { playerType = value; } }
-
     public void InitializeStatus(string name, string weapon, PlayerType type)
     {
-        playerName = name;
-        playerWeapon = weapon;
-        playerType = type;
+        if (string.IsNullOrEmpty(playerName))
+        {
+            playerName = name;
+            playerWeapon = weapon;
+            playerType = type;
 
-        SetPlayerStatus();
+            SetPlayerStatus();
+        }
     }
 
     public void UpdateStatus(int currentHp, float currentAttack, float currentSkillGauge)

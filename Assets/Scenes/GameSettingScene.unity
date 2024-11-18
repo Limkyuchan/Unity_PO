@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 705507994}
-  m_IndirectSpecularColor: {r: 0.057683513, g: 0.0775312, b: 0.11608705, a: 1}
+  m_IndirectSpecularColor: {r: 0.05768367, g: 0.07753138, b: 0.11608741, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -291,7 +291,7 @@ GameObject:
   - component: {fileID: 19899114}
   - component: {fileID: 19899113}
   m_Layer: 5
-  m_Name: Button_WeaponRange2
+  m_Name: Button_BlueBolt
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3613,7 +3613,7 @@ GameObject:
   - component: {fileID: 824039737}
   - component: {fileID: 824039736}
   m_Layer: 5
-  m_Name: Button_WeaponRange1
+  m_Name: Button_RedFlare
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4531,7 +4531,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1000482705
 RectTransform:
   m_ObjectHideFlags: 0
@@ -5941,7 +5941,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Weapon1
+  m_text: RedFlare
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 37931ac93f0b4c14bb1646ca9cc7d2a7, type: 2}
   m_sharedMaterial: {fileID: -1195345562238789372, guid: 37931ac93f0b4c14bb1646ca9cc7d2a7, type: 2}
@@ -6566,7 +6566,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Weapon2
+  m_text: BlueBolt
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 37931ac93f0b4c14bb1646ca9cc7d2a7, type: 2}
   m_sharedMaterial: {fileID: -1195345562238789372, guid: 37931ac93f0b4c14bb1646ca9cc7d2a7, type: 2}
@@ -8820,10 +8820,10 @@ MonoBehaviour:
   m_weaponSword: {fileID: 2366270477843616909}
   m_playerRange: {fileID: 2958720695303590945}
   m_rangeCharacterUI: {fileID: 506980515}
-  m_buttonRangeWeapon1: {fileID: 824039736}
-  m_buttonRangeWeapon2: {fileID: 19899113}
-  m_weaponRange1: {fileID: 7355813029305455943}
-  m_weaponRange2: {fileID: 722859519846866901}
+  m_buttonRedFlare: {fileID: 824039736}
+  m_buttonBlueBolt: {fileID: 19899113}
+  m_weaponRedFlare: {fileID: 7355813029305455943}
+  m_weaponBlueBolt: {fileID: 722859519846866901}
 --- !u!1 &2054728307
 GameObject:
   m_ObjectHideFlags: 0
@@ -9066,7 +9066,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!1 &52246421271492050
 GameObject:
   m_ObjectHideFlags: 0
@@ -9779,7 +9779,7 @@ GameObject:
   - component: {fileID: 7834654824376790880}
   - component: {fileID: 7883160870911109325}
   m_Layer: 6
-  m_Name: WeaponRange2
+  m_Name: WeaponBlueBolt
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -15382,7 +15382,7 @@ GameObject:
   - component: {fileID: 8287181571091030236}
   - component: {fileID: 4030983651179960498}
   m_Layer: 6
-  m_Name: WeaponRange1
+  m_Name: WeaponRedFlare
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

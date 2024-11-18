@@ -24,7 +24,6 @@ public class EnemyController : CharacterBase
     PlayerController m_player;
     EnemyAnimController m_animCtrl;
     HittedFeedback m_hittedFeedback;
-    //AttackAreaUnitFind m_attackArea;
     NavMeshAgent m_navAgent;
     PathController m_path;
     HUD_Controller m_hudCtrl;
@@ -35,8 +34,6 @@ public class EnemyController : CharacterBase
     [Header("Enemy 包访 沥焊")]
     [SerializeField] 
     AiState m_state;
-    //[SerializeField]
-    //GameObject m_attackAreaObj;
     [SerializeField]
     int m_maxHp;                    // 积己等 利 弥措 Hp
     [SerializeField]
@@ -85,8 +82,6 @@ public class EnemyController : CharacterBase
     public NavMeshAgent GetNavMeshAgent { get { return m_navAgent; } }
 
     public EnemyAnimController GetAnimator { get { return m_animCtrl; } }
-
-    //public AttackAreaUnitFind GetUnitFind { get { return m_attackArea; } }
 
     public bool IsChase { get { return m_isChase; } set { m_isChase = value; } }
 
@@ -444,7 +439,6 @@ public class EnemyController : CharacterBase
         m_animCtrl = GetComponent<EnemyAnimController>();
         m_navAgent = GetComponent<NavMeshAgent>();
         m_hittedFeedback = GetComponent<HittedFeedback>();
-        //m_attackArea = m_attackAreaObj.GetComponentInChildren<AttackAreaUnitFind>();
         m_maxHp = StatusTable.Instance.GetStatusData(this.Type).hpMax;
         m_currentHp = StatusTable.Instance.GetStatusData(this.Type).hp;
 

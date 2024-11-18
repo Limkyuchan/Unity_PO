@@ -1763,13 +1763,13 @@ CharacterController:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Height: 1.8
+  m_Height: 1.7
   m_Radius: 0.3
   m_SlopeLimit: 45
   m_StepOffset: 0.5
   m_SkinWidth: 0.08
   m_MinMoveDistance: 0.001
-  m_Center: {x: 0, y: 0.9, z: 0}
+  m_Center: {x: 0, y: 0.85, z: 0}
 --- !u!114 &3883856893466939610
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1820,15 +1820,18 @@ MonoBehaviour:
   m_playerRange: {fileID: 5998795482664301052}
   m_weaponAxe: {fileID: 0}
   m_weaponSword: {fileID: 0}
-  m_weaponRange1: {fileID: 8868245886255304953}
-  m_weaponRange2: {fileID: 8872808769799860509}
+  m_weaponRedFlare: {fileID: 8868245886255304953}
+  m_weaponBlueBolt: {fileID: 8872808769799860509}
+  m_indicator: {fileID: 0}
   m_followTarget: {fileID: 0}
   m_playerStat: {fileID: 0}
   m_playerNameText: {fileID: 0}
   m_playerHUD: {fileID: 0}
   m_playerSkillGauge: {fileID: 0}
   m_skillZCoolTime: {fileID: 0}
+  m_skillZImage: {fileID: 0}
   m_skillXCoolTime: {fileID: 0}
+  m_skillXImage: {fileID: 0}
   m_damageToActiveSkill: 100
   m_movementSpeed: 0
   m_scale: 0
@@ -2713,7 +2716,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5327705983515830776, guid: ed01540a2fb366e4796a316f0ee603b0, type: 3}
       propertyPath: m_Name
-      value: WeaponRange2
+      value: WeaponBlueBolt
       objectReference: {fileID: 0}
     - target: {fileID: 5327705983515830776, guid: ed01540a2fb366e4796a316f0ee603b0, type: 3}
       propertyPath: m_IsActive
@@ -2744,7 +2747,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 3095584721181706537, guid: 62f245fd23ad20b40a131c7c215cdd3e, type: 3}
       propertyPath: m_Name
-      value: WeaponRange1
+      value: WeaponRedFlare
       objectReference: {fileID: 0}
     - target: {fileID: 3095584721181706537, guid: 62f245fd23ad20b40a131c7c215cdd3e, type: 3}
       propertyPath: m_IsActive

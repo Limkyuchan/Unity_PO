@@ -52,40 +52,18 @@ public class GameSettingManager : MonoBehaviour
     [SerializeField]
     GameObject m_rangeCharacterUI;
     [SerializeField]
-    Button m_buttonRangeWeapon1;
+    Button m_buttonRedFlare;
     [SerializeField]
-    Button m_buttonRangeWeapon2;
+    Button m_buttonBlueBolt;
     [SerializeField]
-    GameObject m_weaponRange1;
+    GameObject m_weaponRedFlare;
     [SerializeField]
-    GameObject m_weaponRange2;
+    GameObject m_weaponBlueBolt;
 
     string m_selectCharacterType;
     string m_chectText;
     string m_selectedWeapon;
     int m_maxNameLength;
-
-    //public void SelectCharacterType(string characterType)
-    //{ 
-    //m_choicePlayer.SetActive(false);
-
-    //if (characterType == "Warrior")
-    //{
-    //    m_warriorCharacterUI.SetActive(true);
-    //    m_rangeCharacterUI.SetActive(false);
-    //    m_playerWarrior.SetActive(true);
-    //    m_playerNameParent.SetActive(true);
-    //}
-    //else if (characterType == "Range")
-    //{
-    //    m_warriorCharacterUI.SetActive(false);
-    //    m_rangeCharacterUI.SetActive(true);
-    //    m_playerRange.SetActive(true);
-    //    m_playerNameParent.SetActive(true);
-    //}
-
-    //m_selectCharacterType = characterType;
-    //}
 
     public void SelectCharacterType(string characterType)
     {
@@ -117,8 +95,8 @@ public class GameSettingManager : MonoBehaviour
         m_playerRange.SetActive(false);
         m_weaponAxe.SetActive(false);
         m_weaponSword.SetActive(false);
-        m_weaponRange1.SetActive(false);
-        m_weaponRange2.SetActive(false);
+        m_weaponRedFlare.SetActive(false);
+        m_weaponBlueBolt.SetActive(false);
         m_commonParent.gameObject.SetActive(false);
     }
 
@@ -156,15 +134,15 @@ public class GameSettingManager : MonoBehaviour
         }
         else if (m_selectCharacterType == "Range")
         {
-            if (weapon == "Weapon1")
+            if (weapon == "RedFlare")
             {
-                m_weaponRange1.SetActive(true);
-                m_weaponRange2.SetActive(false);
+                m_weaponRedFlare.SetActive(true);
+                m_weaponBlueBolt.SetActive(false);
             }
-            else if (weapon == "Weapon2")
+            else if (weapon == "BlueBolt")
             {
-                m_weaponRange1.SetActive(false);
-                m_weaponRange2.SetActive(true);
+                m_weaponRedFlare.SetActive(false);
+                m_weaponBlueBolt.SetActive(true);
             }
         }
 
@@ -262,8 +240,8 @@ public class GameSettingManager : MonoBehaviour
         m_playerRange.SetActive(false);
         m_weaponAxe.SetActive(false);
         m_weaponSword.SetActive(false);
-        m_weaponRange1.SetActive(false);
-        m_weaponRange2.SetActive(false);
+        m_weaponRedFlare.SetActive(false);
+        m_weaponBlueBolt.SetActive(false);
         m_commonParent.gameObject.SetActive(false);
         m_warningParent.gameObject.SetActive(false);
 
@@ -272,8 +250,8 @@ public class GameSettingManager : MonoBehaviour
 
         m_buttonAxe.onClick.AddListener(() => SelectWeapon("Axe"));
         m_buttonSword.onClick.AddListener(() => SelectWeapon("Sword"));
-        m_buttonRangeWeapon1.onClick.AddListener(() => SelectWeapon("Weapon1"));
-        m_buttonRangeWeapon2.onClick.AddListener(() => SelectWeapon("Weapon2"));
+        m_buttonRedFlare.onClick.AddListener(() => SelectWeapon("RedFlare"));
+        m_buttonBlueBolt.onClick.AddListener(() => SelectWeapon("BlueBolt"));
 
         m_playerNameInput.onValueChanged.AddListener(ValidateNameLength);
     }

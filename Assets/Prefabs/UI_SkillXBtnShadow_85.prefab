@@ -34,7 +34,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 13.6}
+  m_AnchoredPosition: {x: 0, y: 7.4}
   m_SizeDelta: {x: 200, y: 40}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &768676945615023770
@@ -65,7 +65,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 30
+  m_text: 20
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 37931ac93f0b4c14bb1646ca9cc7d2a7, type: 2}
   m_sharedMaterial: {fileID: -1195345562238789372, guid: 37931ac93f0b4c14bb1646ca9cc7d2a7, type: 2}
@@ -263,9 +263,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_skillCoolTime: {fileID: 3324979304728872453}
-  m_imgSkill: {fileID: 6917912916954173059}
+  m_imgShadow: {fileID: 6917912916954173059}
   m_textCoolTime: {fileID: 8382286434986235308}
-  m_coolTime: 30
+  m_coolTime: 20
   m_skillShadow: {fileID: 3424352473467984826}
 --- !u!222 &1117078320984670448
 CanvasRenderer:
@@ -367,6 +367,7 @@ GameObject:
   - component: {fileID: 882502129383535667}
   - component: {fileID: 1841863421136690892}
   - component: {fileID: 3121580777274422168}
+  - component: {fileID: 5602862424381701666}
   m_Layer: 5
   m_Name: Image_Icon
   m_TagString: Untagged
@@ -391,7 +392,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 85, y: 85}
+  m_SizeDelta: {x: 90, y: 90}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &1841863421136690892
 CanvasRenderer:
@@ -421,7 +422,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 2a8f7675cbd9f1a4ab1c77e662ee262f, type: 3}
+  m_Sprite: {fileID: 21300000, guid: e56a3d21f371d8f418281eabffc36f1c, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -431,6 +432,21 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!114 &5602862424381701666
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3390972048626854096}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f7e67226f3ebebb408ec8f02be4c21ab, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  skill_Image: {fileID: 3121580777274422168}
+  img_Warrior: {fileID: 21300000, guid: e56a3d21f371d8f418281eabffc36f1c, type: 3}
+  img_Range: {fileID: 21300000, guid: 8955b2d876dc03b4495d5a03f69eb03e, type: 3}
 --- !u!1 &3424352473467984826
 GameObject:
   m_ObjectHideFlags: 0
@@ -667,7 +683,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: -30}
+  m_AnchoredPosition: {x: 0, y: -31}
   m_SizeDelta: {x: 40, y: 30}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &9043920109583318768

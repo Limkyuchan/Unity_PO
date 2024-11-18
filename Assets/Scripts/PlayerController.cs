@@ -53,9 +53,9 @@ public class PlayerController : CharacterBase
     [SerializeField]
     GameObject m_weaponSword;
     [SerializeField]
-    GameObject m_weaponRange1;
+    GameObject m_weaponRedFlare;
     [SerializeField]
-    GameObject m_weaponRange2;
+    GameObject m_weaponBlueBolt;
     [SerializeField]
     IndicatorManager m_indicator;
     [SerializeField]
@@ -71,7 +71,11 @@ public class PlayerController : CharacterBase
     [SerializeField]
     FillAmount m_skillZCoolTime;
     [SerializeField]
+    UIChangeImage m_skillZImage;
+    [SerializeField]
     FillAmount m_skillXCoolTime;
+    [SerializeField]
+    UIChangeImage m_skillXImage;
     [SerializeField]
     float m_damageToActiveSkill = 100f;
     [SerializeField]
@@ -260,8 +264,6 @@ public class PlayerController : CharacterBase
     void AnimEvent_AttackFinished()
     {
         bool isCombo = false;
-        //if (m_skillCtrl != null)
-        //{
         if (m_skillCtrl.CommandCount > 0)           // 기본 공격을 활용한 콤보 공격 구현
         {
             var command = m_skillCtrl.GetCommand();
@@ -286,12 +288,6 @@ public class PlayerController : CharacterBase
             m_skillCtrl.ResetCombo();
             m_animCtrl.Play(PlayerAnimController.Motion.Idle);
         }
-        //}
-        //else
-        //{
-        //    m_animCtrl.Play(PlayerAnimController.Motion.Idle);
-        //    m_isPlayerAttack = false;
-        //}
     }
 
     void AnimEvent_SkillFinished()
@@ -390,8 +386,11 @@ public class PlayerController : CharacterBase
         m_charCtrl = GetComponent<CharacterController>();
 
         hash_Speed = Animator.StringToHash("Speed");
+
         m_indicator.SetPlayer(this);
         m_playerStat.SetPlayer(this);
+        m_skillZImage.SetPlayer(this);
+        m_skillXImage.SetPlayer(this);
         m_introduceGame.SetPlayer(this);
         m_virtualCamEffect.SetActive(false);
         m_virtualShield.SetActive(false);
@@ -451,15 +450,15 @@ public class PlayerController : CharacterBase
                 PlayerStatus.Instance.InitializeStatus(m_playerName, m_playerWeapon, PlayerStatus.PlayerType.Range);
                 m_playerNameText.text = PlayerStatus.Instance.playerName;
 
-                if (m_playerWeapon == "Weapon1")
+                if (m_playerWeapon == "RedFlare")
                 {
-                    m_weaponRange1.gameObject.SetActive(true);
-                    m_weaponRange2.gameObject.SetActive(false);
+                    m_weaponRedFlare.gameObject.SetActive(true);
+                    m_weaponBlueBolt.gameObject.SetActive(false);
                 }
-                else if (m_playerWeapon == "Weapon2")
+                else if (m_playerWeapon == "BlueBolt")
                 {
-                    m_weaponRange1.gameObject.SetActive(false);
-                    m_weaponRange2.gameObject.SetActive(true);
+                    m_weaponRedFlare.gameObject.SetActive(false);
+                    m_weaponBlueBolt.gameObject.SetActive(true);
                 }
                 break;
         }
@@ -526,7 +525,7 @@ public class PlayerController : CharacterBase
         {
             m_isSkillActive = true;
             m_virtualCamEffect.SetActive(false);
-            m_skillXCoolTime.StartCoolTime(30f);
+            m_skillXCoolTime.StartCoolTime(20f);
             m_attackStrategy.SkillAttack_2(this);
             ResetMove();
         }

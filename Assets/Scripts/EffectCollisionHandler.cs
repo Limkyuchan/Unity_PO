@@ -26,8 +26,6 @@ public class EffectCollisionHandler : MonoBehaviour
                 DamageType damageType = m_player.AttackDecision(m_enemy, m_skillData, status, out damage);
 
                 m_enemy.SetDamage(m_skillData, damageType, damage);
-
-                Debug.Log("HIHI");
             }
         }
     }
