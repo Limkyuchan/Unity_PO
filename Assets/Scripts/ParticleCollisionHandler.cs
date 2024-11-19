@@ -37,7 +37,6 @@ public class ParticleCollisionHandler : MonoBehaviour
                 DamageType type = m_player.AttackDecision(m_enemy, m_skillData, status, out damage);
 
                 m_enemy.SetDamage(m_skillData, type, damage);
-                Destroy(gameObject);
 
                 // 공격 데미지에 따른 Z스킬 게이지 계산 및 활성화
                 if (m_enemy.GetMotion != EnemyController.AiState.Death && !m_player.IsSkillActive)

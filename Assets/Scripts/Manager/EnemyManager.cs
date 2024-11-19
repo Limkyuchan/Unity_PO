@@ -75,10 +75,11 @@ public class EnemyManager : SingletonMonoBehaviour<EnemyManager>
 
     public void RemoveEnemy(EnemyController enemy)
     {
+        m_deathEnemyCnt++;
+
         if (m_enemyList.Contains(enemy))
         {
             m_enemyList.Remove(enemy);
-            m_deathEnemyCnt++;
             m_player.DeathEnemyCnt = m_deathEnemyCnt;
 
             int dropProbability = UnityEngine.Random.Range(0, 100);
@@ -97,12 +98,12 @@ public class EnemyManager : SingletonMonoBehaviour<EnemyManager>
                 m_itemManager.SpawnSkillGaugeItem(enemy.transform.position);
                 m_player.PlayerSkillGaugeUpgrade();
             }
-            Debug.Log(dropProbability);
         }
 
         if (enemy.Type == EnemyType.BossMonster && !m_bossDeath)
         {
             m_bossDeath = true;
+            m_player.DeathEnemyCnt = m_deathEnemyCnt;
             m_nextSceneZone.EndGame();
             return;
         }
@@ -113,6 +114,12 @@ public class EnemyManager : SingletonMonoBehaviour<EnemyManager>
             m_player.AllEnemiesDie();
             m_spawnZone.CheckEnableBossMonster();
         }
+    }
+
+    public void ResetDeathEnemyCnt()
+    {
+        m_deathEnemyCnt = 0;
+        m_player.DeathEnemyCnt = 0;
     }
     #endregion Public Methods
 

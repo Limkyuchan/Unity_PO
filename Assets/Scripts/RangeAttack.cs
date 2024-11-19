@@ -140,6 +140,8 @@ public class RangeAttack : MonoBehaviour, IAttackStrategy
     {
         yield return Utility.GetWaitForSeconds(delay);
 
+        player.GetVirtualEffectCam.SetActive(true);
+
         // 스킬 및 이펙트 데이터 불러오기
         var skill = SkillTable.Instance.GetSkillData(player.GetMotion);
         var effectData = EffectTable.Instance.GetData(7);

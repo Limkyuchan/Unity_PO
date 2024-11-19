@@ -766,8 +766,8 @@ MonoBehaviour:
   m_playerRange: {fileID: 0}
   m_weaponAxe: {fileID: 6380419182703472751}
   m_weaponSword: {fileID: 9024519631060724255}
-  m_weaponRange1: {fileID: 0}
-  m_weaponRange2: {fileID: 0}
+  m_weaponRedFlare: {fileID: 0}
+  m_weaponBlueBolt: {fileID: 0}
   m_indicator: {fileID: 0}
   m_followTarget: {fileID: 0}
   m_playerStat: {fileID: 0}
@@ -775,7 +775,9 @@ MonoBehaviour:
   m_playerHUD: {fileID: 0}
   m_playerSkillGauge: {fileID: 0}
   m_skillZCoolTime: {fileID: 0}
+  m_skillZImage: {fileID: 0}
   m_skillXCoolTime: {fileID: 0}
+  m_skillXImage: {fileID: 0}
   m_damageToActiveSkill: 100
   m_movementSpeed: 0
   m_scale: 0

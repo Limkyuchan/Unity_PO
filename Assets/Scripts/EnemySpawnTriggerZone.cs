@@ -26,6 +26,7 @@ public class EnemySpawnTriggerZone : MonoBehaviour
         {
             bossCnt++;
             m_bossSpawnUI.ShowBossSpawnMessage();
+            m_enemyManager.ResetDeathEnemyCnt();
         }
     }
 
@@ -48,7 +49,7 @@ public class EnemySpawnTriggerZone : MonoBehaviour
                 {
                     m_enemyManager.CreateEnemy(EnemyManager.EnemyType.MeleeWalk2, m_pathA, 1);
                     m_enemyManager.CreateEnemy(EnemyManager.EnemyType.WarriorWalk, m_pathB, 1);
-                    m_enemyManager.CreateEnemy(EnemyManager.EnemyType.MeleeWalk, m_pathC, 1);
+                    m_enemyManager.CreateEnemy(EnemyManager.EnemyType.MeleeWalk2, m_pathC, 1);
                 }
             }
             else if (sceneName == "GameScene02")
@@ -60,7 +61,7 @@ public class EnemySpawnTriggerZone : MonoBehaviour
                 }
                 else if (player.GetPlayerType == PlayerController.Type.Range)
                 {
-                    m_enemyManager.CreateEnemy(EnemyManager.EnemyType.WarriorWalk, m_pathA, 2);
+                    m_enemyManager.CreateEnemy(EnemyManager.EnemyType.MageWalk, m_pathA, 1);
                     m_enemyManager.CreateEnemy(EnemyManager.EnemyType.WarriorWalk, m_pathB, 2);
                 }
             }

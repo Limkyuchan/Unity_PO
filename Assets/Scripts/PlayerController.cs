@@ -115,6 +115,8 @@ public class PlayerController : CharacterBase
 
     public UISkillGauge_Controller GetPlayerSkillGauge { get { return m_playerSkillGauge; } }
 
+    public GameObject GetVirtualEffectCam { get { return m_virtualCamEffect; } }
+
     public bool IsAttack
     {
         get
@@ -294,6 +296,7 @@ public class PlayerController : CharacterBase
     {
         m_isSkillActive = false;
         m_isPlayerAttack = false;
+        m_virtualCamEffect.SetActive(false);
         m_animCtrl.Play(PlayerAnimController.Motion.Idle);
     }
 
@@ -361,15 +364,18 @@ public class PlayerController : CharacterBase
 
     void MouseCursorControl()
     {
-        if (PopupManager.Instance.IsPopupOpened)
+        if (PopupManager.Instance != null)
         {
-            Cursor.lockState = CursorLockMode.None;
-            Cursor.visible = true;
-        }
-        else
-        {
-            Cursor.lockState = CursorLockMode.Locked;
-            Cursor.visible = false;
+            if (PopupManager.Instance.IsPopupOpened)
+            {
+                Cursor.lockState = CursorLockMode.None;
+                Cursor.visible = true;
+            }
+            else
+            {
+                Cursor.lockState = CursorLockMode.Locked;
+                Cursor.visible = false;
+            }
         }
     }
     #endregion Methods
@@ -418,6 +424,7 @@ public class PlayerController : CharacterBase
         {
             case Type.Warrior:
                 m_playerRange.gameObject.SetActive(false);
+                m_playerWarrior.gameObject.SetActive(true);
                 m_skillCtrl = GetComponent<SkillController>();
                 m_attackStrategy = GetComponent<WarriorAttack>();
 
@@ -441,11 +448,12 @@ public class PlayerController : CharacterBase
                 break;
             case Type.Range:
                 m_playerWarrior.gameObject.SetActive(false);
+                m_playerRange.gameObject.SetActive(true);
                 m_attackStrategy = GetComponent<RangeAttack>();
 
                 m_cameraController.SetTarget(m_rangeCameraRoot);
                 m_followTarget.SetTarget(Dummy_HUD);
-                m_movementSpeed = 2f;
+                m_movementSpeed = 3f;
 
                 PlayerStatus.Instance.InitializeStatus(m_playerName, m_playerWeapon, PlayerStatus.PlayerType.Range);
                 m_playerNameText.text = PlayerStatus.Instance.playerName;

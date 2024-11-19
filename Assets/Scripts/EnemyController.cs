@@ -107,7 +107,6 @@ public class EnemyController : CharacterBase
     {
         // 적 체력 감소
         m_currentHp -= Mathf.RoundToInt(damage);
-        Debug.Log("적 체력: " + m_currentHp);
 
         // 적 HUD 업데이트
         m_hudCtrl.UpdateHUD(type, damage, m_currentHp / (float)m_maxHp);
@@ -275,10 +274,6 @@ public class EnemyController : CharacterBase
             {
                 Debug.DrawRay(start, (end - start).normalized * hit.distance, Color.magenta, 0.5f);
                 return true;
-            }
-            else
-            {
-                Debug.DrawRay(start, (end - start).normalized * hit.distance, Color.cyan, 0.5f);
             }
         }
         return false;
