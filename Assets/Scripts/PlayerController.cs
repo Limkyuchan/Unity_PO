@@ -4,7 +4,6 @@ using TMPro;
 using UnityEditor;
 using UnityEngine;
 
-
 public class PlayerController : CharacterBase
 {
     #region Enum Methods
@@ -24,6 +23,8 @@ public class PlayerController : CharacterBase
     [Header("게임 정보")]
     [SerializeField]
     UIGameInformationMessage m_introduceGame;
+    [SerializeField]
+    PauseManager m_pauseManager;
 
     [Header("카메라 정보")]
     [SerializeField]
@@ -41,21 +42,7 @@ public class PlayerController : CharacterBase
     [SerializeField]
     float mouseSensitivity = 100f;
 
-    [Header("Player 정보")]
-    [SerializeField]
-    Type m_playerType;
-    [SerializeField]
-    GameObject m_playerWarrior;
-    [SerializeField]
-    GameObject m_playerRange;
-    [SerializeField]
-    GameObject m_weaponAxe;
-    [SerializeField]
-    GameObject m_weaponSword;
-    [SerializeField]
-    GameObject m_weaponRedFlare;
-    [SerializeField]
-    GameObject m_weaponBlueBolt;
+    [Header("UI 정보")]
     [SerializeField]
     IndicatorManager m_indicator;
     [SerializeField]
@@ -78,13 +65,28 @@ public class PlayerController : CharacterBase
     UIChangeImage m_skillXImage;
     [SerializeField]
     float m_damageToActiveSkill = 100f;
+
+    [Header("Player 정보")]
+    [SerializeField]
+    Type m_playerType;
+    [SerializeField]
+    GameObject m_playerWarrior;
+    [SerializeField]
+    GameObject m_playerRange;
+    [SerializeField]
+    GameObject m_weaponAxe;
+    [SerializeField]
+    GameObject m_weaponSword;
+    [SerializeField]
+    GameObject m_weaponRedFlare;
+    [SerializeField]
+    GameObject m_weaponBlueBolt;
     [SerializeField]
     float m_movementSpeed;
     [SerializeField]
     float m_scale;
 
     Vector3 m_dir;
-
     bool m_isSkillActive;
     bool m_isSkillCanUse;
     bool m_isPlayerDead;
@@ -471,6 +473,8 @@ public class PlayerController : CharacterBase
                 break;
         }
 
+        m_curSpeed = m_movementSpeed;
+
         if (PlayerStatus.Instance != null)
         {
             m_curHp = PlayerStatus.Instance.hp;
@@ -492,26 +496,13 @@ public class PlayerController : CharacterBase
 
     void Update()
     {
+        if (m_pauseManager != null && m_pauseManager.IsPaused)
+        {
+            return;
+        }
+
         MouseCursorControl();
         RotateCamera();
-
-        // 게임 정보 확인하기
-        if (Input.GetKeyDown(KeyCode.H))
-        {
-            if (!PopupManager.Instance.IsPopupOpened)
-            {
-                m_introduceGame.IntroduceHowToPlayGame();
-            }
-        }
-
-        // 주인공 스탯 확인하기
-        if (Input.GetKeyDown(KeyCode.Tab))
-        {
-            if (!PopupManager.Instance.IsPopupOpened)
-            {
-                m_introduceGame.CheckPlayerStat();
-            }
-        }
 
         // 주인공 기본 공격
         if (Input.GetKeyDown(KeyCode.Space))

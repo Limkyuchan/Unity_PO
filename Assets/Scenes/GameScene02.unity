@@ -1719,6 +1719,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 1084251102}
     - target: {fileID: 137596303122900047, guid: 60dedf547c9002a40b428e7b42834ee6, type: 3}
+      propertyPath: m_pauseManager
+      value: 
+      objectReference: {fileID: 2007476536}
+    - target: {fileID: 137596303122900047, guid: 60dedf547c9002a40b428e7b42834ee6, type: 3}
       propertyPath: m_introduceGame
       value: 
       objectReference: {fileID: 155136797}
@@ -3153,6 +3157,7 @@ Transform:
   - {fileID: 992604435}
   - {fileID: 1146122875}
   - {fileID: 1701335943}
+  - {fileID: 2007476535}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &978306581
@@ -6827,6 +6832,51 @@ Transform:
   - {fileID: 1814596859}
   m_Father: {fileID: 6501760642111345190}
   m_LocalEulerAnglesHint: {x: 0, y: -38.631, z: 0}
+--- !u!1 &2007476534
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2007476535}
+  - component: {fileID: 2007476536}
+  m_Layer: 0
+  m_Name: PauseManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2007476535
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2007476534}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 974390358}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2007476536
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2007476534}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0605750d1d4616c4383497ef07caa036, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_introduceGame: {fileID: 155136797}
 --- !u!1 &2013911814
 GameObject:
   m_ObjectHideFlags: 0
@@ -7422,6 +7472,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 1084251102}
     - target: {fileID: 6444900272773837446, guid: 13dab98559222d34b8fa3d2d1a698050, type: 3}
+      propertyPath: m_pauseManager
+      value: 
+      objectReference: {fileID: 2007476536}
+    - target: {fileID: 6444900272773837446, guid: 13dab98559222d34b8fa3d2d1a698050, type: 3}
       propertyPath: m_weaponRange1
       value: 
       objectReference: {fileID: 624991579}
@@ -7453,6 +7507,14 @@ PrefabInstance:
       propertyPath: m_skillZCoolTime
       value: 
       objectReference: {fileID: 841661242}
+    - target: {fileID: 6444900272773837446, guid: 13dab98559222d34b8fa3d2d1a698050, type: 3}
+      propertyPath: m_weaponBlueBolt
+      value: 
+      objectReference: {fileID: 624991578}
+    - target: {fileID: 6444900272773837446, guid: 13dab98559222d34b8fa3d2d1a698050, type: 3}
+      propertyPath: m_weaponRedFlare
+      value: 
+      objectReference: {fileID: 624991579}
     - target: {fileID: 6444900272773837446, guid: 13dab98559222d34b8fa3d2d1a698050, type: 3}
       propertyPath: m_rangeCameraRoot
       value: 

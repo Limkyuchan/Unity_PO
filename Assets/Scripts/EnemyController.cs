@@ -473,6 +473,11 @@ public class EnemyController : CharacterBase
 
     void Update()
     {
+        if (Time.timeScale == 0f)
+        {
+            return;
+        }
+
         BehaviourProcess();
     }
     #endregion Unity Methods

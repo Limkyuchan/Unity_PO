@@ -84,6 +84,9 @@ public class WarriorAttack : MonoBehaviour, IAttackStrategy
                         player.EnableSkill();
                     }
 
+                    Debug.Log("Damage: " + damage);
+                    Debug.Log("Gauge: " + player.PlayerCurSkillGauge);
+
                     // 공격 이팩트 효과 적용
                     var effect = EffectPool.Instance.Create(effectData.Prefabs[type == DamageType.Normal ? 0 : 1]);
                     effect.transform.position = checkEnemy.transform.position + Vector3.up * 0.6f;

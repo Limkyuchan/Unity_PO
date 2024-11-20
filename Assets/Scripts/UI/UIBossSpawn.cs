@@ -21,6 +21,8 @@ public class UIBossSpawn : MonoBehaviour
     {
         for (int i = 0; i < 3; i++)
         {
+            yield return Utility.GetWaitForSeconds(1f);
+
             m_bossSpawnText.gameObject.SetActive(true);
             yield return Utility.GetWaitForSeconds(0.5f);
 

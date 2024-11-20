@@ -48,6 +48,9 @@ public class ParticleCollisionHandler : MonoBehaviour
                 {
                     m_player.EnableSkill();
                 }
+
+                Debug.Log("Damage: " + damage);
+                Debug.Log("Gauge: " + m_player.PlayerCurSkillGauge);
             }
         }
     }
