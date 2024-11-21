@@ -102,6 +102,7 @@ public class WarriorAttack : MonoBehaviour, IAttackStrategy
     {
         if (target is PlayerController player)
         {
+            AudioManager.Instance.PlaySFX(AudioManager.Instance.m_warriorAttack, 0.5f);
             if (player.GetMotion == PlayerAnimController.Motion.Idle || player.GetMotion == PlayerAnimController.Motion.Locomotion)
             {
                 player.GetAnimController.Play(PlayerAnimController.Motion.Attack1);
@@ -118,6 +119,7 @@ public class WarriorAttack : MonoBehaviour, IAttackStrategy
         if (target is PlayerController player)
         {
             player.GetAnimController.Play(PlayerAnimController.Motion.Skill1, false);
+            AudioManager.Instance.PlaySFX(AudioManager.Instance.m_warriorAttack);
             player.ResetSkillGauge();
         }
     }
@@ -127,6 +129,7 @@ public class WarriorAttack : MonoBehaviour, IAttackStrategy
         if (target is PlayerController player)
         {
             player.GetAnimController.Play(PlayerAnimController.Motion.Skill2, false);
+            AudioManager.Instance.PlaySFX(AudioManager.Instance.m_warriorAttack, 0.5f);
         }
     }
 

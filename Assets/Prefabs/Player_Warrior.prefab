@@ -727,7 +727,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9e9dd65c89ebb5945b6a6219b562fe61, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_comboList: 03000000040000000500000006000000
+  m_comboList: 05000000060000000700000008000000
 --- !u!114 &4263605468614975526
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -754,6 +754,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_introduceGame: {fileID: 0}
+  m_pauseManager: {fileID: 0}
   m_cameraController: {fileID: 0}
   m_warriorCameraRoot: {fileID: 4692540800975899065}
   m_rangeCameraRoot: {fileID: 0}
@@ -761,13 +762,6 @@ MonoBehaviour:
   m_virtualShield: {fileID: 0}
   m_virtualCamRun: {fileID: 0}
   mouseSensitivity: 100
-  m_playerType: 0
-  m_playerWarrior: {fileID: 1290149118588912365}
-  m_playerRange: {fileID: 0}
-  m_weaponAxe: {fileID: 6380419182703472751}
-  m_weaponSword: {fileID: 9024519631060724255}
-  m_weaponRedFlare: {fileID: 0}
-  m_weaponBlueBolt: {fileID: 0}
   m_indicator: {fileID: 0}
   m_followTarget: {fileID: 0}
   m_playerStat: {fileID: 0}
@@ -779,6 +773,13 @@ MonoBehaviour:
   m_skillXCoolTime: {fileID: 0}
   m_skillXImage: {fileID: 0}
   m_damageToActiveSkill: 100
+  m_playerType: 0
+  m_playerWarrior: {fileID: 1290149118588912365}
+  m_playerRange: {fileID: 0}
+  m_weaponAxe: {fileID: 6380419182703472751}
+  m_weaponSword: {fileID: 9024519631060724255}
+  m_weaponRedFlare: {fileID: 0}
+  m_weaponBlueBolt: {fileID: 0}
   m_movementSpeed: 0
   m_scale: 0
   Dummy_HUD: {fileID: 6729490168220809358}

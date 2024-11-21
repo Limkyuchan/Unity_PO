@@ -1,7 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Rendering;
 using UnityEngine.SceneManagement;
 
 public class UIGameInformationMessage : MonoBehaviour
@@ -53,6 +52,8 @@ public class UIGameInformationMessage : MonoBehaviour
     string GetBasicKeyInfo()
     {
         return "< 기본 키 > \r\n" +
+            "[V] \r\n" +
+            " ▶ 볼륨 조절창을 On/Off 할 수 있습니다.\r\n" +
             "[Tab] \r\n" +
             " ▶ 플레이어의 정보를 확인할 수 있습니다.\r\n" +
             "[Left Shift] \r\n" +

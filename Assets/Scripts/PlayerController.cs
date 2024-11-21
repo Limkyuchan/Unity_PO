@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEditor;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 public class PlayerController : CharacterBase
 {
@@ -364,23 +363,6 @@ public class PlayerController : CharacterBase
             transform.Rotate(Vector3.up * mouseX);
         }
     }
-
-    void MouseCursorControl()
-    {
-        if (PopupManager.Instance != null)
-        {
-            if (PopupManager.Instance.IsPopupOpened)
-            {
-                Cursor.lockState = CursorLockMode.None;
-                Cursor.visible = true;
-            }
-            else
-            {
-                Cursor.lockState = CursorLockMode.Locked;
-                Cursor.visible = false;
-            }
-        }
-    }
     #endregion Methods
 
     #region Unity Methods
@@ -502,7 +484,6 @@ public class PlayerController : CharacterBase
             return;
         }
 
-        MouseCursorControl();
         RotateCamera();
 
         // 주인공 기본 공격

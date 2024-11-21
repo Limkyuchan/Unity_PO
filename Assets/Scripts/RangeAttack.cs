@@ -71,6 +71,7 @@ public class RangeAttack : MonoBehaviour, IAttackStrategy
             if (!player.IsPlayerAttack)
             {
                 player.GetAnimController.Play(PlayerAnimController.Motion.RangeAttack);
+                AudioManager.Instance.PlaySFX(AudioManager.Instance.m_rangeAttack);
             }
         }
     }
@@ -84,6 +85,7 @@ public class RangeAttack : MonoBehaviour, IAttackStrategy
 
             // 스킬 애니메이션 시작
             player.GetAnimController.Play(PlayerAnimController.Motion.RangeAttack, false);
+            AudioManager.Instance.PlaySFX(AudioManager.Instance.m_rangeAttack);
 
             // 스킬 및 이펙트 데이터 불러오기
             var skill = SkillTable.Instance.GetSkillData(player.GetMotion);
@@ -101,6 +103,7 @@ public class RangeAttack : MonoBehaviour, IAttackStrategy
         {
             // 스킬 애니메이션 시작
             player.GetAnimController.Play(PlayerAnimController.Motion.Skill3, false);
+            AudioManager.Instance.PlaySFX(AudioManager.Instance.m_rangeAttack);
 
             StartCoroutine(CoSpawnAttack2Effect(player, 0.46f));
         }

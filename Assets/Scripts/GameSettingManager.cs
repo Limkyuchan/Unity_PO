@@ -3,8 +3,6 @@ using UnityEngine.UI;
 using TMPro;
 using System.Collections;
 using UnityEngine.EventSystems;
-using UnityEditor.Rendering;
-using UnityEngine.SceneManagement;
 
 public class GameSettingManager : MonoBehaviour
 {
@@ -21,6 +19,12 @@ public class GameSettingManager : MonoBehaviour
     GameObject m_lightWarrior;
     [SerializeField]
     GameObject m_lightRange;
+
+    [Header("캐릭터 선택 화살표")]
+    [SerializeField]
+    GameObject m_arrowIndicator;
+    [SerializeField]
+    Vector3 m_arrowOffset = new Vector3(0, 1.5f, 0);
 
     [Header("공통적으로 사용되는 UI")]
     [SerializeField]
@@ -54,11 +58,11 @@ public class GameSettingManager : MonoBehaviour
     [SerializeField]
     GameObject m_playerRange;
     [SerializeField]
+    GameObject m_RedFlare;
+    [SerializeField]
+    GameObject m_BlueBolt;
+    [SerializeField]
     GameObject m_rangeCharacterUI;
-    [SerializeField]
-    Button m_buttonRedFlare;
-    [SerializeField]
-    Button m_buttonBlueBolt;
     [SerializeField]
     GameObject m_wearRedFlare;
     [SerializeField]
@@ -68,6 +72,7 @@ public class GameSettingManager : MonoBehaviour
     PlayerAnimController m_rangeAnimController;
     BoxCollider m_warriorCollider;
     BoxCollider m_rangeCollider;
+
     Vector3 m_warriorInitPosition = new Vector3(-0.600989461f, 0f, -7.62807608f);
     Quaternion m_warriorInitRoation = new Quaternion(0f, 0.985329509f, 0f, 0.17066291f);
     Vector3 m_rangeInitPosition = new Vector3(0.70246619f, 0f, -7.62788105f);
@@ -86,17 +91,25 @@ public class GameSettingManager : MonoBehaviour
         if (m_selectCharacterType == "Warrior")
         {
             m_introduceWarrior.SetActive(true);
+            m_introduceRange.SetActive(false);
             m_playerRange.SetActive(false);
 
+            ShowArrowIndicator(m_playerWarrior);
+
             m_warriorAnimController.Play(PlayerAnimController.Motion.Victory);
+            AudioManager.Instance.PlaySFX(AudioManager.Instance.m_Victory);
             StartCoroutine(CoResetToIdle(m_warriorAnimController, 2.5f));
         }
         else if (m_selectCharacterType == "Range")
         {
             m_introduceRange.SetActive(true);
+            m_introduceWarrior.SetActive(false);
             m_playerWarrior.SetActive(false);
 
+            ShowArrowIndicator(m_playerRange);
+
             m_rangeAnimController.Play(PlayerAnimController.Motion.Victory);
+            AudioManager.Instance.PlaySFX(AudioManager.Instance.m_Victory);
             StartCoroutine(CoResetToIdle(m_rangeAnimController, 2.5f));
         }
     }
@@ -108,6 +121,7 @@ public class GameSettingManager : MonoBehaviour
         m_warriorCollider.enabled = true;
         m_rangeCollider.enabled = true;
 
+        m_arrowIndicator.SetActive(false);
         m_introduceWarrior.SetActive(false);
         m_introduceRange.SetActive(false);
 
@@ -119,6 +133,7 @@ public class GameSettingManager : MonoBehaviour
         m_choicePlayer.SetActive(false);
         m_commonParent.SetActive(true);
 
+        m_arrowIndicator.SetActive(false);
         m_lightRange.SetActive(false);
         m_lightWarrior.SetActive(false);
         m_pointLight.SetActive(true);
@@ -146,6 +161,8 @@ public class GameSettingManager : MonoBehaviour
             m_playerRange.transform.rotation = m_targetRotation;
 
             m_rangeCharacterUI.SetActive(true);
+            m_RedFlare.SetActive(true);
+            m_BlueBolt.SetActive(true);
         }
     }
 
@@ -159,16 +176,23 @@ public class GameSettingManager : MonoBehaviour
         m_wearAxe.SetActive(false);
         m_Sword.SetActive(false);
         m_wearSword.SetActive(false);
+        m_RedFlare.SetActive(false);
+        m_wearRedFlare.SetActive(false);
+        m_BlueBolt.SetActive(false);
+        m_wearBlueBolt.SetActive(false);
 
+        m_playerNameInput.text = null;
         m_choicePlayer.SetActive(true);
         m_lightRange.SetActive(true);
         m_lightWarrior.SetActive(true);
 
         m_playerWarrior.SetActive(true);
+        m_warriorCollider.enabled = true;
         m_playerWarrior.transform.position = m_warriorInitPosition;
         m_playerWarrior.transform.rotation = m_warriorInitRoation;
 
         m_playerRange.SetActive(true);
+        m_rangeCollider.enabled = true;
         m_playerRange.transform.position = m_rangeInitPosition;
         m_playerRange.transform.rotation = m_rangeInitRotation;
 
@@ -194,18 +218,27 @@ public class GameSettingManager : MonoBehaviour
                 m_wearAxe.SetActive(false);
             }
             m_warriorAnimController.Play(PlayerAnimController.Motion.ShowSkill);
+            AudioManager.Instance.PlaySFX(AudioManager.Instance.m_warriorAttack, 1.166f);
+            AudioManager.Instance.PlaySFX(AudioManager.Instance.m_warriorAttack, 1.5f);
+            AudioManager.Instance.PlaySFX(AudioManager.Instance.m_warriorAttack, 3f);
             StartCoroutine(CoResetToIdle(m_warriorAnimController, 4f));
         }
         else if (m_selectCharacterType == "Range")
         {
+            m_rangeAnimController.Play(PlayerAnimController.Motion.Idle, false);
             if (weapon == "RedFlare")
             {
-
+                m_wearRedFlare.SetActive(true);
+                m_wearBlueBolt.SetActive(false);
             }
             else if (weapon == "BlueBolt")
             {
-
+                m_wearBlueBolt.SetActive(true);
+                m_wearRedFlare.SetActive(false);
             }
+            m_rangeAnimController.Play(PlayerAnimController.Motion.ShowSkill);
+            AudioManager.Instance.PlaySFX(AudioManager.Instance.m_rangeAttack, 0.46f);
+            StartCoroutine(CoResetToIdle(m_rangeAnimController, 2.5f));
         }
     }
 
@@ -253,12 +286,36 @@ public class GameSettingManager : MonoBehaviour
         animController.Play(PlayerAnimController.Motion.Idle);
     }
 
+    IEnumerator CoMoveArrowIndicator(GameObject target)
+    {
+        while (m_arrowIndicator.activeSelf)
+        {
+            Vector3 targetPosition = target.transform.position + m_arrowOffset;
+            m_arrowIndicator.transform.position = targetPosition;
+
+            float bounce = Mathf.Sin(Time.time * 2) * 0.1f;
+            m_arrowIndicator.transform.position += new Vector3(0, bounce, 0);
+
+            yield return null;
+        }
+    }
+
     IEnumerator CoOnOffWarningMessage()
     {
         m_warningParent.SetActive(true);
         yield return Utility.GetWaitForSeconds(2f);
         m_warningParent.SetActive(false);
         yield return Utility.GetWaitForSeconds(0.5f);
+    }
+
+
+    void ShowArrowIndicator(GameObject target)
+    {
+        if (m_arrowIndicator != null)
+        {
+            m_arrowIndicator.SetActive(true);
+            StartCoroutine(CoMoveArrowIndicator(target));
+        }
     }
 
     void RotateCharacter()
@@ -316,6 +373,7 @@ public class GameSettingManager : MonoBehaviour
         m_choicePlayer.SetActive(true);
         m_lightWarrior.SetActive(true);
         m_lightRange.SetActive(true);
+        m_arrowIndicator.SetActive(false);
         m_introduceWarrior.SetActive(false);
         m_introduceRange.SetActive(false);
         m_pointLight.SetActive(false);
@@ -329,6 +387,10 @@ public class GameSettingManager : MonoBehaviour
         m_wearAxe.SetActive(false);
         m_Sword.SetActive(false);
         m_wearSword.SetActive(false);
+        m_RedFlare.SetActive(false);
+        m_wearRedFlare.SetActive(false);
+        m_BlueBolt.SetActive(false);
+        m_wearBlueBolt.SetActive(false);
 
         m_playerNameInput.onValueChanged.AddListener(ValidateNameLength);
     }
