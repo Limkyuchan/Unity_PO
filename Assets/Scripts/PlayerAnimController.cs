@@ -7,6 +7,8 @@ public class PlayerAnimController : AnimationController
     public enum Motion
     {
         None = -1,
+        Victory,
+        ShowSkill,
         Idle,
         Locomotion,
         Hit,

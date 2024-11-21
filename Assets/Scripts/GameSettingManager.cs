@@ -3,6 +3,8 @@ using UnityEngine.UI;
 using TMPro;
 using System.Collections;
 using UnityEngine.EventSystems;
+using UnityEditor.Rendering;
+using UnityEngine.SceneManagement;
 
 public class GameSettingManager : MonoBehaviour
 {
@@ -10,13 +12,15 @@ public class GameSettingManager : MonoBehaviour
     [SerializeField]
     GameObject m_choicePlayer;
     [SerializeField]
-    Button m_buttonWarrior;
+    GameObject m_introduceWarrior;
     [SerializeField]
-    Button m_buttonRange;
+    GameObject m_introduceRange;
     [SerializeField]
-    GameObject m_settingUI;
+    GameObject m_pointLight;
     [SerializeField]
-    TextMeshProUGUI m_settingText;
+    GameObject m_lightWarrior;
+    [SerializeField]
+    GameObject m_lightRange;
 
     [Header("공통적으로 사용되는 UI")]
     [SerializeField]
@@ -36,15 +40,15 @@ public class GameSettingManager : MonoBehaviour
     [SerializeField]
     GameObject m_playerWarrior;
     [SerializeField]
+    GameObject m_Axe;
+    [SerializeField]
+    GameObject m_Sword;
+    [SerializeField]
     GameObject m_warriorCharacterUI;
     [SerializeField]
-    Button m_buttonAxe;
+    GameObject m_wearAxe;
     [SerializeField]
-    Button m_buttonSword;
-    [SerializeField]
-    GameObject m_weaponAxe;
-    [SerializeField]
-    GameObject m_weaponSword;
+    GameObject m_wearSword;
 
     [Header("원거리 캐릭터 UI")]
     [SerializeField]
@@ -56,48 +60,58 @@ public class GameSettingManager : MonoBehaviour
     [SerializeField]
     Button m_buttonBlueBolt;
     [SerializeField]
-    GameObject m_weaponRedFlare;
+    GameObject m_wearRedFlare;
     [SerializeField]
-    GameObject m_weaponBlueBolt;
+    GameObject m_wearBlueBolt;
+
+    PlayerAnimController m_warriorAnimController;
+    PlayerAnimController m_rangeAnimController;
+    BoxCollider m_warriorCollider;
+    BoxCollider m_rangeCollider;
+    Vector3 m_warriorInitPosition = new Vector3(-0.600989461f, 0f, -7.62807608f);
+    Quaternion m_warriorInitRoation = new Quaternion(0f, 0.985329509f, 0f, 0.17066291f);
+    Vector3 m_rangeInitPosition = new Vector3(0.70246619f, 0f, -7.62788105f);
+    Quaternion m_rangeInitRotation = new Quaternion(0f, 0.987895489f, 0f, -0.155121163f);
+    Vector3 m_targetPosition = new Vector3(-1.27900004f, -0.182690054f, -7.6457777f);
+    Quaternion m_targetRotation = new Quaternion(0.0424279869f, 0.949925661f, -0.0326390304f, 0.307856888f);
 
     string m_selectCharacterType;
-    string m_chectText;
-    string m_selectedWeapon;
+    string m_selectWeapon;
     int m_maxNameLength;
 
     public void SelectCharacterType(string characterType)
     {
         m_selectCharacterType = characterType;
-        m_settingUI.SetActive(true);
-        
+
         if (m_selectCharacterType == "Warrior")
         {
-            m_chectText = "근거리 캐릭터로\r\n 플레이 하시겠습니까?";
+            m_introduceWarrior.SetActive(true);
+            m_playerRange.SetActive(false);
+
+            m_warriorAnimController.Play(PlayerAnimController.Motion.Victory);
+            StartCoroutine(CoResetToIdle(m_warriorAnimController, 2.5f));
         }
         else if (m_selectCharacterType == "Range")
         {
-            m_chectText = "원거리 캐릭터로\r\n 플레이 하시겠습니까?";
-        }
+            m_introduceRange.SetActive(true);
+            m_playerWarrior.SetActive(false);
 
-        m_settingText.text = m_chectText;
+            m_rangeAnimController.Play(PlayerAnimController.Motion.Victory);
+            StartCoroutine(CoResetToIdle(m_rangeAnimController, 2.5f));
+        }
     }
 
     public void ReturnSelectCharacterType()
     {
-        m_choicePlayer.SetActive(true);
-        m_settingUI.SetActive(false);
+        m_playerWarrior.SetActive(true);
+        m_playerRange.SetActive(true);
+        m_warriorCollider.enabled = true;
+        m_rangeCollider.enabled = true;
 
-        m_playerNameInput.text = null;
-        m_selectedWeapon = null;
-        m_warriorCharacterUI.SetActive(false);
-        m_rangeCharacterUI.SetActive(false);
-        m_playerWarrior.SetActive(false);
-        m_playerRange.SetActive(false);
-        m_weaponAxe.SetActive(false);
-        m_weaponSword.SetActive(false);
-        m_weaponRedFlare.SetActive(false);
-        m_weaponBlueBolt.SetActive(false);
-        m_commonParent.gameObject.SetActive(false);
+        m_introduceWarrior.SetActive(false);
+        m_introduceRange.SetActive(false);
+
+        m_choicePlayer.SetActive(true);
     }
 
     public void SettingPlayerCharacter()
@@ -105,48 +119,94 @@ public class GameSettingManager : MonoBehaviour
         m_choicePlayer.SetActive(false);
         m_commonParent.SetActive(true);
 
+        m_lightRange.SetActive(false);
+        m_lightWarrior.SetActive(false);
+        m_pointLight.SetActive(true);
+
         if (m_selectCharacterType == "Warrior")
         {
-            m_warriorCharacterUI.SetActive(true);
+            m_warriorAnimController.Play(PlayerAnimController.Motion.Idle);
+            m_playerRange.SetActive(false);
             m_playerWarrior.SetActive(true);
+            m_warriorCollider.enabled = false;
+            m_playerWarrior.transform.position = m_targetPosition;
+            m_playerWarrior.transform.rotation = m_targetRotation;
+
+            m_warriorCharacterUI.SetActive(true);
+            m_Axe.SetActive(true);
+            m_Sword.SetActive(true);
         }
         else if (m_selectCharacterType == "Range")
         {
-            m_rangeCharacterUI.SetActive(true);
+            m_rangeAnimController.Play(PlayerAnimController.Motion.Idle);
+            m_playerWarrior.SetActive(false);
             m_playerRange.SetActive(true);
+            m_rangeCollider.enabled = false;
+            m_playerRange.transform.position = m_targetPosition;
+            m_playerRange.transform.rotation = m_targetRotation;
+
+            m_rangeCharacterUI.SetActive(true);
         }
+    }
+
+    public void ReturnSettingPlayerCharacter()
+    {
+        m_commonParent.SetActive(false);
+        m_pointLight.SetActive(false);
+        m_warriorCharacterUI.SetActive(false);
+        m_rangeCharacterUI.SetActive(false);
+        m_Axe.SetActive(false);
+        m_wearAxe.SetActive(false);
+        m_Sword.SetActive(false);
+        m_wearSword.SetActive(false);
+
+        m_choicePlayer.SetActive(true);
+        m_lightRange.SetActive(true);
+        m_lightWarrior.SetActive(true);
+
+        m_playerWarrior.SetActive(true);
+        m_playerWarrior.transform.position = m_warriorInitPosition;
+        m_playerWarrior.transform.rotation = m_warriorInitRoation;
+
+        m_playerRange.SetActive(true);
+        m_playerRange.transform.position = m_rangeInitPosition;
+        m_playerRange.transform.rotation = m_rangeInitRotation;
+
+        m_introduceWarrior.SetActive(false);
+        m_introduceRange.SetActive(false);
     }
 
     public void SelectWeapon(string weapon)
     {
+        m_selectWeapon = weapon;
+
         if (m_selectCharacterType == "Warrior")
         {
+            m_warriorAnimController.Play(PlayerAnimController.Motion.Idle, false);
             if (weapon == "Axe")
             {
-                m_weaponAxe.SetActive(true);
-                m_weaponSword.SetActive(false);
+                m_wearAxe.SetActive(true);
+                m_wearSword.SetActive(false);
             }
             else if (weapon == "Sword")
             {
-                m_weaponAxe.SetActive(false);
-                m_weaponSword.SetActive(true);
+                m_wearSword.SetActive(true);
+                m_wearAxe.SetActive(false);
             }
+            m_warriorAnimController.Play(PlayerAnimController.Motion.ShowSkill);
+            StartCoroutine(CoResetToIdle(m_warriorAnimController, 4f));
         }
         else if (m_selectCharacterType == "Range")
         {
             if (weapon == "RedFlare")
             {
-                m_weaponRedFlare.SetActive(true);
-                m_weaponBlueBolt.SetActive(false);
+
             }
             else if (weapon == "BlueBolt")
             {
-                m_weaponRedFlare.SetActive(false);
-                m_weaponBlueBolt.SetActive(true);
+
             }
         }
-
-        m_selectedWeapon = weapon;
     }
 
     public void GoGameScene()
@@ -157,7 +217,7 @@ public class GameSettingManager : MonoBehaviour
             StartCoroutine(CoOnOffWarningMessage());
             return;
         }
-        
+
         if (m_playerNameInput.text.Length > m_maxNameLength)
         {
             m_warningText.text = "영문,공백 포함 8글자 이내로 입력해주세요!";
@@ -165,7 +225,7 @@ public class GameSettingManager : MonoBehaviour
             return;
         }
 
-        if (string.IsNullOrEmpty(m_selectedWeapon))
+        if (string.IsNullOrEmpty(m_selectWeapon))
         {
             m_warningText.text = "무기를 선택해주세요!";
             StartCoroutine(CoOnOffWarningMessage());
@@ -173,7 +233,7 @@ public class GameSettingManager : MonoBehaviour
         }
 
         PlayerPrefs.SetString("PlayerName", m_playerNameInput.text);
-        PlayerPrefs.SetString("PlayerWeapon", m_selectedWeapon);
+        PlayerPrefs.SetString("PlayerWeapon", m_selectWeapon);
         PlayerPrefs.SetString("PlayerCharacterType", m_selectCharacterType);
 
         PlayerPrefs.Save();
@@ -184,6 +244,13 @@ public class GameSettingManager : MonoBehaviour
     public void GoTitleScene()
     {
         LoadSceneManager.Instance.LoadSceneAsync(SceneState.Title);
+    }
+
+
+    IEnumerator CoResetToIdle(PlayerAnimController animController, float time)
+    {
+        yield return Utility.GetWaitForSeconds(time);
+        animController.Play(PlayerAnimController.Motion.Idle);
     }
 
     IEnumerator CoOnOffWarningMessage()
@@ -228,30 +295,40 @@ public class GameSettingManager : MonoBehaviour
 
     void Start()
     {
+        // Warrior 캐릭터의 초기 설정
+        m_playerWarrior.SetActive(true);
+        m_playerWarrior.transform.position = m_warriorInitPosition;
+        m_playerWarrior.transform.rotation = m_warriorInitRoation;
+        m_warriorAnimController = m_playerWarrior.GetComponent<PlayerAnimController>();
+        m_warriorCollider = m_playerWarrior.GetComponent<BoxCollider>();
+
+        // Range 캐릭터의 초기 설정
+        m_playerRange.SetActive(true);
+        m_playerRange.transform.position = m_rangeInitPosition;
+        m_playerRange.transform.rotation = m_rangeInitRotation;
+        m_rangeAnimController = m_playerRange.GetComponent<PlayerAnimController>();
+        m_rangeCollider = m_playerRange.GetComponent<BoxCollider>();
+
         m_maxNameLength = 8;
         m_placeholderText.text = "  이름을 입력해주세요";
         m_textMessage.text = "마우스 좌 클릭으로 캐릭터를 회전시킬 수 있습니다.";
 
         m_choicePlayer.SetActive(true);
-        m_settingUI.SetActive(false);
+        m_lightWarrior.SetActive(true);
+        m_lightRange.SetActive(true);
+        m_introduceWarrior.SetActive(false);
+        m_introduceRange.SetActive(false);
+        m_pointLight.SetActive(false);
+
         m_warriorCharacterUI.SetActive(false);
         m_rangeCharacterUI.SetActive(false);
-        m_playerWarrior.SetActive(false);
-        m_playerRange.SetActive(false);
-        m_weaponAxe.SetActive(false);
-        m_weaponSword.SetActive(false);
-        m_weaponRedFlare.SetActive(false);
-        m_weaponBlueBolt.SetActive(false);
         m_commonParent.gameObject.SetActive(false);
         m_warningParent.gameObject.SetActive(false);
 
-        m_buttonWarrior.onClick.AddListener(() => SelectCharacterType("Warrior"));
-        m_buttonRange.onClick.AddListener(() => SelectCharacterType("Range"));
-
-        m_buttonAxe.onClick.AddListener(() => SelectWeapon("Axe"));
-        m_buttonSword.onClick.AddListener(() => SelectWeapon("Sword"));
-        m_buttonRedFlare.onClick.AddListener(() => SelectWeapon("RedFlare"));
-        m_buttonBlueBolt.onClick.AddListener(() => SelectWeapon("BlueBolt"));
+        m_Axe.SetActive(false);
+        m_wearAxe.SetActive(false);
+        m_Sword.SetActive(false);
+        m_wearSword.SetActive(false);
 
         m_playerNameInput.onValueChanged.AddListener(ValidateNameLength);
     }
