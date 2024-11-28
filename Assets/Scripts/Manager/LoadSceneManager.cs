@@ -29,6 +29,7 @@ public class LoadSceneManager : SingletonDontDestroy<LoadSceneManager>
     float m_minimumLoadTime = 2f;
 
     AsyncOperation m_loadingState;              // 로딩 상태 확인
+    UIGameOptionController m_gameOptionController;
 
     SceneState m_state;                         // 현재 씬
     SceneState m_loadState = SceneState.None;   // 현재 로딩중인 씬
@@ -68,7 +69,7 @@ public class LoadSceneManager : SingletonDontDestroy<LoadSceneManager>
         {
             if (canvas.gameObject != LoadSceneManager.Instance.GetComponent<Canvas>().gameObject)
             {
-                canvas.gameObject.SetActive(false);         // 로딩 Canvas 제외한 나머지 Canvas 비활성화
+                canvas.gameObject.SetActive(false);     // 로딩 Canvas 제외한 나머지 Canvas 비활성화
             }
         }
     }
@@ -85,6 +86,11 @@ public class LoadSceneManager : SingletonDontDestroy<LoadSceneManager>
             Cursor.lockState = CursorLockMode.None;    // 타이틀 등 UI 씬에서 커서 고정 해제
             Cursor.visible = true;                     // 커서 보이기
         }
+    }
+
+    void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    {
+        m_gameOptionController = FindObjectOfType<UIGameOptionController>();
     }
 
     IEnumerator CoLoadSceneProcess(int sceneIndex)
@@ -165,6 +171,11 @@ public class LoadSceneManager : SingletonDontDestroy<LoadSceneManager>
         HideUI();
     }
 
+    protected override void OnAwake()
+    {
+        SceneManager.sceneLoaded += OnSceneLoaded;
+    }
+
     protected override void OnStart()
     {
         HideUI();
@@ -174,7 +185,11 @@ public class LoadSceneManager : SingletonDontDestroy<LoadSceneManager>
     {
         if (Input.GetKeyDown(KeyCode.Escape))
         {
-            if (PopupManager.Instance.IsPopupOpened)
+            if (m_gameOptionController != null && m_gameOptionController.IsGameOptionOpen())
+            {
+                m_gameOptionController.CloseGameOption();
+            }
+            else if (PopupManager.Instance.IsPopupOpened)
             {
                 PopupManager.Instance.Popup_Close();
             }
@@ -183,35 +198,27 @@ public class LoadSceneManager : SingletonDontDestroy<LoadSceneManager>
                 switch (m_state)
                 {
                     case SceneState.Title:
-                        PopupManager.Instance.Popup_OpenOkCancel("<color=#ff0000>Notice</color>", "<color=#000000>게임을 종료하시겠습니까?</color>", () =>
+                        string notice = LanguageManager.Instance.GetLocalizedText("Notice");
+                        string exitGame = LanguageManager.Instance.GetLocalizedText("ExitGame");
+                        PopupManager.Instance.Popup_OpenOkCancel(notice, exitGame, () =>
                         {
 #if UNITY_EDITOR
                             EditorApplication.isPlaying = false;
 #else
                             Application.Quit();
 #endif
-                        }, null, "예", "아니오");
+                        }, null, LanguageManager.Instance.GetLocalizedText("OkButton"), LanguageManager.Instance.GetLocalizedText("CancelButton"));
                         break;
                     case SceneState.GameSettingScene:
-                        PopupManager.Instance.Popup_OpenOkCancel("<color=#ff0000>Notice</color>", "<color=#000000>게임을 종료하고 타이틀로 돌아가시겠습니까?\r\n저장하지 않은 내용은 전부 삭제됩니다.</color>", () =>
-                        {
-                            LoadSceneAsync(SceneState.Title);
-                            PopupManager.Instance.Popup_Close();
-                        }, null, "종료", "취소");
-                        break;
                     case SceneState.GameScene01:
-                        PopupManager.Instance.Popup_OpenOkCancel("<color=#ff0000>Notice</color>", "<color=#000000>게임을 종료하고 타이틀로 돌아가시겠습니까?\r\n저장하지 않은 내용은 전부 삭제됩니다.</color>", () => 
-                        {
-                            LoadSceneAsync(SceneState.Title);
-                            PopupManager.Instance.Popup_Close();
-                        }, null, "종료", "취소");
-                        break;
                     case SceneState.GameScene02:
-                        PopupManager.Instance.Popup_OpenOkCancel("<color=#ff0000>Notice</color>", "<color=#000000>게임을 종료하고 타이틀로 돌아가시겠습니까?\r\n저장하지 않은 내용은 전부 삭제됩니다.</color>", () =>
-                        {
-                            LoadSceneAsync(SceneState.Title);
-                            PopupManager.Instance.Popup_Close();
-                        }, null, "종료", "취소");
+                        notice = LanguageManager.Instance.GetLocalizedText("Notice");
+                        string exitMessage = LanguageManager.Instance.GetLocalizedText("ExitMessage");
+                        PopupManager.Instance.Popup_OpenOkCancel(notice, exitMessage, () =>
+                            {
+                                LoadSceneAsync(SceneState.Title);
+                                PopupManager.Instance.Popup_Close();
+                            }, null, LanguageManager.Instance.GetLocalizedText("OkButton"), LanguageManager.Instance.GetLocalizedText("CancelButton"));
                         break;
                 }
             }

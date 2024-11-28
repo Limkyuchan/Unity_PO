@@ -22,6 +22,8 @@ public class AudioManager : SingletonDontDestroy<AudioManager>
     [Range(0f, 1f)] public float m_MainVolume = 0.5f;
     [Range(0f, 1f)] public float m_SFXVolume = 0.5f;
 
+    static readonly HashSet<string> m_scenesWithBGM = new HashSet<string> { "Title", "GameSettingScene", "GameScene01", "GameScene02" };
+
     public void PlayBGM()
     {
         StopAllAudio();
@@ -49,14 +51,9 @@ public class AudioManager : SingletonDontDestroy<AudioManager>
 
     public void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
-        switch (scene.name)
+        if (m_scenesWithBGM.Contains(scene.name))
         {
-            case "Title":
-            case "GameSettingScene":
-            case "GameScene01":
-            case "GameScene02":
-                PlayBGM();
-                break;
+            PlayBGM();
         }
     }
 

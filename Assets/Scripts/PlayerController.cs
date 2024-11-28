@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
+using Unity.VisualScripting;
 using UnityEditor;
 using UnityEngine;
 
@@ -87,6 +88,7 @@ public class PlayerController : CharacterBase
     float m_scale;
 
     Vector3 m_dir;
+    bool m_isCameraShake = true;
     bool m_isSkillActive;
     bool m_isSkillCanUse;
     bool m_isPlayerDead;
@@ -172,7 +174,11 @@ public class PlayerController : CharacterBase
             m_playerHUD.UpdateHUD(type, damage, m_curHp / (float)m_maxHp);
 
             m_animCtrl.Play(PlayerAnimController.Motion.Hit, false);
-            m_virtualCamEffect.SetActive(true);
+            
+            if (m_isCameraShake)
+            {
+                m_virtualCamEffect.SetActive(true);
+            }
         }
         else
         {
@@ -209,6 +215,20 @@ public class PlayerController : CharacterBase
             }
         }
         return type;
+    }
+
+
+    public void SetCameraShake(bool isEnabled)
+    {
+        m_isCameraShake = isEnabled;
+
+        if (!m_isCameraShake)
+        {
+            m_virtualCamEffect.SetActive(false);
+            m_virtualShield.SetActive(false);
+        }
+
+        Debug.Log($"카메라 진동 설정: {(m_isCameraShake ? "On" : "Off")}");
     }
 
     public void AllEnemiesDie()
@@ -334,7 +354,11 @@ public class PlayerController : CharacterBase
 
     IEnumerator CoShieldCameraControl()
     {
-        m_virtualShield.SetActive(true);
+        if (m_isCameraShake)
+        {
+            m_virtualShield.SetActive(true);
+        }
+
         yield return Utility.GetWaitForSeconds(1.5f);
         m_virtualShield.SetActive(false);
     }

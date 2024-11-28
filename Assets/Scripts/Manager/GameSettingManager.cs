@@ -20,6 +20,36 @@ public class GameSettingManager : MonoBehaviour
     [SerializeField]
     GameObject m_lightRange;
 
+    [Header("Text Mesh Pro UGUI")]
+    [SerializeField]
+    TextMeshProUGUI m_playerSettings;
+    [SerializeField]
+    TextMeshProUGUI m_playerType;
+    [SerializeField]
+    TextMeshProUGUI m_introduceWarriorText;
+    [SerializeField]
+    TextMeshProUGUI m_introduceRangeText;
+    [SerializeField]
+    TextMeshProUGUI m_playerNameTitle;
+    [SerializeField]
+    TextMeshProUGUI m_playerNameRule;
+    [SerializeField]
+    TextMeshProUGUI m_placeholderText;
+    [SerializeField]
+    TextMeshProUGUI m_movePlayerText;
+    [SerializeField]
+    TextMeshProUGUI m_previousButton;
+    [SerializeField]
+    TextMeshProUGUI m_gameOnButton;
+    [SerializeField]
+    TextMeshProUGUI m_warriorWeaponSetting;
+    [SerializeField]
+    TextMeshProUGUI m_warriorWeaponSelect;
+    [SerializeField]
+    TextMeshProUGUI m_rangeWeaponSetting;
+    [SerializeField]
+    TextMeshProUGUI m_rangeWeaponSelect;
+
     [Header("캐릭터 선택 화살표")]
     [SerializeField]
     GameObject m_arrowIndicator;
@@ -30,11 +60,9 @@ public class GameSettingManager : MonoBehaviour
     [SerializeField]
     GameObject m_commonParent;
     [SerializeField]
+    GameObject m_gameOptionSetting;
+    [SerializeField]
     TMP_InputField m_playerNameInput;
-    [SerializeField]
-    TextMeshProUGUI m_placeholderText;
-    [SerializeField]
-    TextMeshProUGUI m_textMessage;
     [SerializeField]
     GameObject m_warningParent;
     [SerializeField]
@@ -186,6 +214,7 @@ public class GameSettingManager : MonoBehaviour
         m_wearBlueBolt.SetActive(false);
 
         m_playerNameInput.text = null;
+        m_selectWeapon = null;
         m_choicePlayer.SetActive(true);
         m_lightRange.SetActive(true);
         m_lightWarrior.SetActive(true);
@@ -253,21 +282,21 @@ public class GameSettingManager : MonoBehaviour
     {
         if (string.IsNullOrEmpty(m_playerNameInput.text))
         {
-            m_warningText.text = " 이름을 입력해주세요!";
+            m_warningText.text = LanguageManager.Instance.SetUITextLanguage("PleaseInputName");
             StartCoroutine(CoOnOffWarningMessage());
             return;
         }
 
         if (m_playerNameInput.text.Length > m_maxNameLength)
         {
-            m_warningText.text = "영문,공백 포함 8글자 이내로 입력해주세요!";
+            m_warningText.text = LanguageManager.Instance.SetUITextLanguage("InputNameRule");
             StartCoroutine(CoOnOffWarningMessage());
             return;
         }
 
         if (string.IsNullOrEmpty(m_selectWeapon))
         {
-            m_warningText.text = "무기를 선택해주세요!";
+            m_warningText.text = LanguageManager.Instance.SetUITextLanguage("PleaseSelectWeapon");
             StartCoroutine(CoOnOffWarningMessage());
             return;
         }
@@ -284,6 +313,43 @@ public class GameSettingManager : MonoBehaviour
     public void GoTitleScene()
     {
         LoadSceneManager.Instance.LoadSceneAsync(SceneState.Title);
+    }
+
+    void OnEnable()
+    {
+        if (LanguageManager.Instance == null) return;
+
+        if (LanguageManager.Instance != null)
+        {
+            LanguageManager.Instance.OnLanguageChanged += UpdateTexts;
+            UpdateTexts();
+        }
+    }
+
+    void OnDisable()
+    {
+        if (LanguageManager.Instance != null)
+        {
+            LanguageManager.Instance.OnLanguageChanged -= UpdateTexts;
+        }
+    }
+
+    void UpdateTexts()
+    {
+        m_playerSettings.text = LanguageManager.Instance.SetUITextLanguage("PlayerSettings");
+        m_playerType.text = LanguageManager.Instance.SetUITextLanguage("PlayerType");
+        m_introduceWarriorText.text = LanguageManager.Instance.SetUITextLanguage("IntroduceWarrior");
+        m_introduceRangeText.text = LanguageManager.Instance.SetUITextLanguage("IntroduceRange");
+        m_playerNameTitle.text = LanguageManager.Instance.SetUITextLanguage("PlayerNameTitle");
+        m_playerNameRule.text = LanguageManager.Instance.SetUITextLanguage("PlayerNameRule");
+        m_placeholderText.text = LanguageManager.Instance.SetUITextLanguage("PlaceHolder");
+        m_movePlayerText.text = LanguageManager.Instance.SetUITextLanguage("MovePlayer");
+        m_previousButton.text = LanguageManager.Instance.SetUITextLanguage("Previous");
+        m_gameOnButton.text = LanguageManager.Instance.SetUITextLanguage("GameOn");
+        m_warriorWeaponSetting.text = LanguageManager.Instance.SetUITextLanguage("WeaponSetting");
+        m_warriorWeaponSelect.text = LanguageManager.Instance.SetUITextLanguage("WeaponSelect");
+        m_rangeWeaponSetting.text = LanguageManager.Instance.SetUITextLanguage("WeaponSetting");
+        m_rangeWeaponSelect.text = LanguageManager.Instance.SetUITextLanguage("WeaponSelect");
     }
 
     IEnumerator CoResetToIdle(PlayerAnimController animController, float time)
@@ -358,7 +424,7 @@ public class GameSettingManager : MonoBehaviour
     {
         if (name.Length > m_maxNameLength)
         {
-            m_warningText.text = "이름은 8글자 이내로 입력해주세요!";
+            m_warningText.text = LanguageManager.Instance.SetUITextLanguage("InputNameLength");
             StartCoroutine(CoOnOffWarningMessage());
         }
     }
@@ -380,10 +446,9 @@ public class GameSettingManager : MonoBehaviour
         m_rangeCollider = m_playerRange.GetComponent<BoxCollider>();
 
         m_maxNameLength = 8;
-        m_placeholderText.text = "  이름을 입력해주세요";
-        m_textMessage.text = "마우스 좌 클릭으로 캐릭터를 회전시킬 수 있습니다.";
 
         m_choicePlayer.SetActive(true);
+        m_gameOptionSetting.SetActive(true);
         m_lightWarrior.SetActive(true);
         m_lightRange.SetActive(true);
         m_arrowIndicator.SetActive(false);
