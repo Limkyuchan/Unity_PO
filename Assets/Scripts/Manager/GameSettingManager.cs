@@ -76,13 +76,13 @@ public class GameSettingManager : MonoBehaviour
     PlayerAnimController m_rangeAnimController;
     BoxCollider m_warriorCollider;
     BoxCollider m_rangeCollider;
-
-    Vector3 m_warriorInitPosition = new Vector3(-0.600989461f, 0f, -7.62807608f);
+    
+    Vector3 m_warriorInitPosition = new Vector3(-0.660000026f, -0.129999995f, -7.4000001f);
     Quaternion m_warriorInitRoation = new Quaternion(0f, 0.985329509f, 0f, 0.17066291f);
-    Vector3 m_rangeInitPosition = new Vector3(0.70246619f, 0f, -7.62788105f);
+    Vector3 m_rangeInitPosition = new Vector3(0.479999989f, -0.150000006f, -7.42000008f);
     Quaternion m_rangeInitRotation = new Quaternion(0f, 0.987895489f, 0f, -0.155121163f);
-    Vector3 m_targetPosition = new Vector3(-1.27900004f, -0.182690054f, -7.6457777f);
-    Quaternion m_targetRotation = new Quaternion(0.0424279869f, 0.949925661f, -0.0326390304f, 0.307856888f);
+    Vector3 m_targetPosition = new Vector3(-1.29999995f, -0.182690054f, -7.42000008f);
+    Quaternion m_targetRotation = new Quaternion(0.0421416238f, 0.947202921f, -0.0330081023f, 0.3161349f);
 
     string m_selectCharacterType;
     string m_selectWeapon;
@@ -285,7 +285,6 @@ public class GameSettingManager : MonoBehaviour
     {
         LoadSceneManager.Instance.LoadSceneAsync(SceneState.Title);
     }
-
 
     IEnumerator CoResetToIdle(PlayerAnimController animController, float time)
     {

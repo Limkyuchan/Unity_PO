@@ -7,14 +7,11 @@ public class AudioManager : SingletonDontDestroy<AudioManager>
 {
     [Header("Audio Source")]
     [SerializeField]
-    AudioSource m_MainSource;
-    [SerializeField]
     AudioSource m_BGMSource;
     [SerializeField]
     AudioSource m_SFXSource;
 
     [Header("Audio Clip")]
-    public AudioClip m_Main;
     public AudioClip m_BGM;
     public AudioClip m_Victory;
     public AudioClip m_warriorAttack;
@@ -33,14 +30,6 @@ public class AudioManager : SingletonDontDestroy<AudioManager>
         m_BGMSource.Play();
     }
 
-    public void PlayMain()
-    {
-        StopAllAudio();
-        m_MainSource.volume = m_MainVolume;
-        m_MainSource.clip = m_Main;
-        m_MainSource.Play();
-    }
-
     public void PlaySFX(AudioClip clip)
     {
         m_SFXSource.volume = m_SFXVolume;
@@ -56,7 +45,6 @@ public class AudioManager : SingletonDontDestroy<AudioManager>
     public void StopAllAudio()
     {
         m_BGMSource.Stop();
-        m_MainSource.Stop();
     }
 
     public void OnSceneLoaded(Scene scene, LoadSceneMode mode)
@@ -65,11 +53,9 @@ public class AudioManager : SingletonDontDestroy<AudioManager>
         {
             case "Title":
             case "GameSettingScene":
-                PlayBGM();
-                break;
             case "GameScene01":
             case "GameScene02":
-                PlayMain();
+                PlayBGM();
                 break;
         }
     }

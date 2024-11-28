@@ -9,16 +9,9 @@ public class AudioMixerController : MonoBehaviour
     [SerializeField]
     AudioMixer m_AudioMixer;
     [SerializeField]
-    Slider m_MasterSlider;
-    [SerializeField]
     Slider m_BGMSlider;
     [SerializeField]
-    Slider m_MainSlider;
-
-    public void SetMasterVolume(float volume)
-    {
-        m_AudioMixer.SetFloat("Master", Mathf.Log10(volume) * 20);
-    }
+    Slider m_SFXSlider;
 
     public void SetBGMVolume(float volume)
     {
@@ -27,13 +20,12 @@ public class AudioMixerController : MonoBehaviour
 
     public void SetMainVolume(float volume)
     {
-        m_AudioMixer.SetFloat("Main", Mathf.Log10(volume) * 20);
+        m_AudioMixer.SetFloat("SFX", Mathf.Log10(volume) * 20);
     }
 
     void Awake()
     {
-        m_MasterSlider.onValueChanged.AddListener(SetMasterVolume);
         m_BGMSlider.onValueChanged.AddListener(SetBGMVolume);
-        m_MainSlider.onValueChanged.AddListener(SetMainVolume);
+        m_SFXSlider.onValueChanged.AddListener(SetMainVolume);
     }
 }

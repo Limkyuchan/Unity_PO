@@ -14,7 +14,6 @@ public class CameraController : MonoBehaviour
 
     public void SetTarget(Transform cameraRoot)
     {
-        // 메인 카메라는 그대로 설정
         virtualCamera.Follow = cameraRoot;
         virtualCamera.LookAt = cameraRoot;
 
