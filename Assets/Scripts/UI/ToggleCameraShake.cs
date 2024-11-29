@@ -10,20 +10,24 @@ public class ToggleCameraShake : MonoBehaviour
     [SerializeField]
     Toggle toggleOff;
 
-    [SerializeField]
     PlayerController playerController;
+
+    public void SetPlayer(PlayerController player)
+    {
+        playerController = player;
+    }
 
     public void ToggleClick(bool isOn)
     {
+        if (playerController == null) return;
+
         if (toggleOn.isOn)
         {
-            Debug.Log("카메라 진동 On");
-            //playerController.SetCameraShake(true);
+            playerController.SetCameraShake(true);
         }
         else if (toggleOff.isOn)
         {
-            Debug.Log("카메라 진동 Off");
-            //playerController.SetCameraShake(false);
+            playerController.SetCameraShake(false);
         }
     }
 
@@ -35,6 +39,9 @@ public class ToggleCameraShake : MonoBehaviour
         toggleOn.onValueChanged.AddListener(ToggleClick);
         toggleOff.onValueChanged.AddListener(ToggleClick);
 
-        //playerController.SetCameraShake(toggleOn.isOn);
+        if (playerController != null)
+        {
+            playerController.SetCameraShake(toggleOn.isOn);
+        }
     }
 }

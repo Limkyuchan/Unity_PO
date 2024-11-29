@@ -40,12 +40,16 @@ public class LanguageManager : SingletonDontDestroy<LanguageManager>
     {
         switch (key)
         {
+            case "GameSetting":
+                return CurrentLanguage == Language.Korean ? "[O] 게임 설정" : "[O] Game Settings";
             case "GameOption":
-                return CurrentLanguage == Language.Korean ? "게임 옵션" : "GameOption";
+                return CurrentLanguage == Language.Korean ? "게임 옵션" : "Game Option";
             case "Sound":
                 return CurrentLanguage == Language.Korean ? "소리" : "Sound";
             case "CameraShake":
-                return CurrentLanguage == Language.Korean ? "카메라 진동" : "CameraShake";
+                return CurrentLanguage == Language.Korean ? "카메라 진동" : "Camera Shake";
+            case "SetDamage":
+                return CurrentLanguage == Language.Korean ? "▶ 피격 시 카메라 진동" : "▶ Camera vibrations at the time of shooting";
             case "Language":
                 return CurrentLanguage == Language.Korean ? "언어" : "Language";
             case "PlayerSettings":
@@ -80,6 +84,10 @@ public class LanguageManager : SingletonDontDestroy<LanguageManager>
                 return CurrentLanguage == Language.Korean ? "무기를 선택해주세요!" : "Please choose your weapon!";
             case "InputNameRule":
                 return CurrentLanguage == Language.Korean ? "영문,공백 포함 8글자 이내로 입력해주세요!" : "Please enter within 8 characters including English and spaces!";
+            case "ShowInfo":
+                return CurrentLanguage == Language.Korean ? "[H] 정보 보기" : "[H] View Information";
+            case "BossSpawn":
+                return CurrentLanguage == Language.Korean ? "보스 몬스터 출현!" : "Boss Monster is here!";
         }
         return key;
     }
@@ -103,25 +111,25 @@ public class LanguageManager : SingletonDontDestroy<LanguageManager>
             { "CommonGameInfo", new Dictionary<Language, string>
                 {
                     { Language.Korean, "< 게임 정보 >\r\n모든 적과 보스를 해치우는 게임입니다.\r\n맵이 변경되도 정보는 저장됩니다.\r\n적을 해치우면 랜덤으로 효과를 얻습니다.\r\n ▶ 25% 확률: <color=#ff0000>체력</color> 증가 (+20)\r\n ▶ 25% 확률: <color=#ff0000>스킬 게이지</color> 증가 (+10)\r\n ▶ 25% 확률: <color=#ff0000>공격력</color> 증가 (+2)\r\n\n" },
-                    { Language.English, "< Game Info >\r\nThis is a game where you defeat all enemies and bosses.\r\nYour progress is saved even if the map changes.\r\nDefeating enemies grants random effects.\r\n ▶ 25% chance: <color=#ff0000>Health</color> increase (+20)\r\n ▶ 25% chance: <color=#ff0000>Skill gauge</color> increase (+10)\r\n ▶ 25% chance: <color=#ff0000>Attack power</color> increase (+2)\r\n\n" }
+                    { Language.English, "< Game Info >\r\nThis is a game where you defeat all enemies and bosses.\r\nYour progress is saved even if the map changes.\r\nDefeating enemies grants random effects.\r\n ▶ 25% chance: <color=#ff0000>Health</color> (+20)\r\n ▶ 25% chance: <color=#ff0000>Skill gauge</color> (+10)\r\n ▶ 25% chance: <color=#ff0000>Attack power</color> (+2)\r\n\n" }
                 }
             },
             { "BasicKeyInfo", new Dictionary<Language, string>
                 {
-                    { Language.Korean, "< 기본 키 >\r\n[V] 볼륨 조절창을 On/Off 할 수 있습니다.\r\n[Tab] 플레이어의 정보를 확인할 수 있습니다.\r\n[Left Shift] 플레이어의 이동속도가 증가합니다.\r\n[C] 플레이어가 무기를 들어 방어합니다.\r\n" },
-                    { Language.English, "< Basic Keys >\r\n[V] Toggle volume control window On/Off.\r\n[Tab] Check player information.\r\n[Left Shift] Increases player movement speed.\r\n[C] Player raises a weapon to defend.\r\n" }
+                    { Language.Korean, "< 기본 키 >\r\n[O]\r\n 게임 관련 옵션을 설정할 수 있습니다.\r\n[Tab]\r\n 플레이어의 정보를 확인할 수 있습니다.\r\n[Left Shift]\r\n 플레이어의 이동속도가 증가합니다.\r\n[C]\r\n 플레이어가 무기를 들어 방어합니다.\r\n" },
+                    { Language.English, "< Basic Keys >\r\n[O]\r\n Game-related options can be set.\r\n[Tab]\r\n Check player information.\r\n[Left Shift]\r\n Increases player movement speed.\r\n[C]\r\n Player raises a weapon to defend.\r\n" }
                 }
             },
             { "WarriorSkillInfo", new Dictionary<Language, string>
                 {
-                    { Language.Korean, "[Space]\r\n ▶ <color=#ff0000>콤보 공격</color>(4회 중첩)이 가능합니다.\r\n\n< 스킬 공격 >\r\n[Z] ▶ 기본 공격으로 게이지가 쌓입니다.\r\n ▶ Z키를 통해 적을 <color=#ff0000>스턴</color> 시킬 수 있습니다.\r\n[X] ▶ 20초의 쿨타임을 가지는 스킬입니다.\r\n ▶ X키를 통해 적을 <color=#ff0000>넉백</color> 시킬 수 있습니다.\r\n\n" },
-                    { Language.English, "[Space]\r\n ▶ <color=#ff0000>Combo Attack</color>(4 stacks) is possible.\r\n\n< Skill Attacks >\r\n[Z] ▶ Gauge fills with basic attacks.\r\n ▶ Press Z to <color=#ff0000>stun</color> enemies.\r\n[X] ▶ Has a 20-second cooldown.\r\n ▶ Press X to <color=#ff0000>knockback</color> enemies.\r\n\n" }
+                    { Language.Korean, "[Space]\r\n ▶ <color=#ff0000>콤보 공격</color>(4회 중첩)이 가능합니다.\r\n\n< 스킬 공격 >\r\n[Z]\r\n ▶ 기본 공격으로 게이지가 쌓입니다.\r\n ▶ Z키를 통해 적을 <color=#ff0000>스턴</color> 시킬 수 있습니다.\r\n[X]\r\n ▶ 20초의 쿨타임을 가지는 스킬입니다.\r\n ▶ X키를 통해 적을 <color=#ff0000>넉백</color> 시킬 수 있습니다.\r\n\n" },
+                    { Language.English, "[Space]\r\n ▶ <color=#ff0000>Combo Attack</color>(4 stacks) is possible.\r\n\n< Skill Attacks >\r\n[Z]\r\n ▶ Gauge fills with basic attacks.\r\n ▶ Press Z to <color=#ff0000>stun</color> enemies.\r\n[X]\r\n ▶ Has a 20-second cooldown.\r\n ▶ Press X to <color=#ff0000>knockback</color> enemies.\r\n\n" }
                 }
             },
             { "RangeSkillInfo", new Dictionary<Language, string>
                 {
-                    { Language.Korean, "[Space]\r\n ▶ <color=#ff0000>기본 공격</color> 입니다.\r\n\n< 스킬 공격 >\r\n[Z] ▶ 기본 공격으로 게이지가 쌓입니다.\r\n ▶ 기본 공격을 동시에 <color=#ff0000>3발</color> 발사합니다.\r\n[X] ▶ 20초의 쿨타임을 가지는 스킬입니다.\r\n ▶ 범위 스킬로 적들을 <color=#ff0000>스턴</color> 시킵니다.\r\n\n" },
-                    { Language.English, "[Space]\r\n ▶ <color=#ff0000>Basic Attack</color>.\r\n\n< Skill Attacks >\r\n[Z] ▶ Gauge fills with basic attacks.\r\n ▶ Fires <color=#ff0000>3 arrows</color> simultaneously.\r\n[X] ▶ Has a 20-second cooldown.\r\n ▶ AoE skill <color=#ff0000>stuns</color> enemies.\r\n\n" }
+                    { Language.Korean, "[Space]\r\n ▶ <color=#ff0000>기본 공격</color> 입니다.\r\n\n< 스킬 공격 >\r\n[Z]\r\n ▶ 기본 공격으로 게이지가 쌓입니다.\r\n ▶ 기본 공격을 동시에 <color=#ff0000>3발</color> 발사합니다.\r\n[X]\r\n ▶ 20초의 쿨타임을 가지는 스킬입니다.\r\n ▶ 범위 스킬로 적들을 <color=#ff0000>스턴</color> 시킵니다.\r\n\n" },
+                    { Language.English, "[Space]\r\n ▶ <color=#ff0000>Basic Attack</color>.\r\n\n< Skill Attacks >\r\n[Z]\r\n ▶ Gauge fills with basic attacks.\r\n ▶ Fires <color=#ff0000>3 arrows</color> simultaneously.\r\n[X]\r\n ▶ Has a 20-second cooldown.\r\n ▶ Make enemies <color=#ff0000>stun</color> with the range skill\r\n\n" }
                 }
             },
             { "CurrentScene", new Dictionary<Language, string>

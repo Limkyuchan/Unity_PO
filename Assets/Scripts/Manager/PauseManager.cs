@@ -6,15 +6,31 @@ public class PauseManager : MonoBehaviour
 {
     [SerializeField]
     UIGameInformationMessage m_introduceGame;
+    [SerializeField]
+    UIGameOptionController m_gameOptionController;
 
     bool m_isPaused = false;
     bool m_prevPopupState = false;
+    bool m_prevOptionState = false;
 
     public bool IsPaused { get { return m_isPaused; } }
 
-    void CheckPopupState()
+    void CheckState()
     {
+        bool curOptionState = m_gameOptionController.IsGameOptionOpen();
         bool curPopupState = PopupManager.Instance.IsPopupOpened;
+
+        if (curOptionState != m_prevOptionState)
+        {
+            if (curOptionState)
+            {
+                PauseGame();
+            }
+            else
+            {
+                ResumeGame();
+            }
+        }
 
         if (curPopupState != m_prevPopupState)
         {
@@ -29,6 +45,7 @@ public class PauseManager : MonoBehaviour
         }
 
         m_prevPopupState = curPopupState;
+        m_prevOptionState = curOptionState;
     }
 
     void PauseGame()
@@ -49,16 +66,16 @@ public class PauseManager : MonoBehaviour
 
     void Update()
     {
-        CheckPopupState();
+        CheckState();
 
         // 게임 정보 확인하기
-        if (Input.GetKeyDown(KeyCode.H) && !PopupManager.Instance.IsPopupOpened)
+        if (Input.GetKeyDown(KeyCode.H) && !PopupManager.Instance.IsPopupOpened && !m_gameOptionController.IsGameOptionOpen())
         {
             m_introduceGame.IntroduceHowToPlayGame();
         }
 
         // 주인공 스탯 확인하기
-        if (Input.GetKeyDown(KeyCode.Tab) && !PopupManager.Instance.IsPopupOpened)
+        if (Input.GetKeyDown(KeyCode.Tab) && !PopupManager.Instance.IsPopupOpened && !m_gameOptionController.IsGameOptionOpen())
         {
             m_introduceGame.CheckPlayerStat();
         }

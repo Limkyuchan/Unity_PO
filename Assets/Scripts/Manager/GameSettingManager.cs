@@ -315,25 +315,6 @@ public class GameSettingManager : MonoBehaviour
         LoadSceneManager.Instance.LoadSceneAsync(SceneState.Title);
     }
 
-    void OnEnable()
-    {
-        if (LanguageManager.Instance == null) return;
-
-        if (LanguageManager.Instance != null)
-        {
-            LanguageManager.Instance.OnLanguageChanged += UpdateTexts;
-            UpdateTexts();
-        }
-    }
-
-    void OnDisable()
-    {
-        if (LanguageManager.Instance != null)
-        {
-            LanguageManager.Instance.OnLanguageChanged -= UpdateTexts;
-        }
-    }
-
     void UpdateTexts()
     {
         m_playerSettings.text = LanguageManager.Instance.SetUITextLanguage("PlayerSettings");
@@ -426,6 +407,25 @@ public class GameSettingManager : MonoBehaviour
         {
             m_warningText.text = LanguageManager.Instance.SetUITextLanguage("InputNameLength");
             StartCoroutine(CoOnOffWarningMessage());
+        }
+    }
+
+    void OnEnable()
+    {
+        if (LanguageManager.Instance == null) return;
+
+        if (LanguageManager.Instance != null)
+        {
+            LanguageManager.Instance.OnLanguageChanged += UpdateTexts;
+            UpdateTexts();
+        }
+    }
+
+    void OnDisable()
+    {
+        if (LanguageManager.Instance != null)
+        {
+            LanguageManager.Instance.OnLanguageChanged -= UpdateTexts;
         }
     }
 

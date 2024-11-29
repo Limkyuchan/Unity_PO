@@ -5,13 +5,13 @@ using UnityEngine;
 public class MouseCursorController : MonoBehaviour
 {
     [SerializeField]
-    GameObject m_AudioSlider;
+    GameObject m_gameOption;
 
     void MouseCursorControl()
     {
         if (PopupManager.Instance != null)
         {
-            if (PopupManager.Instance.IsPopupOpened || m_AudioSlider.activeSelf)
+            if (PopupManager.Instance.IsPopupOpened || m_gameOption.activeSelf)
             {
                 Cursor.lockState = CursorLockMode.None;
                 Cursor.visible = true;

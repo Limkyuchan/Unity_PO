@@ -768,6 +768,7 @@ MonoBehaviour:
   m_playerNameText: {fileID: 0}
   m_playerHUD: {fileID: 0}
   m_playerSkillGauge: {fileID: 0}
+  m_toggleCameraShake: {fileID: 0}
   m_skillZCoolTime: {fileID: 0}
   m_skillZImage: {fileID: 0}
   m_skillXCoolTime: {fileID: 0}

@@ -33,6 +33,30 @@ public class UIBossSpawn : MonoBehaviour
         m_enemyManager.CreateEnemy(EnemyManager.EnemyType.BossMonster, m_bossPath, 1);
     }
 
+    void UpdateTexts()
+    {
+        m_bossSpawnText.text = LanguageManager.Instance.SetUITextLanguage("BossSpawn");
+    }
+
+    void OnEnable()
+    {
+        if (LanguageManager.Instance == null) return;
+
+        if (LanguageManager.Instance != null)
+        {
+            LanguageManager.Instance.OnLanguageChanged += UpdateTexts;
+            UpdateTexts();
+        }
+    }
+
+    void OnDisable()
+    {
+        if (LanguageManager.Instance != null)
+        {
+            LanguageManager.Instance.OnLanguageChanged -= UpdateTexts;
+        }
+    }
+
     void Start()
     {
         m_bossSpawnText.gameObject.SetActive(false);

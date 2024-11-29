@@ -57,6 +57,8 @@ public class PlayerController : CharacterBase
     [SerializeField]
     UISkillGauge_Controller m_playerSkillGauge;
     [SerializeField]
+    ToggleCameraShake m_toggleCameraShake;
+    [SerializeField]
     FillAmount m_skillZCoolTime;
     [SerializeField]
     UIChangeImage m_skillZImage;
@@ -403,6 +405,7 @@ public class PlayerController : CharacterBase
         hash_Speed = Animator.StringToHash("Speed");
 
         m_indicator.SetPlayer(this);
+        m_toggleCameraShake.SetPlayer(this);
         m_playerStat.SetPlayer(this);
         m_skillZImage.SetPlayer(this);
         m_skillXImage.SetPlayer(this);

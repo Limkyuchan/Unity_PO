@@ -1,9 +1,12 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 
 public class UIGameOptionController : MonoBehaviour
 {
+    [SerializeField]
+    TextMeshProUGUI m_gameSettingText;
     [SerializeField]
     GameObject m_gameOption;
 
@@ -23,10 +26,34 @@ public class UIGameOptionController : MonoBehaviour
         }
     }
 
+    void UpdateTexts()
+    {
+        m_gameSettingText.text = LanguageManager.Instance.SetUITextLanguage("GameSetting");
+    }
+
     void ToggleGameOption()
     {
         m_isOpen = !m_isOpen;
         m_gameOption.SetActive(m_isOpen);
+    }
+
+    void OnEnable()
+    {
+        if (LanguageManager.Instance == null) return;
+
+        if (LanguageManager.Instance != null)
+        {
+            LanguageManager.Instance.OnLanguageChanged += UpdateTexts;
+            UpdateTexts();
+        }
+    }
+
+    void OnDisable()
+    {
+        if (LanguageManager.Instance != null)
+        {
+            LanguageManager.Instance.OnLanguageChanged -= UpdateTexts;
+        }
     }
 
     void Start()
