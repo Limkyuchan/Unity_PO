@@ -32,7 +32,7 @@ public class WarriorAttack : MonoBehaviour, IAttackStrategy
             {
                 if (m_attackArea.PlayerUnitList != null)
                 {
-                    enemy.GetPlayer.SetDamage(enemy.GetStatus.attack);
+                    enemy.GetPlayer.SetDamage(enemy.GetStatus.attack, enemy);
                 }
             }
         }

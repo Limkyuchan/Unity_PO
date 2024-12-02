@@ -626,6 +626,7 @@ GameObject:
   - component: {fileID: 7663154492420302787}
   - component: {fileID: 7444870003379896631}
   - component: {fileID: 7164537805373417021}
+  - component: {fileID: 7876256944345951183}
   - component: {fileID: 4263605468614975526}
   - component: {fileID: 6444900272773837446}
   m_Layer: 6
@@ -728,6 +729,72 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_comboList: 05000000060000000700000008000000
+--- !u!114 &7876256944345951183
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1290149118588912365}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 70dc8251fb9539c48b04a9f78fb4e817, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_curve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 2
+      outSlope: 2
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 0.11719646
+      value: 0.43986422
+      inSlope: 4.386365
+      outSlope: 4.386365
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.19269197
+    - serializedVersion: 3
+      time: 0.2385164
+      value: 0.8198377
+      inSlope: 2.0145617
+      outSlope: 2.0145617
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.23078029
+    - serializedVersion: 3
+      time: 0.42355472
+      value: 0.9804479
+      inSlope: 0.048014976
+      outSlope: 0.048014976
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.12945993
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  m_from: {x: 0, y: 0, z: 0}
+  m_to: {x: 0, y: 0, z: 0}
+  m_duration: 0.5
 --- !u!114 &4263605468614975526
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5583,6 +5650,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 7068455920865444750}
     m_Modifications:
+    - target: {fileID: 1374603723265483920, guid: 634b058a895da614c97c762281b4fbb3, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     - target: {fileID: 2366270476226848910, guid: 634b058a895da614c97c762281b4fbb3, type: 3}
       propertyPath: m_Name
       value: WeaponSword
@@ -5594,6 +5665,10 @@ PrefabInstance:
     - target: {fileID: 2366270476226848910, guid: 634b058a895da614c97c762281b4fbb3, type: 3}
       propertyPath: m_IsActive
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3095381445303810389, guid: 634b058a895da614c97c762281b4fbb3, type: 3}
+      propertyPath: m_Layer
+      value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 6416500306632540534, guid: 634b058a895da614c97c762281b4fbb3, type: 3}
       propertyPath: m_LocalScale.y
@@ -5638,6 +5713,10 @@ PrefabInstance:
     - target: {fileID: 6416500306632540534, guid: 634b058a895da614c97c762281b4fbb3, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7794778278265493684, guid: 634b058a895da614c97c762281b4fbb3, type: 3}
+      propertyPath: m_Layer
+      value: 6
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

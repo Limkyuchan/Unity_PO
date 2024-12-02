@@ -16,12 +16,10 @@ public class ToggleSelectLanguage : MonoBehaviour
 
         if (toggleKorean.isOn)
         {
-            Debug.Log("Korean");
             LanguageManager.Instance.SetLanguage(LanguageManager.Language.Korean);
         }
         else if (toggleEnglish.isOn)
         {
-            Debug.Log("English");
             LanguageManager.Instance.SetLanguage(LanguageManager.Language.English);
         }
         

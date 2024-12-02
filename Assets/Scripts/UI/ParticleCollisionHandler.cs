@@ -24,7 +24,7 @@ public class ParticleCollisionHandler : MonoBehaviour
     {
         if (other.CompareTag("Player"))
         {
-            m_enemy.GetPlayer.SetDamage(m_enemy.GetStatus.attack);
+            m_enemy.GetPlayer.SetDamage(m_enemy.GetStatus.attack, m_enemy);
         }
 
         if (other.CompareTag("Enemy"))
@@ -48,9 +48,6 @@ public class ParticleCollisionHandler : MonoBehaviour
                 {
                     m_player.EnableSkill();
                 }
-
-                Debug.Log("Damage: " + damage);
-                Debug.Log("Gauge: " + m_player.PlayerCurSkillGauge);
             }
         }
     }

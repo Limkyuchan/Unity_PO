@@ -1,7 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
-using Unity.VisualScripting;
 using UnityEditor;
 using UnityEngine;
 
@@ -19,6 +18,7 @@ public class PlayerController : CharacterBase
     CharacterController m_charCtrl;
     PlayerAnimController m_animCtrl;
     SkillController m_skillCtrl;
+    HittedFeedback m_hittedFeedback;
     IAttackStrategy m_attackStrategy;
 
     [Header("게임 정보")]
@@ -167,7 +167,7 @@ public class PlayerController : CharacterBase
     #endregion Public Properties
 
     #region Public Methods
-    public override void SetDamage(float damage)
+    public override void SetDamage(float damage, EnemyController m_enemy)
     {
         if (!IsShield)
         {
@@ -180,6 +180,17 @@ public class PlayerController : CharacterBase
             if (m_isCameraShake)
             {
                 m_virtualCamEffect.SetActive(true);
+            }
+
+            if (damage > 0)
+            {
+                Vector3 from = transform.position;
+                Vector3 dir = transform.position - m_enemy.transform.position;
+                dir.y = 0f;
+                Vector3 to = from + dir.normalized * 1.5f; 
+                float knockbackDuration = 0.3f;         
+
+                m_hittedFeedback.Play(from, to, knockbackDuration);
             }
         }
         else
@@ -337,10 +348,9 @@ public class PlayerController : CharacterBase
     {
         yield return Utility.GetWaitForSeconds(1.5f);
 
-        PopupManager.Instance.Popup_OpenOkCancel("<color=#ff0000>GameOver!</color>",
-            "플레이어가 사망하여 게임이 종료되었습니다. \r\n" +
-            "\"확인\" 클릭 시 타이틀 화면으로 이동합니다. \r\n" +
-            "\"종료\" 클릭 시 게임을 종료합니다.", () =>
+        PopupManager.Instance.Popup_OpenOkCancel(
+            LanguageManager.Instance.GetLocalizedText("GameOver"),
+            LanguageManager.Instance.GetLocalizedText("GameOverText"), () =>
             {
                 LoadSceneManager.Instance.LoadSceneAsync(SceneState.Title);
                 PopupManager.Instance.Popup_Close();
@@ -351,7 +361,7 @@ public class PlayerController : CharacterBase
 #else
                 Application.Quit();
 #endif
-            }, "확인", "종료");
+            }, LanguageManager.Instance.GetLocalizedText("OkButton"), LanguageManager.Instance.GetLocalizedText("EndButton"));
     }
 
     IEnumerator CoShieldCameraControl()
@@ -401,6 +411,7 @@ public class PlayerController : CharacterBase
     {
         m_animCtrl = GetComponent<PlayerAnimController>();
         m_charCtrl = GetComponent<CharacterController>();
+        m_hittedFeedback = GetComponent<HittedFeedback>();
 
         hash_Speed = Animator.StringToHash("Speed");
 

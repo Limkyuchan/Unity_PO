@@ -4,7 +4,7 @@ using UnityEngine;
 
 public abstract class CharacterBase : MonoBehaviour
 {
-    public abstract void SetDamage(float damage);
+    public abstract void SetDamage(float damage, EnemyController enemy);
     public abstract void SetDamage(SkillData skill, DamageType type, float damage);
     public abstract Transform GetTransform();
 }

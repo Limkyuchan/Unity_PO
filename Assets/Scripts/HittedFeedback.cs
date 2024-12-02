@@ -5,7 +5,6 @@ using UnityEngine.AI;
 
 public class HittedFeedback : MonoBehaviour
 {
-    NavMeshAgent m_navAgent;
     [SerializeField]
     AnimationCurve m_curve = AnimationCurve.Linear(0, 0, 1, 1);
     [SerializeField]
@@ -14,6 +13,9 @@ public class HittedFeedback : MonoBehaviour
     Vector3 m_to;
     [SerializeField]
     float m_duration = 1f;
+
+    NavMeshAgent m_navAgent;
+    CharacterController m_characterController;
 
     IEnumerator CoTweenProcess()
     {
@@ -31,7 +33,20 @@ public class HittedFeedback : MonoBehaviour
 
             value = m_curve.Evaluate(time);
             pos = m_from * (1f - value) + m_to * value;
-            m_navAgent.Move(pos - transform.position);
+
+            if (m_navAgent != null)
+            {
+                m_navAgent.Move(pos - transform.position);
+            }
+            else if (m_characterController != null)
+            {
+                m_characterController.Move(pos - transform.position);
+            }
+            else
+            {
+                transform.position = pos;
+            }
+
             time += Time.deltaTime / m_duration;
             yield return null;
         }
@@ -54,5 +69,6 @@ public class HittedFeedback : MonoBehaviour
     void Start()
     {
         m_navAgent = GetComponent<NavMeshAgent>();
+        m_characterController = GetComponent<CharacterController>();
     }
 }

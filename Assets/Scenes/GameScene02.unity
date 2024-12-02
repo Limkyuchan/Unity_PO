@@ -8,8 +8,8 @@ OcclusionCullingSettings:
     smallestOccluder: 5
     smallestHole: 0.25
     backfaceThreshold: 100
-  m_SceneGUID: 00000000000000000000000000000000
-  m_OcclusionCullingData: {fileID: 0}
+  m_SceneGUID: c4941a5f16c81ac4dbf5aa3daddb2148
+  m_OcclusionCullingData: {fileID: 36300000, guid: a2c553f6af11b0f45b80e6441c74a110, type: 2}
 --- !u!104 &2
 RenderSettings:
   m_ObjectHideFlags: 0
@@ -2827,6 +2827,7 @@ GameObject:
   - component: {fileID: 963194226}
   - component: {fileID: 963194229}
   - component: {fileID: 963194230}
+  - component: {fileID: 963194231}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -2986,6 +2987,51 @@ MonoBehaviour:
     mipBias: 0
     varianceClampScale: 0.9
     contrastAdaptiveSharpening: 0
+--- !u!114 &963194231
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 963194225}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0e633d7bd55f64345a0a87b75a5c1f79, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  layerCallDist:
+  - 0
+  - 0
+  - 0
+  - 30
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
 --- !u!1 &968323321
 GameObject:
   m_ObjectHideFlags: 0
@@ -7610,6 +7656,18 @@ PrefabInstance:
       propertyPath: m_Name
       value: Player_Warrior
       objectReference: {fileID: 0}
+    - target: {fileID: 3587041477397912101, guid: 13dab98559222d34b8fa3d2d1a698050, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 3811906261136375634, guid: 13dab98559222d34b8fa3d2d1a698050, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 5690496530838726145, guid: 13dab98559222d34b8fa3d2d1a698050, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     - target: {fileID: 6444900272773837446, guid: 13dab98559222d34b8fa3d2d1a698050, type: 3}
       propertyPath: m_indicator
       value: 
@@ -7702,6 +7760,10 @@ PrefabInstance:
       propertyPath: m_toggleCameraShake
       value: 
       objectReference: {fileID: 995963155}
+    - target: {fileID: 8583341620030356420, guid: 13dab98559222d34b8fa3d2d1a698050, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     - target: {fileID: 9173695580758162371, guid: 13dab98559222d34b8fa3d2d1a698050, type: 3}
       propertyPath: m_LocalPosition.x
       value: 11.98

@@ -198,6 +198,24 @@ public class LanguageManager : SingletonDontDestroy<LanguageManager>
                     { Language.English, "Cancel" }
                 }
             },
+            { "EndButton", new Dictionary<Language, string>
+                {
+                    { Language.Korean, "종료" },
+                    { Language.English, "End" }
+                }
+            },
+            { "GameOver", new Dictionary<Language, string>
+                {
+                    { Language.Korean, "<color=#ff0000>게임 종료!</color>" },
+                    { Language.English, "<color=#ff0000>GameOver!</color>" }
+                }
+            },
+            { "GameOverText", new Dictionary<Language, string>
+                {
+                    { Language.Korean, "플레이어가 사망하여 게임이 종료되었습니다. \r\n" + "\"확인\" 클릭 시 타이틀 화면으로 이동합니다. \r\n" + "\"종료\" 클릭 시 게임을 종료합니다." },
+                    { Language.English, "The game has been shut down because the player died. \r\n" + "Click \"OK\" to navigate to the title screen. \r\n" + "Click \"End\" to exit the game." }
+                }
+            }
         };
     }
 

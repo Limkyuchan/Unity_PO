@@ -165,7 +165,7 @@ public class EnemyController : CharacterBase
         }
     }
 
-    public override void SetDamage(float damage) { }
+    public override void SetDamage(float damage, EnemyController enemy) { }
 
     public override Transform GetTransform()
     {

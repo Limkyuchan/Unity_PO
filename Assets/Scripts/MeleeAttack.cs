@@ -30,7 +30,7 @@ public class MeleeAttack : MonoBehaviour, IAttackStrategy
             {
                 if (m_attackArea.PlayerUnitList != null)
                 {
-                    enemy.GetPlayer.SetDamage(enemy.GetStatus.attack);
+                    enemy.GetPlayer.SetDamage(enemy.GetStatus.attack, enemy);
                 }
             }
         }
