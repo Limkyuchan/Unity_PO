@@ -4,7 +4,6 @@ using UnityEngine;
 
 public interface IAttackStrategy
 {
-    //public void Attack(EnemyController enemy);
     public void AnimEvent_Attack(CharacterBase target);
 
     public void BasicAttack(CharacterBase target);

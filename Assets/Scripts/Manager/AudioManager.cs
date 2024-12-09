@@ -5,6 +5,7 @@ using UnityEngine.SceneManagement;
 
 public class AudioManager : SingletonDontDestroy<AudioManager>
 {
+    #region Constants and Fields
     [Header("Audio Source")]
     [SerializeField]
     AudioSource m_BGMSource;
@@ -23,10 +24,13 @@ public class AudioManager : SingletonDontDestroy<AudioManager>
     [Range(0f, 1f)] public float m_SFXVolume = 0.5f;
 
     static readonly HashSet<string> m_scenesWithBGM = new HashSet<string> { "Title", "GameSettingScene", "GameScene01", "GameScene02" };
+    bool m_allowSFX = true;
+    #endregion  Constants and Fields
 
+    #region Public Methods
     public void PlayBGM()
     {
-        StopAllAudio();
+        StopBGMAudio();
         m_BGMSource.volume = m_BGMVolume;
         m_BGMSource.clip = m_BGM;
         m_BGMSource.Play();
@@ -34,19 +38,21 @@ public class AudioManager : SingletonDontDestroy<AudioManager>
 
     public void PlaySFX(AudioClip clip)
     {
+        if (!m_allowSFX) return;
         m_SFXSource.volume = m_SFXVolume;
         m_SFXSource.PlayOneShot(clip);
     }
 
     public void PlaySFX(AudioClip clip, float sec)
     {
+        if (!m_allowSFX) return;
         m_SFXSource.volume = m_SFXVolume;
         StartCoroutine(CoPlaySFX(clip, sec));
     }
 
-    public void StopAllAudio()
+    public void EnableSFX(bool enable)
     {
-        m_BGMSource.Stop();
+        m_allowSFX = enable;
     }
 
     public void OnSceneLoaded(Scene scene, LoadSceneMode mode)
@@ -57,14 +63,38 @@ public class AudioManager : SingletonDontDestroy<AudioManager>
         }
     }
 
+    public void StopAllAudio()
+    {
+        m_BGMSource.Stop();
+        m_SFXSource.Stop();
+        m_SFXSource.clip = null;
+    }
+    #endregion Public Methods
+
+    #region Coroutine Methods
     IEnumerator CoPlaySFX(AudioClip clip, float sec)
     {
         yield return Utility.GetWaitForSeconds(sec);
+
+        if (!m_allowSFX)
+        {
+            yield break;
+        }
         m_SFXSource.PlayOneShot(clip);
     }
+    #endregion Coroutine Methods
 
+    #region Methods
+    void StopBGMAudio()
+    {
+        m_BGMSource.Stop();
+    }
+    #endregion Methods
+
+    #region Unity Methods
     protected override void OnAwake()
     {
         SceneManager.sceneLoaded += OnSceneLoaded;
     }
+    #endregion Unity Methods
 }

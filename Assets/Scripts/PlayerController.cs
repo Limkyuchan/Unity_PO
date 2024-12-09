@@ -45,7 +45,7 @@ public class PlayerController : CharacterBase
 
     [Header("UI Á¤º¸")]
     [SerializeField]
-    IndicatorManager m_indicator;
+    OffScreenIndicatorManager m_offScreenIndicator;
     [SerializeField]
     UIFollowTarget m_followTarget;
     [SerializeField]
@@ -182,16 +182,13 @@ public class PlayerController : CharacterBase
                 m_virtualCamEffect.SetActive(true);
             }
 
-            if (damage > 0)
-            {
-                Vector3 from = transform.position;
-                Vector3 dir = transform.position - m_enemy.transform.position;
-                dir.y = 0f;
-                Vector3 to = from + dir.normalized * 1.5f; 
-                float knockbackDuration = 0.3f;         
+            Vector3 from = transform.position;
+            Vector3 dir = transform.position - m_enemy.transform.position;
+            dir.y = 0f;
+            Vector3 to = from + dir.normalized * 1.5f; 
+            float knockbackDuration = 0.3f;         
 
-                m_hittedFeedback.Play(from, to, knockbackDuration);
-            }
+            m_hittedFeedback.Play(from, to, knockbackDuration);
         }
         else
         {
@@ -205,11 +202,6 @@ public class PlayerController : CharacterBase
     }
 
     public override void SetDamage(SkillData skill, DamageType type, float damage) { }
-
-    public override Transform GetTransform()
-    {
-        return this.transform;
-    }
 
     public DamageType AttackDecision(EnemyController enemy, SkillData skill, StatusData status, out float damage)
     {
@@ -349,19 +341,19 @@ public class PlayerController : CharacterBase
         yield return Utility.GetWaitForSeconds(1.5f);
 
         PopupManager.Instance.Popup_OpenOkCancel(
-            LanguageManager.Instance.GetLocalizedText("GameOver"),
-            LanguageManager.Instance.GetLocalizedText("GameOverText"), () =>
-            {
-                LoadSceneManager.Instance.LoadSceneAsync(SceneState.Title);
-                PopupManager.Instance.Popup_Close();
-            }, () =>
-            {
+        LanguageManager.Instance.GetLocalizedText("GameOver"),
+        LanguageManager.Instance.GetLocalizedText("GameOverText"), () =>
+        {
+            LoadSceneManager.Instance.LoadSceneAsync(SceneState.Title);
+            PopupManager.Instance.Popup_Close();
+        }, () =>
+        {
 #if UNITY_EDITOR
-                EditorApplication.isPlaying = false;
+            EditorApplication.isPlaying = false;
 #else
-                Application.Quit();
+            Application.Quit();
 #endif
-            }, LanguageManager.Instance.GetLocalizedText("OkButton"), LanguageManager.Instance.GetLocalizedText("EndButton"));
+        }, LanguageManager.Instance.GetLocalizedText("OkButton"), LanguageManager.Instance.GetLocalizedText("EndButton"));
     }
 
     IEnumerator CoShieldCameraControl()
@@ -409,13 +401,13 @@ public class PlayerController : CharacterBase
 
     void Start()
     {
-        m_animCtrl = GetComponent<PlayerAnimController>();
         m_charCtrl = GetComponent<CharacterController>();
+        m_animCtrl = GetComponent<PlayerAnimController>();
         m_hittedFeedback = GetComponent<HittedFeedback>();
 
         hash_Speed = Animator.StringToHash("Speed");
 
-        m_indicator.SetPlayer(this);
+        m_offScreenIndicator.SetPlayer(this);
         m_toggleCameraShake.SetPlayer(this);
         m_playerStat.SetPlayer(this);
         m_skillZImage.SetPlayer(this);

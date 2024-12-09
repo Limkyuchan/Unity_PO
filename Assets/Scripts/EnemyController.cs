@@ -27,6 +27,8 @@ public class EnemyController : CharacterBase
     NavMeshAgent m_navAgent;
     PathController m_path;
     HUD_Controller m_hudCtrl;
+    DetectionIndicatorManager m_detectIndicatorManager;
+    RectTransform m_currentIndicator;
     EnemyManager.EnemyType m_enemyType;
     IMovementStrategy m_movementStrategy;
     IAttackStrategy m_attackStrategy;
@@ -48,6 +50,7 @@ public class EnemyController : CharacterBase
     bool m_isChase;                 // AiState 현재 상태 확인
     bool m_isPatrol;                // AiState 현재 상태 확인
     bool m_isEnemyAttack;
+    bool m_isDetectedPlayer;
     bool m_isInvokeJumpPatrolMove;  // Invoke가 호출된 상태인지 확인
     bool m_isEnemyPatrol;           // Patrol 중인지 확인
     bool m_isDebuffImmunity;
@@ -167,11 +170,6 @@ public class EnemyController : CharacterBase
 
     public override void SetDamage(float damage, EnemyController enemy) { }
 
-    public override Transform GetTransform()
-    {
-        return this.transform;
-    }
-
     public void SetState(AiState state)
     {
         m_state = state;
@@ -247,6 +245,22 @@ public class EnemyController : CharacterBase
         }
     }
 
+    IEnumerator CoShowIndicator()
+    {
+        if (m_currentIndicator != null)
+        {
+            // Dummy_HUD의 위치로 Indicator 생성
+            Vector3 worldPos = Dummy_HUD.position;
+            Vector3 screenPos = Camera.main.WorldToScreenPoint(worldPos);
+            m_currentIndicator.position = screenPos;
+
+            // 일정 시간 후 Indicator 비활성화
+            yield return Utility.GetWaitForSeconds(0.8f);
+            m_detectIndicatorManager.HideIndicator(m_currentIndicator);
+            m_currentIndicator = null;
+        }
+    }
+
     IEnumerator CoSetDebuff(float duration)
     {
         yield return Utility.GetWaitForSeconds(duration);
@@ -266,16 +280,29 @@ public class EnemyController : CharacterBase
     {
         var start = transform.position + Vector3.up * 0.3f;
         var end = target.position + Vector3.up * 0.3f;
-
         RaycastHit hit;
         if (Physics.Raycast(start, (end - start).normalized, out hit, distance, m_playerLayer | m_backgroundLayer))
         {
             if (hit.transform.CompareTag("Player"))
             {
                 Debug.DrawRay(start, (end - start).normalized * hit.distance, Color.magenta, 0.5f);
+
+                // 주인공을 발견했을 때 Indicator 활성화
+                if (!m_isDetectedPlayer)
+                {
+                    m_isDetectedPlayer = true; // 감지 상태 설정
+                    m_currentIndicator = m_detectIndicatorManager.ShowIndicator();
+                    StartCoroutine(CoShowIndicator());
+                }
                 return true;
             }
         }
+
+        if (m_isDetectedPlayer)
+        {
+            m_isDetectedPlayer = false;
+        }
+
         return false;
     }
     
@@ -431,17 +458,20 @@ public class EnemyController : CharacterBase
 
     void Start()
     {
-        m_animCtrl = GetComponent<EnemyAnimController>();
         m_navAgent = GetComponent<NavMeshAgent>();
+        m_animCtrl = GetComponent<EnemyAnimController>();
         m_hittedFeedback = GetComponent<HittedFeedback>();
+        m_detectIndicatorManager = FindObjectOfType<DetectionIndicatorManager>();
         m_maxHp = StatusTable.Instance.GetStatusData(this.Type).hpMax;
         m_currentHp = StatusTable.Instance.GetStatusData(this.Type).hp;
 
         m_playerLayer = 1 << LayerMask.NameToLayer("Player");
         m_backgroundLayer = 1 << LayerMask.NameToLayer("Background");
-        m_isInvokeJumpPatrolMove = false;
+        m_currentIndicator = null;
         m_isEnemyAttack = false;
+        m_isDetectedPlayer = false;
         m_isDebuffImmunity = false;
+        m_isInvokeJumpPatrolMove = false;
 
         switch (Type)
         {
