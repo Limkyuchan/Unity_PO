@@ -49,6 +49,8 @@ public class PlayerController : CharacterBase
     [SerializeField]
     UIFollowTarget m_followTarget;
     [SerializeField]
+    DirectionArrow m_directionArrow;
+    [SerializeField]
     UIPlayerStat m_playerStat;
     [SerializeField]
     TextMeshProUGUI m_playerNameText;
@@ -409,6 +411,7 @@ public class PlayerController : CharacterBase
 
         m_offScreenIndicator.SetPlayer(this);
         m_toggleCameraShake.SetPlayer(this);
+        m_directionArrow.SetPlayer(this);
         m_playerStat.SetPlayer(this);
         m_skillZImage.SetPlayer(this);
         m_skillXImage.SetPlayer(this);

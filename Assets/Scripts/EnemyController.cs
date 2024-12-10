@@ -250,7 +250,7 @@ public class EnemyController : CharacterBase
         if (m_currentIndicator != null)
         {
             // Dummy_HUD의 위치로 Indicator 생성
-            Vector3 worldPos = Dummy_HUD.position;
+            Vector3 worldPos = Dummy_HUD.position + Vector3.up * 0.5f;
             Vector3 screenPos = Camera.main.WorldToScreenPoint(worldPos);
             m_currentIndicator.position = screenPos;
 

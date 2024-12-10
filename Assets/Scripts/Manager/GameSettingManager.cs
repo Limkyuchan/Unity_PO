@@ -235,6 +235,8 @@ public class GameSettingManager : MonoBehaviour
 
     public void SelectWeapon(string weapon)
     {
+        AudioManager.Instance.StopSFX();
+
         m_selectWeapon = weapon;
 
         if (m_selectCharacterType == "Warrior")

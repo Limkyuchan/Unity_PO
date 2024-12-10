@@ -50,6 +50,11 @@ public class AudioManager : SingletonDontDestroy<AudioManager>
         StartCoroutine(CoPlaySFX(clip, sec));
     }
 
+    public void StopSFX()
+    {
+        m_SFXSource.Stop();
+    }
+
     public void EnableSFX(bool enable)
     {
         m_allowSFX = enable;
