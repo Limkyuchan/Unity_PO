@@ -8802,28 +8802,46 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_choicePlayer: {fileID: 1000482704}
-  m_buttonWarrior: {fileID: 498959334}
-  m_buttonRange: {fileID: 381396069}
-  m_settingUI: {fileID: 1425443214}
-  m_settingText: {fileID: 1838733368}
-  m_commonParent: {fileID: 1757796451}
-  m_playerNameInput: {fileID: 2038617686}
+  m_introduceWarrior: {fileID: 0}
+  m_introduceRange: {fileID: 0}
+  m_pointLight: {fileID: 0}
+  m_lightWarrior: {fileID: 0}
+  m_lightRange: {fileID: 0}
+  m_playerSettings: {fileID: 0}
+  m_playerType: {fileID: 0}
+  m_introduceWarriorText: {fileID: 0}
+  m_introduceRangeText: {fileID: 0}
+  m_playerNameTitle: {fileID: 0}
+  m_playerNameRule: {fileID: 0}
   m_placeholderText: {fileID: 8027816}
-  m_textMessage: {fileID: 640246708}
+  m_movePlayerText: {fileID: 0}
+  m_previousButton: {fileID: 0}
+  m_gameOnButton: {fileID: 0}
+  m_warriorWeaponSetting: {fileID: 0}
+  m_warriorWeaponSelect: {fileID: 0}
+  m_rangeWeaponSetting: {fileID: 0}
+  m_rangeWeaponSelect: {fileID: 0}
+  m_arrowIndicator: {fileID: 0}
+  m_arrowOffset: {x: 0, y: 1.5, z: 0}
+  m_commonParent: {fileID: 1757796451}
+  m_gameOptionSetting: {fileID: 0}
+  m_playerNameInput: {fileID: 2038617686}
   m_warningParent: {fileID: 1480246844}
   m_warningText: {fileID: 1569287788}
   m_playerWarrior: {fileID: 12462328384154687}
+  m_Axe: {fileID: 0}
+  m_AxeEffect: {fileID: 0}
+  m_Sword: {fileID: 0}
+  m_SwordEffect: {fileID: 0}
   m_warriorCharacterUI: {fileID: 1984300037}
-  m_buttonAxe: {fileID: 2008826926}
-  m_buttonSword: {fileID: 64126395}
-  m_weaponAxe: {fileID: 3979260237449197075}
-  m_weaponSword: {fileID: 2366270477843616909}
+  m_wearAxe: {fileID: 0}
+  m_wearSword: {fileID: 0}
   m_playerRange: {fileID: 2958720695303590945}
+  m_RedFlare: {fileID: 0}
+  m_BlueBolt: {fileID: 0}
   m_rangeCharacterUI: {fileID: 506980515}
-  m_buttonRedFlare: {fileID: 824039736}
-  m_buttonBlueBolt: {fileID: 19899113}
-  m_weaponRedFlare: {fileID: 7355813029305455943}
-  m_weaponBlueBolt: {fileID: 722859519846866901}
+  m_wearRedFlare: {fileID: 0}
+  m_wearBlueBolt: {fileID: 0}
 --- !u!1 &2054728307
 GameObject:
   m_ObjectHideFlags: 0

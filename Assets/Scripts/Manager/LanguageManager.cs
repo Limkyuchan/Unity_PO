@@ -1,13 +1,12 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Drawing;
-using UnityEngine;
 
 public class LanguageManager : SingletonDontDestroy<LanguageManager>
 {
     public enum Language
     {
+        None = -1,
         Korean,
         English
     }
@@ -92,7 +91,7 @@ public class LanguageManager : SingletonDontDestroy<LanguageManager>
         return key;
     }
 
-    void InitializeLanguageData()
+    void InitializePopUpLanguageData()
     {
         localizedTexts = new Dictionary<string, Dictionary<Language, string>>
         {
@@ -221,6 +220,6 @@ public class LanguageManager : SingletonDontDestroy<LanguageManager>
 
     protected override void OnAwake()
     {
-        InitializeLanguageData();
+        InitializePopUpLanguageData();
     }
 }

@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -47,6 +48,24 @@ public class UIGameInformationMessage : MonoBehaviour
             message,
             null,
             LanguageManager.Instance.GetLocalizedText("OkButton"));
+    }
+
+    public void PlayerDieGameOver()
+    {
+        PopupManager.Instance.Popup_OpenOkCancel(
+        LanguageManager.Instance.GetLocalizedText("GameOver"),
+        LanguageManager.Instance.GetLocalizedText("GameOverText"), () =>
+        {
+            LoadSceneManager.Instance.LoadSceneAsync(SceneState.Title);
+            PopupManager.Instance.Popup_Close();
+        }, () =>
+        {
+#if UNITY_EDITOR
+            EditorApplication.isPlaying = false;
+#else
+            Application.Quit();
+#endif
+        }, LanguageManager.Instance.GetLocalizedText("OkButton"), LanguageManager.Instance.GetLocalizedText("EndButton"));
     }
 
     string GetSkillInfo()

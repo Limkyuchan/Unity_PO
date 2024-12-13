@@ -14,6 +14,9 @@ public class EnemyAnimController : AnimationController
         Hit,
         Death,
         Attack1,
+        Attack2,
+        Attack3,
+        Scream,
         Stun,
         Knockdown,
         Max

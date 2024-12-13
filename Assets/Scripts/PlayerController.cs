@@ -1,7 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
-using UnityEditor;
 using UnityEngine;
 
 public class PlayerController : CharacterBase
@@ -224,7 +223,6 @@ public class PlayerController : CharacterBase
         return type;
     }
 
-
     public void SetCameraShake(bool isEnabled)
     {
         m_isCameraShake = isEnabled;
@@ -341,21 +339,7 @@ public class PlayerController : CharacterBase
     IEnumerator CoShowGameOverPopup()
     {
         yield return Utility.GetWaitForSeconds(1.5f);
-
-        PopupManager.Instance.Popup_OpenOkCancel(
-        LanguageManager.Instance.GetLocalizedText("GameOver"),
-        LanguageManager.Instance.GetLocalizedText("GameOverText"), () =>
-        {
-            LoadSceneManager.Instance.LoadSceneAsync(SceneState.Title);
-            PopupManager.Instance.Popup_Close();
-        }, () =>
-        {
-#if UNITY_EDITOR
-            EditorApplication.isPlaying = false;
-#else
-            Application.Quit();
-#endif
-        }, LanguageManager.Instance.GetLocalizedText("OkButton"), LanguageManager.Instance.GetLocalizedText("EndButton"));
+        m_introduceGame.PlayerDieGameOver();
     }
 
     IEnumerator CoShieldCameraControl()
