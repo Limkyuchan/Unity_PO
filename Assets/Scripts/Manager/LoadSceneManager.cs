@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -21,6 +22,8 @@ public class LoadSceneManager : SingletonDontDestroy<LoadSceneManager>
     Image m_loadingBG;
     [SerializeField]
     GameObject m_progressBarParents;
+    [SerializeField]
+    TextMeshProUGUI m_backgroundText;
     [SerializeField]
     Image m_progressBar;
     [SerializeField]
@@ -91,6 +94,11 @@ public class LoadSceneManager : SingletonDontDestroy<LoadSceneManager>
     void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
         m_gameOptionController = FindObjectOfType<UIGameOptionController>();
+    }
+
+    void UpdateTexts()
+    {
+        m_backgroundText.text = LanguageManager.Instance.SetUITextLanguage("PlayerKeyText");
     }
 
     IEnumerator CoLoadSceneProcess(int sceneIndex)
@@ -170,6 +178,26 @@ public class LoadSceneManager : SingletonDontDestroy<LoadSceneManager>
         UpdateCursorState(m_state);
         HideUI();
     }
+
+    void OnEnable()
+    {
+        if (LanguageManager.Instance == null) return;
+
+        if (LanguageManager.Instance != null)
+        {
+            LanguageManager.Instance.OnLanguageChanged += UpdateTexts;
+            UpdateTexts();
+        }
+    }
+
+    void OnDisable()
+    {
+        if (LanguageManager.Instance != null)
+        {
+            LanguageManager.Instance.OnLanguageChanged -= UpdateTexts;
+        }
+    }
+
 
     protected override void OnAwake()
     {

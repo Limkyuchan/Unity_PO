@@ -11,6 +11,8 @@ public class UIBossSpawn : MonoBehaviour
     EnemyManager m_enemyManager;
     [SerializeField]
     PathController m_bossPath;
+    [SerializeField]
+    DirectionArrow m_directionArrow;
 
     public void ShowBossSpawnMessage()
     {
@@ -19,6 +21,12 @@ public class UIBossSpawn : MonoBehaviour
 
     IEnumerator CoBossSpawnRoutine()
     {
+        // 화살표로 보스 몬스터 생성 위치를 표시
+        if (m_bossPath.Points.Length > 0)
+        {
+            m_directionArrow.ShowArrowToTarget(m_bossPath.Points[0]);
+        }
+
         for (int i = 0; i < 3; i++)
         {
             yield return Utility.GetWaitForSeconds(1f);
@@ -30,6 +38,7 @@ public class UIBossSpawn : MonoBehaviour
             yield return Utility.GetWaitForSeconds(0.5f);
         }
 
+        // 보스 몬스터 생성
         m_enemyManager.CreateEnemy(EnemyManager.EnemyType.BossMonster, m_bossPath, 1);
     }
 

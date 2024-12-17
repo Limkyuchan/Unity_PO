@@ -542,36 +542,61 @@ public class PlayerController : CharacterBase
             m_animCtrl.Play(PlayerAnimController.Motion.Idle);
         }
 
-        // 주인공 방향전환 
-        Vector3 forward = transform.forward;
-        Vector3 right = transform.right;
-        m_dir = (forward * Input.GetAxis("Vertical")) + (right * Input.GetAxis("Horizontal"));
+        // 카메라의 Forward와 Right 벡터 계산
+        Vector3 cameraForward = Camera.main.transform.forward;
+        Vector3 cameraRight = Camera.main.transform.right;
 
-        if (m_dir != Vector3.zero && !IsAttack && !IsSkill && !IsShield)
+        // Y축 제거 (평면 이동)
+        cameraForward.y = 0f;
+        cameraRight.y = 0f;
+
+        cameraForward.Normalize();
+        cameraRight.Normalize();
+
+        // 이동 방향 계산
+        m_dir = (cameraForward * Input.GetAxis("Vertical")) + (cameraRight * Input.GetAxis("Horizontal"));
+        m_dir = m_dir.normalized;
+
+        // 뒤로 이동 시 캐릭터 멈춤
+        if (Input.GetAxis("Vertical") < 0)
         {
-            // 주인공 회전속도 조절
-            Quaternion targetRotation = Quaternion.LookRotation(m_dir);
-            transform.rotation = Quaternion.Lerp(transform.rotation, targetRotation, Time.deltaTime);
+            // 멈춤 상태에서 마우스 회전 가능
+            transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.LookRotation(cameraForward), Time.deltaTime);
 
-            if (m_scale < 1f)
-            {
-                m_scale += Time.deltaTime / 2f;
-            }
-            else
-            {
-                m_scale = 1f;
-            }
+            m_dir = Vector3.zero;
+            m_scale = 0f;
+            m_curSpeed = 0f;
         }
-        else if (!IsAttack && !IsSkill && !IsShield)
+        else
         {
-            if (m_scale > 0f)
+            if (m_dir != Vector3.zero && !IsAttack && !IsSkill && !IsShield)
             {
-                m_scale -= Time.deltaTime * 1.5f;
+                // 이동 방향으로 캐릭터 회전
+                Quaternion targetRotation = Quaternion.LookRotation(m_dir);
+                transform.rotation = Quaternion.Lerp(transform.rotation, targetRotation, Time.deltaTime);
+
+                if (m_scale < 1f)
+                {
+                    m_scale += Time.deltaTime / 2f;
+                }
+                else
+                {
+                    m_scale = 1f;
+                }
             }
-            else
+            else if (!IsAttack && !IsSkill && !IsShield)
             {
-                m_scale = 0f;
+                if (m_scale > 0f)
+                {
+                    m_scale -= Time.deltaTime * 1.5f;
+                }
+                else
+                {
+                    m_scale = 0f;
+                }
             }
+
+            m_curSpeed = m_movementSpeed; // 기본 속도
         }
 
         // 주인공 이동속도, 카메라 조절

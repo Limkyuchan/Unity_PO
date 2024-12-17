@@ -100,6 +100,7 @@ public class EnemyManager : SingletonMonoBehaviour<EnemyManager>
             }
         }
 
+        // 보스 몬스터가 사망했을 경우
         if (enemy.Type == EnemyType.BossMonster && !m_bossDeath)
         {
             m_bossDeath = true;
@@ -108,6 +109,7 @@ public class EnemyManager : SingletonMonoBehaviour<EnemyManager>
             return;
         }
 
+        // 모든 적이 죽었을 경우
         if (m_enemyList.Count == 0)
         {
             m_nextSceneZone.AllEnemiesDie();

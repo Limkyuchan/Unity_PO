@@ -1885,6 +1885,7 @@ MonoBehaviour:
   mouseSensitivity: 100
   m_offScreenIndicator: {fileID: 0}
   m_followTarget: {fileID: 0}
+  m_directionArrow: {fileID: 0}
   m_playerStat: {fileID: 0}
   m_playerNameText: {fileID: 0}
   m_playerHUD: {fileID: 0}

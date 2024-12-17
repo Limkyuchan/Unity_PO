@@ -337,9 +337,11 @@ public class EnemyController : CharacterBase
                     // 1) 인식 범위 안에 들어오면 => Attack / Chase
                     if (FindTarget(m_player.transform, GetStatus.detectDist))
                     {
+                        Debug.Log("플레이어 감지됨!");
                         // 1-1) 공격 범위 안에 들어오면 => Attack
                         if (CheckArea(m_player.transform, GetStatus.attackDist))    
                         {
+                            Debug.Log("공격 범위 안에 있음!");
                             m_isEnemyAttack = false;
                             m_attackStrategy.AnimEvent_Attack(this);
                         }
@@ -453,6 +455,8 @@ public class EnemyController : CharacterBase
 
     void Awake()
     {
+        //m_navAgent = GetComponent<NavMeshAgent>();
+        //m_navAgent.stoppingDistance = GetStatus.attackDist; // 공격 범위와 일치
         Dummy_HUD = Utility.FindChildObject(gameObject, "Dummy_HUD").transform;
     }
 

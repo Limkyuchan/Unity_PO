@@ -39,6 +39,8 @@ public class LanguageManager : SingletonDontDestroy<LanguageManager>
     {
         switch (key)
         {
+            case "PlayerKeyText":
+                return CurrentLanguage == Language.Korean ? "<b>< 게임 꿀팁 ></b>\r\n\n▶   캐릭터 이동 방법 : [ W, A, S, D ]\r\n\t<b>W</b> : 앞으로 이동\r\n\t<b>A</b> : 좌로 이동\t<b>D</b> : 우로 이동\r\n\t<b>S</b> : 움직임 정지\r\n\r▶  캐릭터 공격 방법 : [ Space ]\r\n▶  게임 내 정보 확인 : [ H ]\r\n▶  게임 설정 (소리, 카메라 진동, 언어) : [ O ]" : "<b>< Game Tips ></b>\r\n\n▶   How to move characters : [ W, A, S, D ]\r\n\t<b>W</b> : Move forward\r\n\t<b>A</b> : Move Left\t<b>D</b> : Move Right \r\n\t<b>S</b> : Stop Movement\r\n\r▶  How to Attack Characters : [ Space ]\r\n▶  Check in-game information : [ H ]\r\n▶  Game settings (sound, camera vibrations, language) : [ O ]";
             case "GameSetting":
                 return CurrentLanguage == Language.Korean ? "[O] 게임 설정" : "[O] Game Settings";
             case "GameOption":

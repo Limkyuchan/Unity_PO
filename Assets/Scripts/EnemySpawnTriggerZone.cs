@@ -25,8 +25,8 @@ public class EnemySpawnTriggerZone : MonoBehaviour
         if (sceneName == "GameScene02" && !m_enemyManager.GetBossMonsterDeath && bossCnt == 1)
         {
             bossCnt++;
-            m_bossSpawnUI.ShowBossSpawnMessage();
             m_enemyManager.ResetDeathEnemyCnt();
+            m_bossSpawnUI.ShowBossSpawnMessage();
         }
     }
 
@@ -35,14 +35,17 @@ public class EnemySpawnTriggerZone : MonoBehaviour
         if (other.CompareTag("Player") && !enemySpawn)
         {
             PlayerController player = other.GetComponent<PlayerController>();
-            if (player == null) return;
+            if (player == null)
+            {
+                return;
+            }
 
             if (sceneName == "GameScene01")
             {
                 if (player.GetPlayerType == PlayerController.Type.Warrior)
                 {
-                    m_enemyManager.CreateEnemy(EnemyManager.EnemyType.MeleeWalk2, m_pathA, 2);
-                    m_enemyManager.CreateEnemy(EnemyManager.EnemyType.WarriorWalk, m_pathB, 2);
+                    //m_enemyManager.CreateEnemy(EnemyManager.EnemyType.MeleeWalk2, m_pathA, 2);
+                    //m_enemyManager.CreateEnemy(EnemyManager.EnemyType.WarriorWalk, m_pathB, 2);
                     m_enemyManager.CreateEnemy(EnemyManager.EnemyType.WarriorJump, m_pathC, 1);
                 }
                 else if (player.GetPlayerType == PlayerController.Type.Range)
@@ -56,7 +59,7 @@ public class EnemySpawnTriggerZone : MonoBehaviour
             {
                 if (player.GetPlayerType == PlayerController.Type.Warrior)
                 {
-                    m_enemyManager.CreateEnemy(EnemyManager.EnemyType.MageWalk, m_pathA, 1);
+                    //m_enemyManager.CreateEnemy(EnemyManager.EnemyType.MageWalk, m_pathA, 1);
                     m_enemyManager.CreateEnemy(EnemyManager.EnemyType.MageWalk, m_pathB, 1);
                 }
                 else if (player.GetPlayerType == PlayerController.Type.Range)
