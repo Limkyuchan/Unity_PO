@@ -22,7 +22,6 @@ public class MeleeAttack : MonoBehaviour, IAttackStrategy
 
             if (enemy.Type == EnemyManager.EnemyType.BossMonster)
             {
-                Debug.Log("보스 몬스터 공격호출");
                 if (!enemy.IsEnemyAttack)
                 {
                     enemy.SetState(EnemyController.AiState.Attack);
@@ -53,32 +52,6 @@ public class MeleeAttack : MonoBehaviour, IAttackStrategy
                     }
                 }
             }
-            //if (enemy.Type == EnemyManager.EnemyType.BossMonster)
-            //{
-            //    BossAttack(enemy);
-            //    return;
-            //}
-
-            //if (enemy.GetPlayer.PlayerCurHp <= 0)
-            //{
-            //    enemy.IsEnemyAttack = false;
-            //    enemy.SetState(EnemyController.AiState.Idle);
-            //    return;
-            //}
-
-            //if (!enemy.IsEnemyAttack)
-            //{
-            //    enemy.SetState(EnemyController.AiState.Attack);
-            //    enemy.transform.LookAt(enemy.GetPlayer.transform);
-            //    enemy.GetAnimator.Play(EnemyAnimController.Motion.Attack1);
-            //}
-            //else if (enemy.IsEnemyAttack)
-            //{
-            //    if (m_attackArea.PlayerUnitList != null)
-            //    {
-            //        enemy.GetPlayer.SetDamage(enemy.GetStatus.attack, enemy);
-            //    }
-            //}
         }
     }
 

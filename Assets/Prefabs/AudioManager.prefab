@@ -180,6 +180,7 @@ MonoBehaviour:
   m_Victory: {fileID: 8300000, guid: 6dcaa78914b101a4ca3d86f08b319d5f, type: 3}
   m_warriorAttack: {fileID: 8300000, guid: 33f3256386bc109428380b374afba85a, type: 3}
   m_rangeAttack: {fileID: 8300000, guid: 1f6cb77a3c783d84e93736c2a6ac3e4f, type: 3}
+  m_dragonScream: {fileID: 8300000, guid: 1555fbc7744e0e84cbc2ea2c5a31f14b, type: 3}
   m_BGMVolume: 0.5
   m_MainVolume: 0.5
   m_SFXVolume: 0.5

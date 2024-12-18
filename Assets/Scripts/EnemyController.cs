@@ -54,6 +54,8 @@ public class EnemyController : CharacterBase
     bool m_isInvokeJumpPatrolMove;  // Invoke가 호출된 상태인지 확인
     bool m_isEnemyPatrol;           // Patrol 중인지 확인
     bool m_isDebuffImmunity;
+    bool m_isScreamAbility;
+    bool m_screamedInIdle;
     int m_curWaypoint;              // 현재 지정되어 있는 Waypoint
     int m_curWaypointIndex;
     int m_playerLayer;
@@ -75,6 +77,11 @@ public class EnemyController : CharacterBase
     {
         get
         {
+            if (StatusTable.Instance == null)
+            {
+                return StatusTable.Instance.defaultStatusData;
+            }
+
             var status = StatusTable.Instance.GetStatusData(this.Type);
             return status;
         }
@@ -207,6 +214,17 @@ public class EnemyController : CharacterBase
         SetIdle(1.5f);
     }
 
+    void AnimEvent_ScreamStart()
+    {
+        AudioManager.Instance.PlaySFX(AudioManager.Instance.m_dragonScream);
+    }
+
+    void AnimEvent_ScreamFinished()
+    {
+        AudioManager.Instance.StopSFX();
+        SetIdle(0.5f);
+    }
+
     void AnimEvent_HitFinished()
     {
         SetIdle(1.5f);
@@ -331,6 +349,12 @@ public class EnemyController : CharacterBase
         switch (m_state)
         {
             case AiState.Idle:
+                if (!m_screamedInIdle && m_isScreamAbility)
+                {
+                    m_animCtrl.Play(EnemyAnimController.Motion.Scream);
+                    m_screamedInIdle = true;        // Idle 상태 시 한 번만 실행
+                }
+
                 if (m_idleTime >= m_idleDuration)
                 {
                     m_idleTime = 0f;
@@ -392,6 +416,11 @@ public class EnemyController : CharacterBase
                     }
                     return;
                 }
+                // 보스 몬스터 추적 중 랜덤 Scream 적용
+                if (m_isScreamAbility && Random.Range(0, 100) < 50)
+                {
+                    m_animCtrl.Play(EnemyAnimController.Motion.Scream);
+                }
                 break;
             case AiState.Patrol:
                 // 1) Patrol 하고 있지 않으면
@@ -443,6 +472,11 @@ public class EnemyController : CharacterBase
     #region Unity Methods
     void OnDrawGizmos()
     {
+        if (StatusTable.Instance == null)
+        {
+            return;
+        }
+
         Gizmos.color = Color.yellow;
         Gizmos.DrawWireSphere(transform.position, GetStatus.detectDist);
         
@@ -455,8 +489,6 @@ public class EnemyController : CharacterBase
 
     void Awake()
     {
-        //m_navAgent = GetComponent<NavMeshAgent>();
-        //m_navAgent.stoppingDistance = GetStatus.attackDist; // 공격 범위와 일치
         Dummy_HUD = Utility.FindChildObject(gameObject, "Dummy_HUD").transform;
     }
 
@@ -475,6 +507,8 @@ public class EnemyController : CharacterBase
         m_isEnemyAttack = false;
         m_isDetectedPlayer = false;
         m_isDebuffImmunity = false;
+        m_screamedInIdle = false;
+        m_isScreamAbility = false;
         m_isInvokeJumpPatrolMove = false;
 
         switch (Type)
@@ -501,6 +535,7 @@ public class EnemyController : CharacterBase
                 m_attackStrategy = GetComponent<MeleeAttack>();
                 m_movementStrategy = GetComponent<WalkMovement>();
                 m_isDebuffImmunity = true;
+                m_isScreamAbility = true;
                 break;
         }
     }

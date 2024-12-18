@@ -303,14 +303,12 @@ public class GameSettingManager : MonoBehaviour
             return;
         }
 
-        AudioManager.Instance.EnableSFX(false);
-        AudioManager.Instance.StopAllAudio();
-
         PlayerPrefs.SetString("PlayerName", m_playerNameInput.text);
         PlayerPrefs.SetString("PlayerWeapon", m_selectWeapon);
         PlayerPrefs.SetString("PlayerCharacterType", m_selectCharacterType);
         PlayerPrefs.Save();
 
+        AudioManager.Instance.StopAllAudio();
         LoadSceneManager.Instance.LoadSceneAsync(SceneState.GameScene01);
     }
 
@@ -371,7 +369,6 @@ public class GameSettingManager : MonoBehaviour
         m_warningParent.SetActive(false);
         yield return Utility.GetWaitForSeconds(0.5f);
     }
-
 
     void ShowArrowIndicator(GameObject target)
     {
