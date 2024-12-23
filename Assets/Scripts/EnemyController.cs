@@ -299,6 +299,7 @@ public class EnemyController : CharacterBase
         var start = transform.position + Vector3.up * 0.3f;
         var end = target.position + Vector3.up * 0.3f;
         RaycastHit hit;
+
         if (Physics.Raycast(start, (end - start).normalized, out hit, distance, m_playerLayer | m_backgroundLayer))
         {
             if (hit.transform.CompareTag("Player"))
@@ -361,11 +362,9 @@ public class EnemyController : CharacterBase
                     // 1) 인식 범위 안에 들어오면 => Attack / Chase
                     if (FindTarget(m_player.transform, GetStatus.detectDist))
                     {
-                        Debug.Log("플레이어 감지됨!");
                         // 1-1) 공격 범위 안에 들어오면 => Attack
                         if (CheckArea(m_player.transform, GetStatus.attackDist))    
                         {
-                            Debug.Log("공격 범위 안에 있음!");
                             m_isEnemyAttack = false;
                             m_attackStrategy.AnimEvent_Attack(this);
                         }
@@ -415,11 +414,6 @@ public class EnemyController : CharacterBase
                         StopCoroutine(m_coChaseTarget);
                     }
                     return;
-                }
-                // 보스 몬스터 추적 중 랜덤 Scream 적용
-                if (m_isScreamAbility && Random.Range(0, 100) < 50)
-                {
-                    m_animCtrl.Play(EnemyAnimController.Motion.Scream);
                 }
                 break;
             case AiState.Patrol:

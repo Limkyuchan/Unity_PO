@@ -25,7 +25,6 @@ public class AudioManager : SingletonDontDestroy<AudioManager>
     [Range(0f, 1f)] public float m_SFXVolume = 0.5f;
 
     static readonly HashSet<string> m_scenesWithBGM = new HashSet<string> { "Title", "GameSettingScene", "GameScene01", "GameScene02" };
-    //bool m_allowSFX = true;
     #endregion  Constants and Fields
 
     #region Public Methods
@@ -39,14 +38,12 @@ public class AudioManager : SingletonDontDestroy<AudioManager>
 
     public void PlaySFX(AudioClip clip)
     {
-        //if (!m_allowSFX) return;
         m_SFXSource.volume = m_SFXVolume;
         m_SFXSource.PlayOneShot(clip);
     }
 
     public void PlaySFX(AudioClip clip, float sec)
     {
-        //if (!m_allowSFX) return;
         m_SFXSource.volume = m_SFXVolume;
         StartCoroutine(CoPlaySFX(clip, sec));
     }
@@ -55,11 +52,6 @@ public class AudioManager : SingletonDontDestroy<AudioManager>
     {
         m_SFXSource.Stop();
     }
-
-    //public void EnableSFX(bool enable)
-    //{
-    //    m_allowSFX = enable;
-    //}
 
     public void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
@@ -81,11 +73,6 @@ public class AudioManager : SingletonDontDestroy<AudioManager>
     IEnumerator CoPlaySFX(AudioClip clip, float sec)
     {
         yield return Utility.GetWaitForSeconds(sec);
-
-        //if (!m_allowSFX)
-        //{
-        //    yield break;
-        //}
         m_SFXSource.PlayOneShot(clip);
     }
     #endregion Coroutine Methods
