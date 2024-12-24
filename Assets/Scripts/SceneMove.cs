@@ -6,6 +6,7 @@ public class SceneMove : MonoBehaviour
 {
     public void GoGameSettingScene()
     {
+        AudioManager.Instance.StopAllAudio();
         LoadSceneManager.Instance.LoadSceneAsync(SceneState.GameSettingScene);
     }
 

@@ -23,7 +23,7 @@ public class SceneTransitionTriggerZone : MonoBehaviour
 
     IEnumerator CoShowGameEndPopup()
     {
-        yield return Utility.GetWaitForSeconds(1f);
+        yield return Utility.GetWaitForSeconds(2f);
 
         PopupManager.Instance.Popup_OpenOkCancel("<color=#ff0000>게임 종료!</color>",
         "보스 몬스터를 포함한 모든 적들을 해치우셨습니다. \r\n" +
@@ -48,6 +48,7 @@ public class SceneTransitionTriggerZone : MonoBehaviour
         {
             if (sceneName == "GameScene01")
             {
+                AudioManager.Instance.StopAllAudio();
                 LoadSceneManager.Instance.LoadSceneAsync(SceneState.GameScene02);
             }
         }

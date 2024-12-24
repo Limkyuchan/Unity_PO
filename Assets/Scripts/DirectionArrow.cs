@@ -66,7 +66,7 @@ public class DirectionArrow : MonoBehaviour
     #region Coroutine Methods
     IEnumerator CoShowBossDirectionArrow(Vector3 targetPosition)
     {
-        for (int i = 0; i < 3; i++)
+        for (int i = 0; i < 2; i++)
         {
             ShowDirectionArrow(targetPosition);
             yield return new WaitForSeconds(0.5f);

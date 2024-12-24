@@ -44,8 +44,8 @@ public class EnemySpawnTriggerZone : MonoBehaviour
             {
                 if (player.GetPlayerType == PlayerController.Type.Warrior)
                 {
-                    //m_enemyManager.CreateEnemy(EnemyManager.EnemyType.MeleeWalk2, m_pathA, 2);
-                    //m_enemyManager.CreateEnemy(EnemyManager.EnemyType.WarriorWalk, m_pathB, 2);
+                    m_enemyManager.CreateEnemy(EnemyManager.EnemyType.MeleeWalk2, m_pathA, 2);
+                    m_enemyManager.CreateEnemy(EnemyManager.EnemyType.WarriorWalk, m_pathB, 2);
                     m_enemyManager.CreateEnemy(EnemyManager.EnemyType.WarriorJump, m_pathC, 1);
                 }
                 else if (player.GetPlayerType == PlayerController.Type.Range)
@@ -59,7 +59,7 @@ public class EnemySpawnTriggerZone : MonoBehaviour
             {
                 if (player.GetPlayerType == PlayerController.Type.Warrior)
                 {
-                    //m_enemyManager.CreateEnemy(EnemyManager.EnemyType.MageWalk, m_pathA, 1);
+                    m_enemyManager.CreateEnemy(EnemyManager.EnemyType.MageWalk, m_pathA, 1);
                     m_enemyManager.CreateEnemy(EnemyManager.EnemyType.MageWalk, m_pathB, 1);
                 }
                 else if (player.GetPlayerType == PlayerController.Type.Range)

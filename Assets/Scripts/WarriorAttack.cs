@@ -116,7 +116,7 @@ public class WarriorAttack : MonoBehaviour, IAttackStrategy
         if (target is PlayerController player)
         {
             player.GetAnimController.Play(PlayerAnimController.Motion.Skill1, false);
-            AudioManager.Instance.PlaySFX(AudioManager.Instance.m_warriorAttack);
+            AudioManager.Instance.PlaySFX(AudioManager.Instance.m_warriorAttack, 0.67f);
             player.ResetSkillGauge();
         }
     }
@@ -126,7 +126,7 @@ public class WarriorAttack : MonoBehaviour, IAttackStrategy
         if (target is PlayerController player)
         {
             player.GetAnimController.Play(PlayerAnimController.Motion.Skill2, false);
-            AudioManager.Instance.PlaySFX(AudioManager.Instance.m_warriorAttack, 0.5f);
+            AudioManager.Instance.PlaySFX(AudioManager.Instance.m_warriorAttack, 0.53f);
         }
     }
 

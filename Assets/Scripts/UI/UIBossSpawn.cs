@@ -21,12 +21,7 @@ public class UIBossSpawn : MonoBehaviour
 
     IEnumerator CoBossSpawnRoutine()
     {
-        // 화살표로 보스 몬스터 생성 위치를 표시
-        if (m_bossPath.Points.Length > 0)
-        {
-            m_directionArrow.ShowArrowToTarget(m_bossPath.Points[0]);
-        }
-
+        // 보스 몬스터 생성 텍스트 출력
         for (int i = 0; i < 3; i++)
         {
             yield return Utility.GetWaitForSeconds(1f);
@@ -36,6 +31,12 @@ public class UIBossSpawn : MonoBehaviour
 
             m_bossSpawnText.gameObject.SetActive(false);
             yield return Utility.GetWaitForSeconds(0.5f);
+        }
+
+        // 보스 몬스터 생성 위치 표시
+        if (m_bossPath.Points.Length > 0)
+        {
+            m_directionArrow.ShowArrowToTarget(m_bossPath.Points[0]);
         }
 
         // 보스 몬스터 생성
